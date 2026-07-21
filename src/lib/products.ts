@@ -28,6 +28,9 @@ export interface Product {
   oldPrice: number | null;
   buyPrice: number;
   emoji: string;
+  // Реальне фото товару (напр. з готового бренд-лендингу) — якщо задано,
+  // картка показує його замість emoji-заглушки
+  image?: string;
   rating: number;
   reviewCount: number;
   orderCount: number;

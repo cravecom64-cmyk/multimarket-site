@@ -10,6 +10,7 @@ interface ProductCardProps {
   price: number;
   oldPrice?: number | null;
   emoji: string;
+  image?: string;
   rating: number;
   reviewCount: number;
   orderCount: number;
@@ -26,6 +27,7 @@ export function ProductCard({
   price,
   oldPrice,
   emoji,
+  image,
   rating,
   reviewCount,
   orderCount,
@@ -45,8 +47,18 @@ export function ProductCard({
   return (
     <div className="product-card bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
       <Link href={href}>
-        <div className="h-[130px] bg-gray-200 relative flex items-center justify-center text-3xl">
-          {emoji}
+        <div className="h-[130px] bg-gray-200 relative flex items-center justify-center text-3xl overflow-hidden">
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={image}
+              alt={name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            emoji
+          )}
 
           {/* Rank badge */}
           {rank && rank <= 4 && (

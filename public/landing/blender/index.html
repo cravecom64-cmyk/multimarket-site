@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fresh Juice — смузі за 20 секунд де завгодно</title>
+<meta name="description" content="Fresh Juice — портативний блендер і пляшка в одному. Холодний смузі за 20 секунд: парк, пляж, офіс, зал. Нова Пошта 1–3 дні.">
+<meta property="og:title" content="Fresh Juice — смузі за 20 секунд де завгодно">
+<meta property="og:image" content="img/hero-flatlay.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF9F7; --blue:#EADFD3; --blue-soft:#F7EFE9;
+  --ink:#262C40; --muted:#6F6A75;
+  --orange:#D22C54; --orange-hot:#B81E44; --peach:#F5C7D4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;color:var(--ink);background:#EDE7E0;font-size:16.5px;line-height:1.65}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg);box-shadow:0 0 50px rgba(38,44,64,.14);min-height:100vh;position:relative;overflow-x:hidden}
+h1,h2,.frn{font-family:'Fraunces',serif;font-weight:700;letter-spacing:-.01em}
+h1{font-size:40px;line-height:1.08}
+h2{font-size:29px;line-height:1.15;margin-bottom:18px}
+h1 em,h2 em{font-style:italic;font-weight:600;color:var(--orange)}
+section{padding:52px 26px}
+img,video{max-width:100%;display:block}
+
+/* ticker */
+.ticker{background:var(--orange);color:#fff;overflow:hidden;white-space:nowrap;font-size:13px;font-weight:800;letter-spacing:1.5px;padding:9px 0;text-transform:uppercase}
+.ticker span{display:inline-block;animation:tick 20s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* hero */
+.hero{padding:40px 26px 48px}
+.badge{display:inline-flex;align-items:center;gap:7px;background:#fff;padding:7px 15px;border-radius:999px;font-size:13px;font-weight:800;margin-bottom:20px;box-shadow:0 2px 10px rgba(38,52,62,.07)}
+.badge b{color:var(--orange)}
+.hero .sub{color:var(--muted);margin:16px 0 24px;font-size:17px}
+.video-card{border-radius:26px;overflow:hidden;position:relative;box-shadow:0 18px 45px rgba(38,52,62,.18);margin-bottom:26px}
+.video-card video{width:100%;aspect-ratio:4/5;object-fit:cover}
+.video-tag{position:absolute;left:16px;bottom:16px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);padding:8px 15px;border-radius:999px;font-size:13.5px;font-weight:800}
+.price-row{display:flex;align-items:baseline;gap:13px;margin-bottom:20px}
+.price-now{font-family:'Fraunces';font-size:46px;font-weight:700;color:var(--ink)}
+.price-old{color:var(--muted);text-decoration:line-through;font-size:20px}
+.price-tag{background:var(--peach);color:var(--ink);font-size:13px;font-weight:800;padding:5px 12px;border-radius:999px}
+
+/* urgency */
+.urgency{background:#FCE4EC;border-radius:16px;padding:14px 16px;margin-bottom:20px}
+.urgency-timer{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#9F1239}
+.urgency-timer b{font-family:'Fraunces';font-size:19px;letter-spacing:.5px;background:#fff;padding:4px 10px;border-radius:8px;color:var(--orange-hot);margin-left:auto}
+.urgency-stock{font-size:13px;font-weight:700;color:#9F1239;margin-top:9px}
+.urgency-pct{background:var(--orange-hot);color:#fff;font-size:12.5px;font-weight:800;padding:4px 9px;border-radius:8px;letter-spacing:.2px}
+
+/* colors — фото */
+.pick-label{font-size:14.5px;font-weight:800;margin-bottom:10px}
+.pick-label span{color:var(--orange)}
+.picks{display:flex;gap:10px;margin-bottom:24px}
+.pick{flex:1;cursor:pointer;border-bottom:3px solid transparent;padding-bottom:6px;transition:border-color .15s,opacity .15s;opacity:.62}
+.pick img{height:126px;width:100%;object-fit:contain;display:block}
+.pick p{text-align:center;font-size:12px;font-weight:800;padding:6px 0 0;color:var(--muted)}
+.pick.on{border-color:var(--orange);opacity:1}
+.pick.on p{color:var(--orange)}
+
+.qty-picks{display:flex;gap:10px;margin:8px 0 22px}
+.qtyp{flex:1;background:#fff;border:2px solid transparent;border-radius:16px;padding:14px 8px 12px;text-align:center;cursor:pointer;position:relative;transition:border-color .15s,background .15s}
+.qtyp b{display:block;font-size:15px;font-weight:800;color:var(--ink)}
+.qtyp span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.qtyp i{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--orange);color:#fff;font-style:normal;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px}
+.qtyp i.base{background:#fff;color:var(--muted);border:1.5px solid var(--blue)}
+.qtyp.on{border-color:var(--orange);background:#FFF6EF}
+.qtyp.on b{color:var(--orange)}
+.qty-hint{font-size:13px;color:var(--muted);margin:-14px 0 20px}
+
+/* CTA */
+.cta{display:block;width:100%;background:var(--orange);color:#fff;text-align:center;padding:18px;font-size:18px;font-weight:800;font-family:'Nunito';border:none;border-radius:999px;cursor:pointer;text-decoration:none;box-shadow:0 10px 26px rgba(210,44,84,.32);transition:background .15s}
+.cta:hover{background:var(--orange-hot)}
+.cta-note{text-align:center;font-size:13.5px;color:var(--muted);margin-top:12px}
+
+/* problem */
+.problem{background:var(--ink);color:#EAF2F7;border-radius:34px 34px 0 0}
+.problem h2{color:#fff}
+.problem p{color:#B9C9D4;margin-bottom:13px}
+.problem .hl{color:#FFB57E;font-weight:700}
+.problem .fin{color:#fff;font-weight:800;font-size:18px;margin-top:6px}
+
+/* steps */
+.steps{background:var(--ink);color:#EAF2F7;padding-top:10px;border-radius:0 0 34px 34px}
+.steps h2{color:#fff}
+.step{display:flex;gap:20px;margin-bottom:28px;align-items:flex-start}
+.step .n{font-family:'Fraunces';font-style:italic;font-size:52px;font-weight:600;color:var(--orange);line-height:.9;min-width:46px}
+.step h3{font-size:17.5px;color:#fff;margin-bottom:5px;font-weight:800}
+.step p{font-size:15px;color:#B9C9D4}
+
+/* numbers */
+.grid-nums{display:grid;grid-template-columns:62% 38%;gap:12px}
+.cell{background:#fff;border-radius:20px;padding:24px 20px}
+.cell .num{font-family:'Fraunces';font-size:40px;font-weight:700;line-height:1;color:var(--ink);white-space:nowrap}
+.cell .num small{font-size:16px;font-weight:600}
+.cell.o .num{color:var(--orange)}
+.cell p{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+
+/* lifestyle */
+.life{padding:0;position:relative}
+.life img{width:100%;min-height:440px;object-fit:cover}
+.life .cap{position:absolute;left:0;right:0;bottom:0;padding:80px 26px 34px;background:linear-gradient(transparent,rgba(38,52,62,.78));color:#fff}
+.life .cap h2{color:#fff;margin-bottom:6px}
+.life .cap p{font-size:15.5px;color:#EAF2F7}
+
+/* features */
+.feat{background:#fff;border-radius:20px;padding:22px;margin-bottom:12px}
+.feat h3{font-size:17px;font-weight:800;margin-bottom:5px}
+.feat h3 span{color:var(--orange);margin-right:8px}
+.feat p{font-size:14.5px;color:var(--muted)}
+
+/* 5-in-1 + specs */
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:6px 0 10px}
+.chip{background:#fff;border:1.5px solid var(--peach);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:800}
+.spec{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1.5px dashed var(--blue);font-size:15px}
+.spec b{font-weight:800;text-align:right}
+.spec span{color:var(--muted)}
+
+/* reviews */
+.revs{background:var(--blue-soft)}
+.rating-line{display:flex;align-items:baseline;gap:12px;margin-bottom:22px}
+.rating-line .num{font-family:'Fraunces';font-size:52px;font-weight:700}
+.stars{color:var(--orange);letter-spacing:2px}
+.rev-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab}
+.rev-carousel::-webkit-scrollbar{display:none}
+.rev{flex:0 0 100%;scroll-snap-align:start;background:#fff;border-radius:20px;padding:22px}
+.rev p{font-size:15px;margin:9px 0 11px}
+.rev .who{font-size:13px;color:var(--muted);font-weight:700}
+.rev-dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
+.rev-dots span{width:7px;height:7px;border-radius:50%;background:var(--blue);display:block;cursor:pointer;transition:background .2s,transform .2s}
+.rev-dots span.on{background:var(--orange);transform:scale(1.3)}
+
+/* offer */
+.offer ul{list-style:none;margin:20px 0 26px}
+.offer li{padding:11px 0 11px 34px;position:relative;font-size:15.5px;border-bottom:1.5px dashed var(--blue)}
+.offer li:before{content:"✓";position:absolute;left:2px;color:var(--orange);font-weight:800}
+.stock{display:inline-block;background:#FCE4EC;color:#9F1239;font-size:13.5px;font-weight:800;padding:7px 14px;border-radius:999px;margin-bottom:18px}
+
+/* form */
+form label{display:block;font-size:14px;font-weight:800;margin:18px 0 7px}
+form input,form select,form textarea{width:100%;padding:15px 16px;border:1.5px solid var(--blue);background:#fff;font-family:inherit;font-size:16px;border-radius:14px}
+form input:focus,form textarea:focus,form select:focus{outline:none;border-color:var(--orange)}
+form .err{border-color:#DC2626!important}
+.form-ok{background:#fff;border:2px solid var(--orange);border-radius:20px;padding:26px;text-align:center;display:none}
+.form-ok h3{font-family:'Fraunces';font-size:22px;color:var(--orange-hot);margin-bottom:8px}
+
+/* faq */
+details{background:#fff;border-radius:16px;margin-bottom:10px;padding:0 20px}
+summary{padding:17px 26px 17px 0;font-weight:800;font-size:15.5px;cursor:pointer;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";position:absolute;right:0;top:13px;font-size:24px;color:var(--orange);font-family:'Fraunces'}
+details[open] summary:after{content:"–"}
+details p{padding:0 0 18px;font-size:14.5px;color:var(--muted)}
+
+/* final */
+.final{text-align:center;padding-bottom:64px}
+.final h2{font-size:32px}
+
+/* sticky bar */
+.bar{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:456px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-radius:999px;display:flex;align-items:center;gap:14px;padding:9px 10px 9px 22px;z-index:50;box-shadow:0 12px 34px rgba(38,52,62,.22)}
+.bar .p{font-family:'Fraunces';font-weight:700;font-size:22px}
+.bar .p s{color:var(--muted);font-size:13px;font-weight:400;margin-left:5px}
+.bar .cta{flex:1;padding:14px;font-size:16px;box-shadow:none}
+.pad-bar{height:84px}
+
+footer{padding:30px 26px 44px;font-size:13.5px;color:var(--muted);text-align:center}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="ticker"><span>Смузі за 20 секунд&nbsp;&nbsp;🍓&nbsp;&nbsp;334+ замовлень&nbsp;&nbsp;🍓&nbsp;&nbsp;4.7★ рейтинг&nbsp;&nbsp;🍓&nbsp;&nbsp;Нова Пошта 1–3 дні&nbsp;&nbsp;🍓&nbsp;&nbsp;Смузі за 20 секунд&nbsp;&nbsp;🍓&nbsp;&nbsp;334+ замовлень&nbsp;&nbsp;🍓&nbsp;&nbsp;4.7★ рейтинг&nbsp;&nbsp;🍓&nbsp;&nbsp;Нова Пошта 1–3 дні&nbsp;&nbsp;🍓&nbsp;&nbsp;</span></div>
+
+<header class="hero">
+  <span class="badge">🥤 <b>ТОП літа</b> · 334+ замовлень</span>
+  <h1>Смузі за <em>20 секунд</em> — де завгодно</h1>
+  <p class="sub">Fresh Juice — портативний блендер і пляшка в одному. Кинула фрукти, натиснула кнопку — і пішла. Парк, пляж, офіс, зал.</p>
+  <div class="video-card">
+    <img id="heroImg" src="img/hero-flatlay.jpg" alt="Fresh Juice з ягодами" fetchpriority="high" style="width:100%;aspect-ratio:4/5;object-fit:cover">
+  </div>
+  <div class="price-row">
+    <span class="price-now">349₴</span>
+    <span class="price-old">680₴</span>
+    <span class="price-tag">−49% сьогодні</span>
+  </div>
+  <div class="urgency">
+    <div class="urgency-timer">
+      <span>⏳ Знижка діє ще:</span>
+      <b id="countdown">00:00:00</b>
+    </div>
+    <div class="urgency-stock">🔥 Залишилась обмежена кількість за ціною 349₴</div>
+  </div>
+  <p class="pick-label">Обери свій колір: <span id="cName">Рожевий</span></p>
+  <div class="picks">
+    <div class="pick on" data-c="Рожевий"><img src="img/bottle-pink.jpg" alt="Рожевий Fresh Juice"><p>Рожевий</p></div>
+    <div class="pick" data-c="Білий"><img src="img/bottle-white.jpg" alt="Білий Fresh Juice"><p>Білий</p></div>
+    <div class="pick" data-c="Блакитний"><img src="img/bottle-blue.jpg" alt="Блакитний Fresh Juice"><p>Блакитний</p></div>
+  </div>
+  <a class="cta" href="#order">Замовити за 349₴</a>
+  <p class="cta-note">Менеджер зателефонує і уточнить деталі оплати та доставки</p>
+</header>
+
+<section class="problem">
+  <h2>Знайоме <em>відчуття?</em></h2>
+  <p>Спека, хочеться чогось холодного і корисного. Але стаціонарний блендер — ціла історія: дістань, зібери, помий три деталі, сховай назад.</p>
+  <p>На роботу його не візьмеш, на пляж — тим паче. І смузі знову замінюється <span class="hl">кавою з печивом</span>.</p>
+  <p class="fin">Fresh Juice вирішує це одним рухом — блендер уже і є твоя пляшка.</p>
+</section>
+
+<section class="steps">
+  <h2>Як це працює</h2>
+  <div style="border-radius:20px;overflow:hidden;margin-bottom:26px"><img src="img/steps-hands.jpg" alt="Закидаєш фрукти у Fresh Juice" loading="lazy" style="aspect-ratio:4/4.4;object-fit:cover;width:100%"></div>
+  <div class="step"><div class="n">1</div><div><h3>Наріж і закинь</h3><p>Банан, ягоди, шпинат — що любиш. Долий води, молока або йогурту до 380 мл.</p></div></div>
+  <div class="step"><div class="n">2</div><div><h3>Подвійний клік</h3><p>Леза розганяються до 20 000 обертів. Через 20–30 секунд блендер сам вимкнеться.</p></div></div>
+  <div class="step" style="margin-bottom:6px"><div class="n">3</div><div><h3>Пий просто з пляшки</h3><p>Нічого переливати. Закрутила кришку — і в сумку. 390 грамів, легша за пляшку води.</p></div></div>
+</section>
+
+<section>
+  <div style="position:relative;border-radius:20px;overflow:hidden;margin-bottom:12px">
+    <img src="img/blades.jpg" alt="Сталеві леза Fresh Juice" loading="lazy" style="aspect-ratio:16/10;object-fit:cover;object-position:50% 62%;width:100%">
+    <span class="video-tag" style="position:absolute;left:14px;bottom:14px">Сталеві леза — лід не проблема</span>
+  </div>
+  <div class="grid-nums">
+    <div class="cell o"><div class="num">20 000<small> об/хв</small></div><p>справляється з льодом і замороженими ягодами</p></div>
+    <div class="cell"><div class="num">8–10</div><p>смузі з одного заряду</p></div>
+    <div class="cell"><div class="num">380<small> мл</small></div><p>повноцінна порція</p></div>
+    <div class="cell o"><div class="num">390<small> г</small></div><p>легша за пляшку води</p></div>
+  </div>
+</section>
+
+<div class="life">
+  <img src="img/lifestyle2.jpg" alt="Свіжий сік з Fresh Juice" loading="lazy" style="object-position:50% 70%">
+  <div class="cap">
+    <h2>Свіжий сік — <em>щоранку</em></h2>
+    <p>Апельсин, манго, банан — 20 секунд і склянка свіжого соку без кухонного комбайна.</p>
+  </div>
+</div>
+
+<div class="life">
+  <img src="img/morning-robe.jpg" alt="Ранкова рутина з Fresh Juice" loading="lazy" style="object-position:50% 25%;min-height:400px">
+  <div class="cap">
+    <h2>Не тільки <em>на пікніку</em></h2>
+    <p>Вдома вранці, на кухні, поки кава ще закипає — Fresh Juice встигає раніше за чайник.</p>
+  </div>
+</div>
+
+<section style="padding-bottom:0">
+  <h2>Весь процес <em>за 20 секунд</em></h2>
+  <p class="sub" style="margin:-8px 0 20px">Порізали, закинули — і смузі готовий, поки ти ще миєш дошку.</p>
+  <div class="video-card" style="margin-bottom:12px">
+    <video src="img/process-real.mp4" poster="img/process-real-poster.jpg" autoplay muted loop playsinline></video>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <img src="img/hero-basket.jpg" alt="Fresh Juice на пікніку з кошиком фруктів" loading="lazy" style="border-radius:16px;aspect-ratio:3/4;object-fit:cover">
+    <img src="img/kitchen-add.jpg" alt="Додаєш інгредієнти у Fresh Juice" loading="lazy" style="border-radius:16px;aspect-ratio:3/4;object-fit:cover">
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+    <img src="img/gym.jpg" alt="Fresh Juice у залі" loading="lazy" style="border-radius:16px;aspect-ratio:3/4;object-fit:cover">
+    <img src="img/three-bottles.jpg" alt="Три кольори Fresh Juice" loading="lazy" style="border-radius:16px;aspect-ratio:3/4;object-fit:cover">
+  </div>
+</section>
+
+<section>
+  <h2>Чому саме <em>він</em></h2>
+  <div class="feat"><h3><span>~</span>Заряджається як телефон</h3><p>USB-кабель у комплекті — від ноутбука, повербанка чи розетки. Акумулятор 1200 mAh.</p></div>
+  <div class="feat"><h3><span>~</span>Автостоп — безпечно</h3><p>Працює цикл 20–30 секунд і сам вимикається. Леза не крутяться, поки чаша не закручена до упору.</p></div>
+</section>
+
+<section style="padding-top:0">
+  <h2>Це не просто блендер — <em>5-в-1</em></h2>
+  <div class="chips">
+    <span class="chip">🥤 Пляшка для смузі</span>
+    <span class="chip">🍹 Блендер</span>
+    <span class="chip">🍊 Соковижималка</span>
+    <span class="chip">🥣 Міксер</span>
+    <span class="chip">🍎 Екстрактор фруктів</span>
+  </div>
+  <p style="font-size:15px;color:var(--muted)">210×75 мм — вміщається в рюкзак, сумку і навіть автомобільний підсклянник. Бери на роботу, тренування чи в подорож.</p>
+</section>
+
+<section style="padding-top:0">
+  <h2>Характеристики</h2>
+  <div class="spec"><span>Колір</span><b>Рожевий / Білий / Блакитний</b></div>
+  <div class="spec"><span>Місткість</span><b>380 мл</b></div>
+  <div class="spec"><span>Оберти за хвилину</span><b>20 000</b></div>
+  <div class="spec"><span>Потужність</span><b>40 Вт</b></div>
+  <div class="spec"><span>Акумулятор</span><b>1200 мА·год (8–10 смузі)</b></div>
+  <div class="spec"><span>Заряджання</span><b>micro-USB, кабель у комплекті</b></div>
+  <div class="spec"><span>Розміри</span><b>210×75 мм</b></div>
+  <div class="spec"><span>Вага</span><b>390 г</b></div>
+  <div class="spec"><span>Матеріал</span><b>харчовий пластик + нержавіюча сталь</b></div>
+</section>
+
+<section class="revs">
+  <h2>Що кажуть <em>покупці</em></h2>
+  <div class="rating-line"><span class="num">4.7</span><div><div class="stars">★★★★★</div><div style="font-size:13px;color:var(--muted);font-weight:700">89 відгуків · 334 замовлення</div></div></div>
+  <div class="rev-carousel" id="revCarousel">
+    <div class="rev"><div class="stars">★★★★★</div><p>Беру на роботу щодня, колеги вже питають де купила. Банан + кефір + вівсянка — і сніданок готовий прямо в офісі.</p><div class="who">Ірина, Харків</div></div>
+    <div class="rev"><div class="stars">★★★★★</div><p>Скептично ставилась до «іграшкових» блендерів, але цей реально перебиває заморожені ягоди. Головне — різати банан шматочками, як в інструкції.</p><div class="who">Оля, Київ</div></div>
+    <div class="rev"><div class="stars">★★★★☆</div><p>Для протеїнових коктейлів після залу — ідеально. Мінус зірка бо хотіла б Type-C замість micro-USB, але кабель у комплекті, тож ок.</p><div class="who">Настя, Львів</div></div>
+  </div>
+  <div class="rev-dots" id="revDots"><span class="on"></span><span></span><span></span></div>
+</section>
+
+<section class="offer" id="offer">
+  <h2><em>349₴</em> <s style="color:var(--muted);font-size:20px;font-weight:400">680₴</s> <span class="urgency-pct" style="vertical-align:middle;margin-left:4px">−49%</span></h2>
+  <span class="stock">🍓 Літня партія — залишилось небагато</span>
+  <div class="urgency-timer" style="margin-bottom:18px"><span>⏳ Знижка діє ще:</span><b id="countdown2">00:00:00</b></div>
+  <ul>
+    <li>Блендер-пляшка Fresh Juice 380 мл (колір на вибір)</li>
+    <li>USB-кабель для зарядки</li>
+    <li>Інструкція</li>
+    <li>Менеджер зателефонує і узгодить оплату</li>
+    <li>Нова Пошта по Україні, 1–3 дні</li>
+    <li>Перевір товар при отриманні на відділенні Нової Пошти</li>
+  </ul>
+  <p style="font-weight:800;color:var(--orange);margin:14px 0 4px">🎁 Береш для подруги? 2 шт — 628₴, 3 шт — 838₴</p>
+  <a class="cta" href="#order">Оформити замовлення</a>
+</section>
+
+<section id="order" style="padding-top:20px">
+  <h2>Замовлення</h2>
+  <p style="font-size:14.5px;color:var(--muted)">Залиш ім'я і номер — менеджер зателефонує, уточнить колір, відділення Нової Пошти та оплату.</p>
+  <p class="pick-label">Скільки береш:</p>
+  <div class="qty-picks" id="qtyPicks">
+    <div class="qtyp on" data-q="1" data-price="349"><i class="base">База</i><b>1 шт</b><span>349₴/шт</span></div>
+    <div class="qtyp" data-q="2" data-price="628"><i>Вигідно</i><b>2 шт</b><span>314₴/шт</span></div>
+    <div class="qtyp" data-q="3" data-price="838"><i>Вигідно</i><b>3 шт</b><span>279₴/шт</span></div>
+  </div>
+  <form id="orderForm" novalidate>
+    <label for="fName">Ім'я</label>
+    <input id="fName" name="name" autocomplete="name" required placeholder="Марія">
+    <label for="fPhone">Номер телефону</label>
+    <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+380 __ ___ __ __">
+    <input type="hidden" id="fColor" name="color" value="Рожевий">
+    <input type="hidden" id="fQty" name="qty" value="1">
+    <input type="hidden" id="fAmount" name="amount" value="349">
+    <div style="height:22px"></div>
+    <button class="cta" type="submit" id="submitBtn">Підтвердити замовлення — 349₴</button>
+    <p class="cta-note">Натискаючи кнопку, ти погоджуєшся на обробку даних для доставки</p>
+  </form>
+  <div class="form-ok" id="formOk">
+    <h3>Замовлення прийнято 🎉</h3>
+    <p style="font-size:14.5px">Менеджер зателефонує найближчим часом, уточнить колір і відділення. Дякуємо!</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <h2>Часті питання</h2>
+  <details><summary>Чи переб'є лід і заморожені ягоди?</summary><p>Так — 20 000 об/хв справляються з льодом і твердими фруктами. Але кісточки (черешня, слива) прибирай — вони зіпсують леза будь-якого блендера.</p></details>
+  <details><summary>Чому блендер зупиняється і блимає червоним?</summary><p>Захист: або налито більше 380 мл, або шматки завеликі, або чаша не закручена до упору, або перегрівся. Виправ — і працює далі.</p></details>
+  <details><summary>Є секрет ідеального смузі?</summary><p>Так: наріж фрукти дрібними шматочками, закрути чашу до упору (засвітиться синій індикатор) і перші секунди тримай пляшку під кутом 45° шийкою вниз — так леза захоплюють все одразу. Далі можна ставити вертикально.</p></details>
+  <details><summary>Скільки тримає заряд?</summary><p>Акумулятор 1200 mAh — це 8–10 смузі з одного заряду. Заряджається через USB-кабель з комплекту.</p></details>
+  <details><summary>Як його мити?</summary><p>Ополосни водою з краплею миючого засобу і витри насухо. Не потрібно вмикати блендер під час миття.</p></details>
+  <details><summary>Що якщо прийде не той колір або товар пошкоджено?</summary><p>Обов'язково огляньте товар при отриманні на відділенні Нової Пошти. Якщо колір не відповідає замовленому — це наша помилка, і ми безкоштовно замінимо товар. Але після отримання посилки повернення чи обмін не здійснюється.</p></details>
+</section>
+
+<section class="final">
+  <h2>Це літо — <em>зі смузі</em></h2>
+  <p style="color:var(--muted);margin-bottom:24px">334 покупці вже п'ють смузі в офісі, залі й дорозі на пляж. Приєднуйся, поки діє 349₴.</p>
+  <a class="cta" href="#order">Замовити Fresh Juice</a>
+</section>
+
+<footer>
+  Multimarket · Доставка по Україні Новою Поштою<br>
+  Питання? <a href="https://t.me/multimarket_ua">Telegram @multimarket_ua</a>
+</footer>
+<div class="pad-bar"></div>
+
+<div class="bar" id="bar">
+  <div class="p">349₴<s>680₴</s></div>
+  <a class="cta" href="#order">Замовити</a>
+</div>
+
+<script>
+const heroImg=document.getElementById('heroImg');
+const heroMap={
+  'Рожевий':{src:'img/hero-flatlay.jpg',fit:'cover',bg:'',pad:'0'},
+  'Білий':{src:'img/bottle-white.jpg',fit:'contain',bg:'#FBF3E7',pad:'0'},
+  'Блакитний':{src:'img/bottle-blue.jpg',fit:'contain',bg:'#FBF3E7',pad:'0'}
+};
+document.querySelectorAll('.pick').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.pick').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    document.getElementById('cName').textContent=d.dataset.c;
+    document.getElementById('fColor').value=d.dataset.c;
+    const m=heroMap[d.dataset.c];
+    if(m){heroImg.src=m.src;heroImg.style.objectFit=m.fit;heroImg.style.background=m.bg;heroImg.style.padding=m.pad;}
+  });
+});
+['img/bottle-white.jpg','img/bottle-blue.jpg'].forEach(s=>{new Image().src=s;});
+const QTY_PRICE={1:349,2:628,3:838};
+document.querySelectorAll('.qtyp').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.qtyp').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    const q=d.dataset.q, price=d.dataset.price;
+    document.getElementById('fQty').value=q;
+    document.getElementById('fAmount').value=price;
+    document.getElementById('submitBtn').textContent=`Підтвердити замовлення — ${price}₴`;
+  });
+});
+(function(){
+  const track=document.getElementById('revCarousel');
+  if(!track)return;
+  const dots=document.querySelectorAll('#revDots span');
+  const cards=Array.from(track.children);
+  let idx=0, timer=null, paused=false;
+  function cardLeft(el){
+    return el.getBoundingClientRect().left-track.getBoundingClientRect().left+track.scrollLeft;
+  }
+  function goTo(i){
+    idx=(i+cards.length)%cards.length;
+    track.scrollTo({left:cardLeft(cards[idx]),behavior:'smooth'});
+    dots.forEach((d,j)=>d.classList.toggle('on',j===idx));
+  }
+  function stopAuto(){
+    if(paused)return;
+    paused=true;
+    clearInterval(timer);
+  }
+  // клик по точке — сразу листает и глушит автопрокрутку
+  dots.forEach((d,j)=>{
+    d.addEventListener('click',()=>{ stopAuto(); goTo(j); });
+  });
+  // свайп пальцем — работает нативно (overflow-x:auto), тут только гасим автопрокрутку
+  track.addEventListener('touchstart',stopAuto,{passive:true});
+  track.addEventListener('wheel',stopAuto,{passive:true});
+  // мышью браузер не скроллит div перетаскиванием — добавляем drag-to-scroll для десктопа
+  let dragging=false, dragStartX=0, dragStartScroll=0, moved=false;
+  track.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='touch')return; // тач и так работает нативно
+    stopAuto();
+    dragging=true; moved=false;
+    dragStartX=e.clientX;
+    dragStartScroll=track.scrollLeft;
+    track.setPointerCapture(e.pointerId);
+    track.style.scrollSnapType='none';
+    track.style.cursor='grabbing';
+  });
+  track.addEventListener('pointermove',e=>{
+    if(!dragging)return;
+    const dx=e.clientX-dragStartX;
+    if(Math.abs(dx)>4)moved=true;
+    track.scrollLeft=dragStartScroll-dx;
+  });
+  function endDrag(){
+    if(!dragging)return;
+    dragging=false;
+    track.style.cursor='grab';
+    track.style.scrollSnapType='x mandatory';
+    // довести до ближайшей карточки
+    let closest=0,closestDist=Infinity;
+    cards.forEach((c,j)=>{
+      const dist=Math.abs(cardLeft(c)-track.scrollLeft);
+      if(dist<closestDist){closestDist=dist;closest=j;}
+    });
+    goTo(closest);
+  }
+  track.addEventListener('pointerup',endDrag);
+  track.addEventListener('pointercancel',endDrag);
+  track.addEventListener('pointerleave',()=>{if(dragging)endDrag();});
+  let scrollTimeout;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimeout);
+    scrollTimeout=setTimeout(()=>{
+      if(dragging)return;
+      let closest=0,closestDist=Infinity;
+      cards.forEach((c,j)=>{
+        const dist=Math.abs(cardLeft(c)-track.scrollLeft);
+        if(dist<closestDist){closestDist=dist;closest=j;}
+      });
+      idx=closest;
+      dots.forEach((d,j)=>d.classList.toggle('on',j===idx));
+    },100);
+  },{passive:true});
+  timer=setInterval(()=>{if(!paused)goTo(idx+1);},3000);
+})();
+function tickCountdown(){
+  const now=new Date();
+  const end=new Date(now.getFullYear(),now.getMonth(),now.getDate(),23,59,59);
+  let diff=Math.max(0,end-now);
+  const h=String(Math.floor(diff/3600000)).padStart(2,'0');
+  const m=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  const s=String(Math.floor(diff%60000/1000)).padStart(2,'0');
+  const txt=`${h}:${m}:${s}`;
+  const c1=document.getElementById('countdown'), c2=document.getElementById('countdown2');
+  if(c1)c1.textContent=txt;
+  if(c2)c2.textContent=txt;
+}
+tickCountdown();
+setInterval(tickCountdown,1000);
+const bar=document.getElementById('bar');
+new IntersectionObserver(e=>{bar.style.display=e[0].isIntersecting?'none':'flex';},{threshold:.15})
+  .observe(document.getElementById('order'));
+const form=document.getElementById('orderForm');
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  let ok=true;
+  ['fName','fPhone'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.toggle('err',!el.value.trim());
+    if(!el.value.trim())ok=false;
+  });
+  if(!ok)return;
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Відправляємо…';
+  const data=Object.fromEntries(new FormData(form));
+  try{
+    const r=await fetch('/api/order/blender',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    if(!r.ok)throw 0;
+    form.style.display='none';
+    document.getElementById('formOk').style.display='block';
+  }catch(_){
+    btn.disabled=false;btn.textContent=`Підтвердити замовлення — ${document.getElementById('fAmount').value}₴`;
+    alert('Не вдалося відправити. Напиши нам у Telegram: @multimarket_ua');
+  }
+});
+</script>
+</div>
+</body>
+</html>

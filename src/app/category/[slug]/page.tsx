@@ -144,6 +144,7 @@ export default function CategoryPage() {
             price={product.price}
             oldPrice={product.oldPrice}
             emoji={product.emoji}
+            image={product.image}
             rating={product.rating}
             reviewCount={product.reviewCount}
             orderCount={product.orderCount}
@@ -171,6 +172,7 @@ export default function CategoryPage() {
                   price={p.price}
                   oldPrice={p.oldPrice}
                   emoji={p.emoji}
+                  image={p.image}
                   rating={p.rating}
                   reviewCount={p.reviewCount}
                   orderCount={p.orderCount}

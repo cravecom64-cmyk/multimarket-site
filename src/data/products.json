@@ -119,7 +119,8 @@
     "bundleWith": [
       "h10",
       "h11"
-    ]
+    ],
+    "image": "/landing/ventilyator/img/hero-ice.jpg"
   },
   {
     "id": "h04",
@@ -1632,7 +1633,8 @@
       "bundleWith": [
         "g13"
       ]
-    }
+    },
+    "image": "/landing/blender/img/hero-flatlay.jpg"
   },
   {
     "id": "tt03",

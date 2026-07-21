@@ -124,26 +124,44 @@ export default function HomePage() {
             return (
               <Link
                 key={product.id}
-                href={`/product/${product.slug}`}
+                href={product.externalLanding || `/product/${product.slug}`}
                 className="min-w-[160px] h-[200px] rounded-xl flex flex-col items-center justify-center relative flex-shrink-0 snap-start overflow-hidden"
-                style={{
-                  background: `linear-gradient(135deg, ${gradientParts[0]} 0%, ${gradientParts[1]} 100%)`,
-                }}
+                style={
+                  product.image
+                    ? undefined
+                    : {
+                        background: `linear-gradient(135deg, ${gradientParts[0]} 0%, ${gradientParts[1]} 100%)`,
+                      }
+                }
               >
+                {product.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+                {product.image && (
+                  <div className="absolute inset-0 bg-black/35" />
+                )}
                 <div className="absolute top-2 left-2 bg-white/20 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
                   🔥 ТРЕНД
                 </div>
-                <span className="text-4xl mb-2">{product.emoji}</span>
-                <div className="text-white text-[11px] font-bold text-center leading-tight px-3">
+                {!product.image && (
+                  <span className="text-4xl mb-2">{product.emoji}</span>
+                )}
+                <div className="text-white text-[11px] font-bold text-center leading-tight px-3 relative">
                   {product.name}
                 </div>
-                <div className="mt-1.5 flex items-center gap-1.5">
+                <div className="mt-1.5 flex items-center gap-1.5 relative">
                   <span className="text-white text-sm font-black">{product.price}₴</span>
                   {product.oldPrice && (
                     <span className="text-white/50 text-[10px] line-through">{product.oldPrice}₴</span>
                   )}
                 </div>
-                <div className="text-white/60 text-[9px] mt-1">
+                <div className="text-white/60 text-[9px] mt-1 relative">
                   {product.orderCount} замовлень
                 </div>
               </Link>
@@ -173,6 +191,7 @@ export default function HomePage() {
                 price={product.price}
                 oldPrice={product.oldPrice}
                 emoji={product.emoji}
+                image={product.image}
                 rating={product.rating}
                 reviewCount={product.reviewCount}
                 orderCount={product.orderCount}
@@ -203,6 +222,7 @@ export default function HomePage() {
               price={product.price}
               oldPrice={product.oldPrice}
               emoji={product.emoji}
+              image={product.image}
               rating={product.rating}
               reviewCount={product.reviewCount}
               orderCount={product.orderCount}

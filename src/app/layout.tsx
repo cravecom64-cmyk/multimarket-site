@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { TelegramButton } from "@/components/TelegramButton";
 import { CartDrawer } from "@/components/CartDrawer";
+import { MetaPixel } from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
   title: "Multimarket — Штуки для дому, саду і улюбленців",
@@ -41,6 +42,7 @@ export default function RootLayout({
         `}} />
       </head>
       <body className="font-sans bg-gray-50 text-gray-900 antialiased select-none">
+        <MetaPixel />
         <CartProvider>
           <div className="max-w-[480px] mx-auto bg-white min-h-screen shadow-sm lg:shadow-lg">
             <Header />

@@ -94,8 +94,17 @@ export default function ProductPage() {
 
       {/* Gallery area */}
       <div className="relative">
-        <div className="h-[340px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative">
-          <span className="text-6xl">{product.emoji}</span>
+        <div className="h-[340px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
+          {product.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-6xl">{product.emoji}</span>
+          )}
 
           {discount > 0 && (
             <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold">
@@ -110,21 +119,23 @@ export default function ProductPage() {
           )}
         </div>
 
-        {/* Thumbnail strip */}
-        <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide">
-          {[product.emoji, product.emoji, product.emoji, "📦"].map((e, i) => (
-            <div
-              key={i}
-              className={`w-14 h-14 rounded-md flex-shrink-0 flex items-center justify-center text-lg ${
-                i === 0
-                  ? "border-2 border-emerald-500 bg-gray-100"
-                  : "border-2 border-transparent bg-gray-100"
-              }`}
-            >
-              {e}
-            </div>
-          ))}
-        </div>
+        {/* Thumbnail strip — тільки коли нема реального фото (fallback на emoji-заглушку) */}
+        {!product.image && (
+          <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide">
+            {[product.emoji, product.emoji, product.emoji, "📦"].map((e, i) => (
+              <div
+                key={i}
+                className={`w-14 h-14 rounded-md flex-shrink-0 flex items-center justify-center text-lg ${
+                  i === 0
+                    ? "border-2 border-emerald-500 bg-gray-100"
+                    : "border-2 border-transparent bg-gray-100"
+                }`}
+              >
+                {e}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Title & Price */}

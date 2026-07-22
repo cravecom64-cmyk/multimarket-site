@@ -4,14 +4,27 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Standalone-лендинги (не пов'язані з головною, окремі static HTML в public/landing)
-  rewrites: async () => [
-    { source: "/landing/blender", destination: "/landing/blender/index.html" },
-    {
-      source: "/landing/ventilyator",
-      destination: "/landing/ventilyator/index.html",
-    },
-  ],
+  // Брендовані сторінки товару (blender, ventilyator) — той самий static HTML,
+  // що і в /landing/*, тепер віддається напряму з канонічного /product/<slug>,
+  // щоб не було зовнішнього редіректу і дублю URL для Meta-фіда/реклами.
+  // beforeFiles — щоб перебити динамічний App Router роут /product/[slug].
+  rewrites: async () => ({
+    beforeFiles: [
+      { source: "/landing/blender", destination: "/landing/blender/index.html" },
+      {
+        source: "/landing/ventilyator",
+        destination: "/landing/ventilyator/index.html",
+      },
+      {
+        source: "/product/blender-fresh-juice-portatyvnyy",
+        destination: "/landing/blender/index.html",
+      },
+      {
+        source: "/product/ventilyator-crownberg-sv413",
+        destination: "/landing/ventilyator/index.html",
+      },
+    ],
+  }),
   headers: async () => [
     {
       source: "/:path*",

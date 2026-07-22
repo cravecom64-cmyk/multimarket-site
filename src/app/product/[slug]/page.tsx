@@ -285,66 +285,77 @@ export default function ProductPage() {
         );
       })()}
 
-      {/* TikTok Videos */}
-      {product.hasTiktok && (
+      {/* TikTok Videos — тільки реальні відео, без фейкових ▶-плашок */}
+      {product.tiktokVideos && product.tiktokVideos.length > 0 && (
         <div className="px-4 mt-5">
           <h3 className="text-[13px] font-extrabold">📱 Цей товар у TikTok</h3>
           <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
-            {["Розпаковка", "Огляд", "В дії"].map((label, i) => (
-              <div
+            {product.tiktokVideos.map((v, i) => (
+              <a
                 key={i}
+                href={v.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="min-w-[100px] h-[140px] bg-black rounded-xl flex flex-col items-center justify-center relative flex-shrink-0"
               >
                 <span className="text-xl opacity-90">▶</span>
                 <div className="absolute bottom-2 text-[8px] text-gray-300 text-center">
-                  {label}
+                  {v.label}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       )}
 
-      {/* Reviews */}
+      {/* Reviews — реальні написані відгуки; чесний empty-state якщо їх ще нема */}
       <div className="px-4 mt-5">
         <div className="flex justify-between items-center">
           <h3 className="text-[13px] font-extrabold">
-            💬 Відгуки ({product.reviewCount})
+            💬 Відгуки ({product.reviews?.length ?? 0})
           </h3>
-          <span className="text-[11px] text-amber-500 font-semibold">
-            Всі →
-          </span>
+          {product.reviews && product.reviews.length > 0 && (
+            <span className="text-[11px] text-amber-500 font-semibold">
+              Всі →
+            </span>
+          )}
         </div>
-        <div className="bg-gray-50 rounded-xl p-3 mt-2 border border-gray-100">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
-                О
-              </div>
-              <div>
-                <div className="text-[10px] font-bold">Оксана М.</div>
-                <div className="text-[8px] text-gray-400">
-                  Київ · 3 дні тому
+        {product.reviews && product.reviews.length > 0 ? (
+          <div className="space-y-2 mt-2">
+            {product.reviews.map((r, i) => (
+              <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
+                      {r.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-bold">{r.name}</div>
+                      <div className="text-[8px] text-gray-400">
+                        {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-amber-500">
+                    {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                  </span>
+                </div>
+                <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
+                  {r.text}
+                </div>
+                <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
+                  ✓ Підтверджена покупка
                 </div>
               </div>
-            </div>
-            <span className="text-[10px] text-amber-500">★★★★★</span>
+            ))}
           </div>
-          <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
-            Замовляла і дуже задоволена! Якість відмінна, доставка швидка. Рекомендую всім.
-          </div>
-          <div className="flex gap-1 mt-1.5">
-            <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-xs">
-              📷
-            </div>
-            <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-xs">
-              📷
+        ) : (
+          <div className="bg-gray-50 rounded-xl p-4 mt-2 border border-gray-100 text-center">
+            <div className="text-[11px] text-gray-500">
+              Поки без відгуків — будьте першим, хто розповість про цей товар!
             </div>
           </div>
-          <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
-            ✓ Підтверджена покупка
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Cross-sell */}

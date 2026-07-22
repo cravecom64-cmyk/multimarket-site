@@ -1,12 +1,13 @@
 "use client";
 
-import { useParams, redirect } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartProvider";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { LandingProduct } from "@/components/LandingProduct";
+import { trackViewContent } from "@/lib/pixel";
 import {
   getProductBySlug,
   getRelatedProducts,
@@ -20,6 +21,16 @@ export default function ProductPage() {
   const product = getProductBySlug(slug);
   const { addItem } = useCart();
   const [specsOpen, setSpecsOpen] = useState(true);
+
+  // ViewContent для будь-якого варіанту сторінки товару (включно з
+  // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
+  useEffect(() => {
+    if (!product) return;
+    trackViewContent({ id: product.id, name: product.name, price: product.price });
+    if (product.externalLanding) {
+      window.location.href = product.externalLanding;
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -36,9 +47,10 @@ export default function ProductPage() {
     );
   }
 
-  // Готовий бренд-лендинг (окрема сторінка) — перенаправляємо туди
+  // Готовий бренд-лендинг (окрема сторінка) — редірект виконує useEffect
+  // вище (після трекінгу ViewContent), тут просто нічого не рендеримо.
   if (product.externalLanding) {
-    redirect(product.externalLanding);
+    return null;
   }
 
   // Trending products get a unique landing page

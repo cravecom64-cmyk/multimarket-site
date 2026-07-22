@@ -170,6 +170,28 @@ details p{padding:0 0 18px;font-size:14.5px;color:var(--muted)}
 footer{padding:30px 26px 44px;font-size:13.5px;color:var(--muted);text-align:center}
 footer a{color:var(--muted)}
 </style>
+<!--
+  META PIXEL — поки не підключено (окрема статична сторінка, немає env var).
+  Коли Павло дасть Pixel ID: розкоментувати блок нижче, підставити ID в
+  двох місцях (init і noscript src), товар для ViewContent тут — tt02
+  (той самий id, що й у фіді /api/feed).
+
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID_TUT');
+  fbq('track', 'PageView');
+  fbq('track', 'ViewContent', {content_ids: ['tt02'], content_type: 'product', value: 349, currency: 'UAH'});
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=PIXEL_ID_TUT&ev=PageView&noscript=1"/></noscript>
+-->
 </head>
 <body>
 <div class="wrap">

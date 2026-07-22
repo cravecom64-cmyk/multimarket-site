@@ -18,6 +18,14 @@ export interface LandingConfig {
   urgency: string;
 }
 
+export interface ProductReview {
+  name: string;
+  city: string;
+  daysAgo: number;
+  rating: number;
+  text: string;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -48,6 +56,12 @@ export interface Product {
   // Готовий бренд-лендинг товару (окрема сторінка в public/landing) — якщо задано,
   // картка товару і /product/[slug] ведуть туди замість стандартного шаблону
   externalLanding?: string;
+  // Реальні написані відгуки — якщо порожньо/немає, сторінка товару показує
+  // чесний стан "поки без відгуків" замість фейкового захардкодженого відгуку
+  reviews?: ProductReview[];
+  // Реальні посилання на TikTok-відео цього товару — якщо порожньо/немає,
+  // блок TikTok не рендериться (замість фейкових ▶-плашок що нічого не грають)
+  tiktokVideos?: { label: string; url: string }[];
 }
 
 const products: Product[] = productsData as unknown as Product[];

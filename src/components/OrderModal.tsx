@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useCart } from "./CartProvider";
+import { trackPurchase } from "@/lib/pixel";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -46,6 +47,13 @@ export function OrderModal({ onClose }: OrderModalProps) {
       });
 
       if (res.ok) {
+        // Оплата при отриманні — Purchase шлемо в момент прийняття заявки,
+        // а не реальної оплати. Коли підключимо онлайн-оплату — перенесемо
+        // цей виклик на сторінку успішної оплати.
+        trackPurchase(
+          items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+          totalPrice
+        );
         setStatus("success");
         clearCart();
       } else {

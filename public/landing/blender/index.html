@@ -120,6 +120,14 @@ img,video{max-width:100%;display:block}
 .spec b{font-weight:800;text-align:right}
 .spec span{color:var(--muted)}
 
+/* bundle */
+.bundle-card{display:flex;align-items:center;gap:14px;background:#fff;border-radius:20px;padding:16px 18px;text-decoration:none;color:inherit;box-shadow:0 4px 16px rgba(38,52,62,.06);margin-bottom:10px}
+.bundle-card .em{font-size:28px;flex-shrink:0;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:var(--blue-soft);border-radius:14px}
+.bundle-card .info{flex:1;min-width:0}
+.bundle-card .info .nm{font-size:14px;font-weight:800;color:var(--ink)}
+.bundle-card .info .pr{font-size:15px;font-weight:800;color:var(--orange);margin-top:3px}
+.bundle-card .arrow{font-size:20px;color:var(--orange);flex-shrink:0}
+
 /* reviews */
 .revs{background:var(--blue-soft)}
 .rating-line{display:flex;align-items:baseline;gap:12px;margin-bottom:22px}
@@ -316,6 +324,19 @@ footer a{color:var(--muted)}
   <div class="spec"><span>Розміри</span><b>210×75 мм</b></div>
   <div class="spec"><span>Вага</span><b>390 г</b></div>
   <div class="spec"><span>Матеріал</span><b>харчовий пластик + нержавіюча сталь</b></div>
+</section>
+
+<section style="padding-top:0">
+  <h2>Часто беруть <em>разом</em></h2>
+  <p class="sub" style="margin:-8px 0 16px">Тримай смузі холодним по дорозі на пляж, в зал чи офіс</p>
+  <a class="bundle-card" href="/product/termosumka-tmbox02">
+    <span class="em">🧊</span>
+    <span class="info">
+      <span class="nm">Термосумка з ременем TMBox-02</span>
+      <span class="pr">349₴</span>
+    </span>
+    <span class="arrow">→</span>
+  </a>
 </section>
 
 <section class="revs">

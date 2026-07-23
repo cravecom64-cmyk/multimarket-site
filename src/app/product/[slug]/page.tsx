@@ -21,6 +21,7 @@ export default function ProductPage() {
   const product = getProductBySlug(slug);
   const { addItem } = useCart();
   const [specsOpen, setSpecsOpen] = useState(true);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
   // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
@@ -319,53 +320,59 @@ export default function ProductPage() {
         </div>
       )}
 
-      {/* Reviews — реальні написані відгуки; чесний empty-state якщо їх ще нема */}
+      {/* Reviews — реальні написані відгуки; згорнуті за замовчуванням,
+          розкриваються по кнопці, щоб не перевантажувати сторінку */}
       <div className="px-4 mt-5">
-        <div className="flex justify-between items-center">
+        <button
+          onClick={() => setReviewsOpen(!reviewsOpen)}
+          className="w-full flex justify-between items-center"
+        >
           <h3 className="text-[13px] font-extrabold">
             💬 Відгуки ({product.reviews?.length ?? 0})
           </h3>
           {product.reviews && product.reviews.length > 0 && (
             <span className="text-[11px] text-amber-500 font-semibold">
-              Всі →
+              {reviewsOpen ? "Згорнути ▴" : "Показати ▾"}
             </span>
           )}
-        </div>
-        {product.reviews && product.reviews.length > 0 ? (
-          <div className="space-y-2 mt-2">
-            {product.reviews.map((r, i) => (
-              <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
-                      {r.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-bold">{r.name}</div>
-                      <div className="text-[8px] text-gray-400">
-                        {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
+        </button>
+        {reviewsOpen && (
+          product.reviews && product.reviews.length > 0 ? (
+            <div className="space-y-2 mt-2">
+              {product.reviews.map((r, i) => (
+                <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
+                        {r.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-bold">{r.name}</div>
+                        <div className="text-[8px] text-gray-400">
+                          {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
+                        </div>
                       </div>
                     </div>
+                    <span className="text-[10px] text-amber-500">
+                      {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-amber-500">
-                    {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
-                  </span>
+                  <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
+                    {r.text}
+                  </div>
+                  <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
+                    ✓ Підтверджена покупка
+                  </div>
                 </div>
-                <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
-                  {r.text}
-                </div>
-                <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
-                  ✓ Підтверджена покупка
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="bg-gray-50 rounded-xl p-4 mt-2 border border-gray-100 text-center">
-            <div className="text-[11px] text-gray-500">
-              Поки без відгуків — будьте першим, хто розповість про цей товар!
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="bg-gray-50 rounded-xl p-4 mt-2 border border-gray-100 text-center">
+              <div className="text-[11px] text-gray-500">
+                Поки без відгуків — будьте першим, хто розповість про цей товар!
+              </div>
+            </div>
+          )
         )}
       </div>
 

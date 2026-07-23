@@ -102,7 +102,8 @@
     "isTrending": false,
     "bundleWith": [
       "h04"
-    ]
+    ],
+    "image": "/products/h02/hero.jpg"
   },
   {
     "id": "h03",

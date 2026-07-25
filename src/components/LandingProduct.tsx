@@ -59,9 +59,22 @@ export function LandingProduct({ product }: LandingProductProps) {
           </p>
 
           {/* Product visual */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center mb-6">
-            <div className="text-7xl mb-3">{product.emoji}</div>
-            <div className="text-white font-bold text-lg">{product.name}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-6">
+            {product.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-56 object-cover"
+              />
+            ) : (
+              <div className="pt-8 text-center">
+                <div className="text-7xl mb-3">{product.emoji}</div>
+              </div>
+            )}
+            <div className="text-white font-bold text-lg text-center py-3.5 px-4">
+              {product.name}
+            </div>
           </div>
 
           {/* Price block */}

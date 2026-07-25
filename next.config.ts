@@ -4,23 +4,16 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Брендовані сторінки товару (blender, ventilyator) — той самий static HTML,
-  // що і в /landing/*, тепер віддається напряму з канонічного /product/<slug>,
-  // щоб не було зовнішнього редіректу і дублю URL для Meta-фіда/реклами.
-  // beforeFiles — щоб перебити динамічний App Router роут /product/[slug].
+  // Старі static HTML лендинги (blender, ventilyator) лишені у /public/landing/
+  // для сумісності зі старими посиланнями, але /product/<slug> для цих товарів
+  // більше НЕ підміняється на raw HTML — рендериться звичайним App Router
+  // роутом /product/[slug] (LandingProduct для blender, стандартний шаблон
+  // для ventilyator), щоб мати спільну шапку/нав/кошик як і решта карток сайту.
   rewrites: async () => ({
     beforeFiles: [
       { source: "/landing/blender", destination: "/landing/blender/index.html" },
       {
         source: "/landing/ventilyator",
-        destination: "/landing/ventilyator/index.html",
-      },
-      {
-        source: "/product/blender-fresh-juice-portatyvnyy",
-        destination: "/landing/blender/index.html",
-      },
-      {
-        source: "/product/ventilyator-crownberg-sv413",
         destination: "/landing/ventilyator/index.html",
       },
     ],

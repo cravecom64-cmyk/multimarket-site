@@ -14,6 +14,7 @@ export function LandingProduct({ product }: LandingProductProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const landing = product.landing!;
   const bundleProducts = getBundleProducts(landing.bundleWith);
+  const inStock = product.inStock !== false;
 
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;
   const freeShipLeft = Math.max(0, 800 - product.price);
@@ -59,18 +60,23 @@ export function LandingProduct({ product }: LandingProductProps) {
           </p>
 
           {/* Product visual */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-6 relative">
             {product.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-56 object-cover"
+                className={`w-full aspect-square object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
               />
             ) : (
               <div className="pt-8 text-center">
                 <div className="text-7xl mb-3">{product.emoji}</div>
               </div>
+            )}
+            {!inStock && (
+              <span className="absolute top-3 left-3 bg-gray-900/85 text-white text-[11px] px-3 py-1.5 rounded-full font-bold">
+                Немає в наявності
+              </span>
             )}
             <div className="text-white font-bold text-lg text-center py-3.5 px-4">
               {product.name}
@@ -217,6 +223,7 @@ export function LandingProduct({ product }: LandingProductProps) {
           {/* Bundle deal */}
           <button
             onClick={() => {
+              if (!inStock) return;
               addItem({
                 id: product.id,
                 name: product.name,
@@ -232,10 +239,13 @@ export function LandingProduct({ product }: LandingProductProps) {
                 })
               );
             }}
-            className="w-full mt-4 py-3.5 rounded-xl text-sm font-bold text-white transition-transform active:scale-[0.98]"
+            disabled={!inStock}
+            className={`w-full mt-4 py-3.5 rounded-xl text-sm font-bold text-white transition-transform active:scale-[0.98] ${!inStock ? "opacity-50 cursor-not-allowed" : ""}`}
             style={{ backgroundColor: landing.accentColor }}
           >
-            🎁 Взяти все разом — {product.price + bundleProducts.reduce((s, p) => s + p.price, 0)}₴
+            {inStock
+              ? `🎁 Взяти все разом — ${product.price + bundleProducts.reduce((s, p) => s + p.price, 0)}₴`
+              : "Немає в наявності"}
           </button>
         </section>
       )}
@@ -301,15 +311,20 @@ export function LandingProduct({ product }: LandingProductProps) {
               )}
             </div>
             <button
-              onClick={() => addItem({
+              onClick={() => inStock && addItem({
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 emoji: product.emoji,
               })}
-              className="bg-white text-gray-900 px-6 py-3 rounded-xl text-sm font-extrabold active:scale-[0.97] transition-transform"
+              disabled={!inStock}
+              className={`px-6 py-3 rounded-xl text-sm font-extrabold transition-transform ${
+                inStock
+                  ? "bg-white text-gray-900 active:scale-[0.97]"
+                  : "bg-white/40 text-white/70 cursor-not-allowed"
+              }`}
             >
-              🛒 Замовити
+              {inStock ? "🛒 Замовити" : "Немає в наявності"}
             </button>
           </div>
         </div>

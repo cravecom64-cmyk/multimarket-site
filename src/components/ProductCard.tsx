@@ -18,6 +18,7 @@ interface ProductCardProps {
   rank?: number;
   hasTiktok?: boolean;
   externalLanding?: string;
+  inStock?: boolean;
 }
 
 export function ProductCard({
@@ -35,6 +36,7 @@ export function ProductCard({
   rank,
   hasTiktok,
   externalLanding,
+  inStock = true,
 }: ProductCardProps) {
   const { addItem } = useCart();
 
@@ -53,11 +55,17 @@ export function ProductCard({
             <img
               src={image}
               alt={name}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
               loading="lazy"
             />
           ) : (
             emoji
+          )}
+
+          {!inStock && (
+            <span className="absolute inset-x-0 bottom-0 bg-gray-800/85 text-white text-[8px] text-center py-1 font-semibold">
+              Немає в наявності
+            </span>
           )}
 
           {/* Rank badge */}
@@ -113,11 +121,16 @@ export function ProductCard({
         </div>
         <button
           onClick={() =>
-            addItem({ id, name, price, emoji })
+            inStock && addItem({ id, name, price, emoji })
           }
-          className="mt-1.5 w-full bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-semibold py-1.5 rounded-md transition-colors"
+          disabled={!inStock}
+          className={`mt-1.5 w-full text-white text-[10px] font-semibold py-1.5 rounded-md transition-colors ${
+            inStock
+              ? "bg-emerald-500 hover:bg-emerald-600"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
         >
-          Замовити
+          {inStock ? "Замовити" : "Немає в наявності"}
         </button>
       </div>
     </div>

@@ -36,6 +36,9 @@ export interface Product {
   oldPrice: number | null;
   buyPrice: number;
   emoji: string;
+  // Якщо false — товару немає в наявності у постачальника,
+  // сайт показує позначку "Немає в наявності" і блокує замовлення
+  inStock?: boolean;
   // Реальне фото товару (напр. з готового бренд-лендингу) — якщо задано,
   // картка показує його замість emoji-заглушки
   image?: string;

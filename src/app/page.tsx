@@ -198,6 +198,7 @@ export default function HomePage() {
                 badges={product.badges}
                 hasTiktok={product.hasTiktok}
                 externalLanding={product.externalLanding}
+                inStock={product.inStock}
               />
             </div>
           ))}
@@ -230,6 +231,7 @@ export default function HomePage() {
               rank={i + 1}
               hasTiktok={product.hasTiktok}
               externalLanding={product.externalLanding}
+              inStock={product.inStock}
             />
           ))}
         </div>

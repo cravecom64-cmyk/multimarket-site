@@ -304,11 +304,11 @@ export default function HomePage() {
           </span>
         </div>
 
-        <div className="mt-2.5 space-y-2">
+        <div className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
           {reviews.map((r, i) => (
             <div
               key={i}
-              className="bg-gray-50 rounded-xl p-3.5 border border-gray-100"
+              className="bg-gray-50 rounded-xl p-3.5 border border-gray-100 min-w-[260px] max-w-[260px] shrink-0 snap-start"
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">

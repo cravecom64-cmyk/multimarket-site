@@ -397,6 +397,7 @@ export default function ProductPage() {
                   badges={p.badges}
                   hasTiktok={p.hasTiktok}
                   externalLanding={p.externalLanding}
+                  inStock={p.inStock}
                 />
               </div>
             ))}
@@ -424,6 +425,7 @@ export default function ProductPage() {
                 badges={p.badges}
                 hasTiktok={p.hasTiktok}
                 externalLanding={p.externalLanding}
+                inStock={p.inStock}
               />
             ))}
           </div>

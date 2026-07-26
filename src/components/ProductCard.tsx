@@ -49,7 +49,7 @@ export function ProductCard({
   return (
     <div className="product-card bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
       <Link href={href}>
-        <div className="h-[130px] bg-gray-200 relative flex items-center justify-center text-3xl overflow-hidden">
+        <div className="aspect-square bg-gray-200 relative flex items-center justify-center text-3xl overflow-hidden">
           {image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img

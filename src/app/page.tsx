@@ -274,13 +274,27 @@ export default function HomePage() {
             <Link
               key={product.id}
               href={`/product/${product.slug}`}
-              className="min-w-[110px] h-[150px] bg-black rounded-xl flex flex-col items-center justify-center relative flex-shrink-0"
+              className="min-w-[110px] h-[150px] bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
             >
-              <span className="text-3xl">{product.emoji}</span>
-              <div className="absolute bottom-2 text-[9px] text-gray-300 text-center leading-tight px-2">
-                {product.name.split(" ").slice(0, 2).join(" ")}
+              {product.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-3xl">{product.emoji}</span>
+                </div>
+              )}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-8 pb-1.5 px-1.5">
+                <div className="text-[9px] text-white text-center leading-tight font-semibold">
+                  {product.name.split(" ").slice(0, 2).join(" ")}
+                </div>
               </div>
-              <div className="absolute top-1.5 left-1.5 text-[8px] text-white bg-white/15 px-1.5 py-0.5 rounded">
+              <div className="absolute top-1.5 left-1.5 text-[8px] text-white bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded">
                 ♪ TikTok
               </div>
             </Link>

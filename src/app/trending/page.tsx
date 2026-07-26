@@ -57,7 +57,19 @@ export default function TrendingPage() {
                       {landing.heroSubtitle}
                     </p>
                   </div>
-                  <div className="text-5xl ml-3 shrink-0">{product.emoji}</div>
+                  <div className="w-20 h-20 ml-3 shrink-0 rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                    {product.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="text-4xl">{product.emoji}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 mt-4">

@@ -174,9 +174,9 @@ export default function HomePage() {
       <section className="mt-5 px-4">
         <div className="flex justify-between items-center">
           <h2 className="text-base font-extrabold">🔥 Акції та спецціни</h2>
-          <span className="text-[11px] text-amber-500 font-semibold">
+          <Link href="/sale" className="text-[11px] text-amber-500 font-semibold">
             Всі акції →
-          </span>
+          </Link>
         </div>
         <p className="text-[11px] text-gray-400 mt-0.5">
           Встигни поки є. Кількість обмежена.
@@ -274,7 +274,7 @@ export default function HomePage() {
             <Link
               key={product.id}
               href={`/product/${product.slug}`}
-              className="min-w-[110px] h-[150px] bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
+              className="w-[130px] aspect-square bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
             >
               {product.image ? (
                 // eslint-disable-next-line @next/next/no-img-element

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { getTrendingProducts } from "@/lib/products";
 import { Footer } from "@/components/Footer";
+import { ProductCard } from "@/components/ProductCard";
 
 const trending = getTrendingProducts();
 
@@ -25,76 +25,27 @@ export default function TrendingPage() {
       </div>
 
       {/* Trending Grid */}
-      <div className="px-4 mt-5 space-y-4">
-        {trending.map((product, i) => {
-          const landing = product.landing!;
-          const gradientParts = landing.gradient
-            .replace("from-[", "")
-            .replace("] to-[", ",")
-            .replace("]", "")
-            .split(",");
-          const savings = product.oldPrice ? product.oldPrice - product.price : 0;
-
-          return (
-            <Link
-              key={product.id}
-              href={`/product/${product.slug}`}
-              className="block rounded-2xl overflow-hidden"
-              style={{
-                background: `linear-gradient(135deg, ${gradientParts[0]} 0%, ${gradientParts[1]} 100%)`,
-              }}
-            >
-              <div className="p-5">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="inline-flex items-center gap-1 bg-white/20 text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-2">
-                      🔥 #{i + 1} ТРЕНД
-                    </div>
-                    <h2 className="text-[15px] font-extrabold text-white leading-tight">
-                      {landing.heroTitle}
-                    </h2>
-                    <p className="text-[11px] text-white/70 mt-1 leading-relaxed line-clamp-2">
-                      {landing.heroSubtitle}
-                    </p>
-                  </div>
-                  <div className="w-20 h-20 ml-3 shrink-0 rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    {product.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span className="text-4xl">{product.emoji}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 mt-4">
-                  <span className="text-xl font-black text-white">{product.price}₴</span>
-                  {product.oldPrice && (
-                    <span className="text-sm text-white/50 line-through">{product.oldPrice}₴</span>
-                  )}
-                  {savings > 0 && (
-                    <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                      −{savings}₴
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-3 mt-2 text-[10px] text-white/60">
-                  <span>📦 {product.orderCount} замовлень</span>
-                  <span>⭐ {product.rating}</span>
-                  <span className="ml-auto text-white/80 font-semibold text-[11px]">
-                    Детальніше →
-                  </span>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="grid grid-cols-2 gap-2.5 px-3 mt-5">
+        {trending.map((product, i) => (
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            slug={product.slug}
+            name={product.name}
+            price={product.price}
+            oldPrice={product.oldPrice}
+            emoji={product.emoji}
+            image={product.image}
+            rating={product.rating}
+            reviewCount={product.reviewCount}
+            orderCount={product.orderCount}
+            badges={product.badges}
+            rank={i + 1}
+            inStock={product.inStock}
+            hasTiktok={product.hasTiktok}
+            externalLanding={product.externalLanding}
+          />
+        ))}
       </div>
 
       <div className="mt-6">

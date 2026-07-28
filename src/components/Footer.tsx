@@ -23,10 +23,18 @@ export function Footer() {
           <div>
             <div className="font-bold text-gray-300 mb-2">Інформація</div>
             <div className="space-y-1.5">
-              <span className="block">Доставка і оплата</span>
-              <span className="block">Повернення</span>
-              <span className="block">Про нас</span>
-              <span className="block">FAQ</span>
+              <Link href="/delivery" className="block hover:text-white transition-colors">
+                Доставка і оплата
+              </Link>
+              <Link href="/returns" className="block hover:text-white transition-colors">
+                Повернення
+              </Link>
+              <Link href="/about" className="block hover:text-white transition-colors">
+                Про нас
+              </Link>
+              <Link href="/faq" className="block hover:text-white transition-colors">
+                FAQ
+              </Link>
             </div>
           </div>
         </div>
@@ -41,8 +49,14 @@ export function Footer() {
             ✈️ Telegram
           </a>
         </div>
-        <div className="border-t border-gray-700 pt-3 text-[9px] text-gray-600">
-          © 2026 Multimarket · Всі права захищені
+        <div className="border-t border-gray-700 pt-3 text-[9px] text-gray-600 flex flex-wrap gap-x-3 gap-y-1">
+          <span>© 2026 Multimarket · Всі права захищені</span>
+          <Link href="/privacy" className="hover:text-gray-400 underline underline-offset-2">
+            Політика конфіденційності
+          </Link>
+          <Link href="/terms" className="hover:text-gray-400 underline underline-offset-2">
+            Публічна оферта
+          </Link>
         </div>
       </div>
     </footer>

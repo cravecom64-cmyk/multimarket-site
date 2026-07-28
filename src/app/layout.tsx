@@ -8,15 +8,43 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { MetaPixel } from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
-  title: "Multimarket — Штуки для дому, саду і улюбленців",
+  metadataBase: new URL("https://multi-market.com.ua"),
+  title: {
+    default:
+      "Multimarket — товари для дому, саду і тварин з TikTok | Купити в Україні",
+    template: "%s | Multimarket",
+  },
   description:
-    "Знайшли в TikTok. Перевірили. Відправляємо сьогодні. Тільки те, що реально працює — з безкоштовною доставкою від 800₴.",
+    "Товари для дому, саду і тварин, перевірені в TikTok. Оплата при отриманні, доставка Новою Поштою по всій Україні, безкоштовна доставка від 800₴. Відправляємо сьогодні.",
+  keywords: [
+    "товари для дому купити",
+    "товари з тік ток купити",
+    "інтернет магазин товарів для дому",
+    "товари для тварин купити Україна",
+    "садовий інвентар купити",
+    "накладений платіж товари",
+    "доставка Новою Поштою",
+  ],
+  alternates: {
+    canonical: "https://multi-market.com.ua",
+  },
   openGraph: {
-    title: "Multimarket — Штуки для дому, саду і улюбленців",
+    title: "Multimarket — товари для дому, саду і тварин з TikTok",
     description:
-      "Знайшли в TikTok. Перевірили. Відправляємо сьогодні.",
+      "Знайшли в TikTok. Перевірили. Відправляємо сьогодні. Оплата при отриманні, доставка по всій Україні.",
     type: "website",
     locale: "uk_UA",
+    url: "https://multi-market.com.ua",
+    siteName: "Multimarket",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
   },
 };
 

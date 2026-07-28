@@ -130,7 +130,7 @@ export function ProductPageClient() {
 
       {/* Gallery area */}
       <div className="relative">
-        <div className="h-[340px] bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
+        <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
           {product.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img

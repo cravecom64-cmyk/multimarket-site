@@ -350,7 +350,14 @@ export function ProductPageClient() {
             <div className="px-4 py-3 space-y-2.5 bg-emerald-50/50">
               {/* Current product */}
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{product.emoji}</span>
+                <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
+                  {product.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    product.emoji
+                  )}
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[11px] font-semibold text-gray-700 truncate">{product.name}</div>
                   <div className="text-[10px] text-gray-400">Обраний товар</div>
@@ -359,14 +366,26 @@ export function ProductPageClient() {
               </div>
               {bundleItems.map((bp) => (
                 <div key={bp.id} className="flex items-center gap-3 border-t border-emerald-100 pt-2.5">
-                  <span className="text-2xl">{bp.emoji}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[11px] font-semibold text-gray-700 truncate">{bp.name}</div>
-                    {bp.oldPrice && (
-                      <div className="text-[9px] text-gray-400 line-through">{bp.oldPrice}₴</div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1.5">
+                  <Link
+                    href={bp.externalLanding || `/product/${bp.slug}`}
+                    className="flex items-center gap-3 flex-1 min-w-0"
+                  >
+                    <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
+                      {bp.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" />
+                      ) : (
+                        bp.emoji
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[11px] font-semibold text-gray-700 truncate">{bp.name}</div>
+                      {bp.oldPrice && (
+                        <div className="text-[9px] text-gray-400 line-through">{bp.oldPrice}₴</div>
+                      )}
+                    </div>
+                  </Link>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
                     <span className="text-sm font-black text-emerald-600">{bp.price}₴</span>
                     <button
                       onClick={() => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji })}

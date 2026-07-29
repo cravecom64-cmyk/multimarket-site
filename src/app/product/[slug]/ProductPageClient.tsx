@@ -20,7 +20,7 @@ export function ProductPageClient() {
   const slug = params.slug as string;
   const product = getProductBySlug(slug);
   const { addItem } = useCart();
-  const [specsOpen, setSpecsOpen] = useState(true);
+  const [specsOpen, setSpecsOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
@@ -256,27 +256,86 @@ export function ProductPageClient() {
         />
       </div>
 
-      {/* Specs Accordion */}
-      <div className="mx-4 mt-4 border border-gray-200 rounded-xl overflow-hidden">
-        <button
-          onClick={() => setSpecsOpen(!specsOpen)}
-          className="w-full px-3.5 py-3 flex justify-between items-center"
-        >
-          <span className="text-xs font-bold">📋 Характеристики</span>
-          <span className="text-sm text-gray-400">
-            {specsOpen ? "▴" : "▾"}
-          </span>
-        </button>
-        {specsOpen && (
-          <div className="px-3.5 pb-3 text-[11px] text-gray-600 space-y-1.5">
-            {Object.entries(product.specs).map(([key, val]) => (
-              <div key={key} className="flex justify-between">
-                <span className="text-gray-400">{key}</span>
-                <span>{val}</span>
+      {/* Характеристики + Відгуки — рядом, обидва згорнуті за замовчуванням */}
+      <div className="grid grid-cols-2 gap-2 mx-4 mt-4">
+        {/* Specs Accordion */}
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setSpecsOpen(!specsOpen)}
+            className="w-full px-3 py-2.5 flex justify-between items-center gap-1"
+          >
+            <span className="text-[12px] font-bold text-left leading-tight">📋 Характеристики</span>
+            <span className="text-sm text-gray-400 flex-shrink-0">
+              {specsOpen ? "▴" : "▾"}
+            </span>
+          </button>
+          {specsOpen && (
+            <div className="px-3 pb-3 text-[11px] text-gray-600 space-y-2">
+              {Object.entries(product.specs).map(([key, val]) => (
+                <div key={key} className="flex flex-col">
+                  <span className="text-gray-400">{key}</span>
+                  <span className="font-semibold text-gray-700">{val}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Reviews Accordion — реальні написані відгуки; згорнуті за
+            замовчуванням, розкриваються по кнопці, щоб не перевантажувати сторінку */}
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setReviewsOpen(!reviewsOpen)}
+            className="w-full px-3 py-2.5 flex justify-between items-center gap-1"
+          >
+            <span className="text-[12px] font-bold text-left leading-tight">
+              💬 Відгуки ({product.reviews?.length ?? 0})
+            </span>
+            <span className="text-sm text-gray-400 flex-shrink-0">
+              {reviewsOpen ? "▴" : "▾"}
+            </span>
+          </button>
+          {reviewsOpen && (
+            product.reviews && product.reviews.length > 0 ? (
+              <div className="px-3 pb-3 space-y-2">
+                {product.reviews.map((r, i) => (
+                  <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
+                          {r.name.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="text-[10px] font-bold">{r.name}</div>
+                          <div className="text-[8px] text-gray-400">
+                            {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-amber-500">
+                        {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
+                      {r.text}
+                    </div>
+                    <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
+                      ✓ Підтверджена покупка
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+            ) : (
+              <div className="px-3 pb-3">
+                <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 text-center">
+                  <div className="text-[10px] text-gray-500">
+                    Поки без відгуків — будьте першим!
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+        </div>
       </div>
 
       {/* Bundle / Upsell */}
@@ -354,62 +413,6 @@ export function ProductPageClient() {
           </div>
         </div>
       )}
-
-      {/* Reviews — реальні написані відгуки; згорнуті за замовчуванням,
-          розкриваються по кнопці, щоб не перевантажувати сторінку */}
-      <div className="px-4 mt-5">
-        <button
-          onClick={() => setReviewsOpen(!reviewsOpen)}
-          className="w-full flex justify-between items-center"
-        >
-          <h3 className="text-[13px] font-extrabold">
-            💬 Відгуки ({product.reviews?.length ?? 0})
-          </h3>
-          {product.reviews && product.reviews.length > 0 && (
-            <span className="text-[11px] text-amber-500 font-semibold">
-              {reviewsOpen ? "Згорнути ▴" : "Показати ▾"}
-            </span>
-          )}
-        </button>
-        {reviewsOpen && (
-          product.reviews && product.reviews.length > 0 ? (
-            <div className="space-y-2 mt-2">
-              {product.reviews.map((r, i) => (
-                <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
-                        {r.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-bold">{r.name}</div>
-                        <div className="text-[8px] text-gray-400">
-                          {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-amber-500">
-                      {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
-                    {r.text}
-                  </div>
-                  <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
-                    ✓ Підтверджена покупка
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-gray-50 rounded-xl p-4 mt-2 border border-gray-100 text-center">
-              <div className="text-[11px] text-gray-500">
-                Поки без відгуків — будьте першим, хто розповість про цей товар!
-              </div>
-            </div>
-          )
-        )}
-      </div>
 
       {/* Cross-sell */}
       {crossSell.length > 0 && (

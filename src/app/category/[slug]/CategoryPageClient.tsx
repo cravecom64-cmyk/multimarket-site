@@ -165,7 +165,7 @@ export function CategoryPageClient() {
           </h3>
           <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide">
             {crossSell.map((p) => (
-              <div key={p.id} className="min-w-[140px] flex-shrink-0">
+              <div key={p.id} className="w-[140px] flex-shrink-0">
                 <ProductCard
                   id={p.id}
                   slug={p.slug}

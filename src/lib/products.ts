@@ -99,10 +99,22 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 }
 
 export function getCrossSellProducts(product: Product, limit = 4): Product[] {
-  return products
-    .filter((p) => p.category !== product.category)
-    .sort((a, b) => b.orderCount - a.orderCount)
-    .slice(0, limit);
+  // Пріоритет — вручну підібрані логічно сумісні товари (bundleWith):
+  // те, що реально доповнює обраний товар, а не випадковий топ з інших категорій.
+  const curated = (product.bundleWith ?? [])
+    .map((id) => products.find((p) => p.id === id))
+    .filter((p): p is Product => !!p && p.id !== product.id);
+
+  if (curated.length >= limit) return curated.slice(0, limit);
+
+  // Якщо кураторських рекомендацій не вистачає — добираємо популярними
+  // товарами з ІНШИХ категорій (щоб не дублювати блок "Схожі товари").
+  const usedIds = new Set([product.id, ...curated.map((p) => p.id)]);
+  const filler = products
+    .filter((p) => !usedIds.has(p.id) && p.category !== product.category)
+    .sort((a, b) => b.orderCount - a.orderCount);
+
+  return [...curated, ...filler].slice(0, limit);
 }
 
 export function getTrendingProducts(): Product[] {

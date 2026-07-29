@@ -476,6 +476,7 @@ export function ProductPageClient() {
                 price={p.price}
                 oldPrice={p.oldPrice}
                 emoji={p.emoji}
+                image={p.image}
                 rating={p.rating}
                 reviewCount={p.reviewCount}
                 orderCount={p.orderCount}

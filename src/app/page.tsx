@@ -183,7 +183,7 @@ export default function HomePage() {
         </p>
         <div className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
           {saleProducts.map((product) => (
-            <div key={product.id} className="min-w-[155px] snap-start">
+            <div key={product.id} className="w-[155px] flex-shrink-0 snap-start">
               <ProductCard
                 id={product.id}
                 slug={product.slug}

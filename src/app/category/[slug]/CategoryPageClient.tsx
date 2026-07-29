@@ -28,6 +28,11 @@ const categoryMeta: Record<
     promo: "🐾 2 товари для улюбленця = -10%",
     promoSub: "Обирай будь-які 2 і економ",
   },
+  tiktok: {
+    subtitle: "Вірусні знахідки з відео — все що ти бачив у стрічці",
+    promo: "🔥 Встигни поки в тренді",
+    promoSub: "Ці товари розлітаються найшвидше",
+  },
 };
 
 export function CategoryPageClient() {

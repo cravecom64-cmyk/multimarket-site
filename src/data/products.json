@@ -100,6 +100,7 @@
       "sale"
     ],
     "isTrending": false,
+    "bundleWith": ["g11", "h13"],
     "image": "/products/h02/hero.jpg"
   },
   {
@@ -1576,7 +1577,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [],
+    "bundleWith": ["p09", "p04"],
     "image": "/products/p03/hero.jpg",
     "reviews": [
       {
@@ -1876,7 +1877,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [],
+    "bundleWith": ["p01", "p04"],
     "image": "/products/p12/hero.jpg",
     "reviews": [
       {
@@ -2304,7 +2305,7 @@
       "sale"
     ],
     "isTrending": true,
-    "bundleWith": [],
+    "bundleWith": ["h09"],
     "landing": {
       "gradient": "from-[#0D9488] to-[#14B8A6]",
       "accentColor": "#0D9488",
@@ -2328,7 +2329,7 @@
           "a": "Так, є регулятор порції."
         }
       ],
-      "bundleWith": []
+      "bundleWith": ["h09"]
     },
     "image": "/products/tt07/hero.jpg"
   },

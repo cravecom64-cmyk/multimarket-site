@@ -194,16 +194,28 @@ export function LandingProduct({ product }: LandingProductProps) {
           <div className="space-y-3">
             {bundleProducts.map((bp) => (
               <div key={bp.id} className="flex items-center gap-3 bg-gray-50 rounded-xl p-3">
-                <div className="text-3xl">{bp.emoji}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold truncate">{bp.name}</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-black" style={{ color: landing.accentColor }}>{bp.price}₴</span>
-                    {bp.oldPrice && (
-                      <span className="text-xs text-gray-400 line-through">{bp.oldPrice}₴</span>
+                <a
+                  href={bp.externalLanding || `/product/${bp.slug}`}
+                  className="flex items-center gap-3 flex-1 min-w-0"
+                >
+                  <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-2xl overflow-hidden shrink-0">
+                    {bp.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" />
+                    ) : (
+                      bp.emoji
                     )}
                   </div>
-                </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold truncate">{bp.name}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black" style={{ color: landing.accentColor }}>{bp.price}₴</span>
+                      {bp.oldPrice && (
+                        <span className="text-xs text-gray-400 line-through">{bp.oldPrice}₴</span>
+                      )}
+                    </div>
+                  </div>
+                </a>
                 <button
                   onClick={() => addItem({
                     id: bp.id,

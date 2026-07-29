@@ -55,6 +55,10 @@ export interface Product {
   badges: string[];
   isTrending?: boolean;
   bundleWith?: string[];
+  // Вручну підібрані СПРАВДІ схожі товари (той самий тип продукту чи
+  // пряма альтернатива) — використовується в блоці "Схожі товари" замість
+  // випадкового топу по замовленнях у категорії
+  similarWith?: string[];
   landing?: LandingConfig;
   // Готовий бренд-лендинг товару (окрема сторінка в public/landing) — якщо задано,
   // картка товару і /product/[slug] ведуть туди замість стандартного шаблону
@@ -92,10 +96,23 @@ export function getSaleProducts(): Product[] {
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
-  return products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .sort((a, b) => b.orderCount - a.orderCount)
-    .slice(0, limit);
+  // Пріоритет — вручну підібрані справді схожі товари (той самий тип
+  // продукту: інший гамак, інший вентилятор, інший блендер тощо), а не
+  // просто топ-продажі в тій самій категорії.
+  const curated = (product.similarWith ?? [])
+    .map((id) => products.find((p) => p.id === id))
+    .filter((p): p is Product => !!p && p.id !== product.id);
+
+  if (curated.length >= limit) return curated.slice(0, limit);
+
+  // Якщо кураторських пар не вистачає — добираємо популярними товарами
+  // з тієї ж категорії (як і раніше).
+  const usedIds = new Set([product.id, ...curated.map((p) => p.id)]);
+  const filler = products
+    .filter((p) => !usedIds.has(p.id) && p.category === product.category)
+    .sort((a, b) => b.orderCount - a.orderCount);
+
+  return [...curated, ...filler].slice(0, limit);
 }
 
 export function getCrossSellProducts(product: Product, limit = 4): Product[] {

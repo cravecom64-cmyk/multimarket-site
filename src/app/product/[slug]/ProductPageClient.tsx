@@ -22,6 +22,7 @@ export function ProductPageClient() {
   const { addItem } = useCart();
   const [specsOpen, setSpecsOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(0);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
   // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
@@ -68,6 +69,11 @@ export function ProductPageClient() {
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;
   const FREE_SHIPPING = 800;
   const remaining = Math.max(0, FREE_SHIPPING - product.price);
+  const hasColors = product.colors && product.colors.length > 0;
+  const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
+  const orderName = hasColors
+    ? `${product.name} (${product.colors![selectedColor].name})`
+    : product.name;
 
   // Parse description markdown (simplified)
   const descHtml = product.description
@@ -131,10 +137,10 @@ export function ProductPageClient() {
       {/* Gallery area */}
       <div className="relative">
         <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
-          {product.image ? (
+          {activeImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={product.image}
+              src={activeImage}
               alt={product.name}
               className="w-full h-full object-cover"
             />
@@ -173,6 +179,29 @@ export function ProductPageClient() {
           </div>
         )}
       </div>
+
+      {/* Color swatches */}
+      {hasColors && (
+        <div className="flex items-center gap-2.5 px-4 mt-3">
+          <span className="text-gray-400 text-xs font-semibold">Колір:</span>
+          {product.colors!.map((c, i) => (
+            <button
+              key={c.name}
+              onClick={() => setSelectedColor(i)}
+              aria-label={c.name}
+              className={`w-7 h-7 rounded-full border-2 transition-transform ${
+                i === selectedColor
+                  ? "border-gray-900 scale-110"
+                  : "border-gray-200"
+              }`}
+              style={{ backgroundColor: c.hex }}
+            />
+          ))}
+          <span className="text-gray-700 text-xs font-semibold ml-0.5">
+            {product.colors![selectedColor].name}
+          </span>
+        </div>
+      )}
 
       {/* Title & Price */}
       <div className="px-4 mt-1">
@@ -351,9 +380,9 @@ export function ProductPageClient() {
               {/* Current product */}
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
-                  {product.image ? (
+                  {activeImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                    <img src={activeImage} alt={product.name} className="w-full h-full object-cover" />
                   ) : (
                     product.emoji
                   )}
@@ -398,7 +427,7 @@ export function ProductPageClient() {
               ))}
               <button
                 onClick={() => {
-                  addItem({ id: product.id, name: product.name, price: product.price, emoji: product.emoji });
+                  addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji });
                   bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji }));
                 }}
                 className="w-full mt-1 bg-emerald-500 text-white py-3 rounded-xl text-xs font-extrabold tracking-wide"
@@ -514,7 +543,7 @@ export function ProductPageClient() {
           onClick={() =>
             addItem({
               id: product.id,
-              name: product.name,
+              name: orderName,
               price: product.price,
               emoji: product.emoji,
             })

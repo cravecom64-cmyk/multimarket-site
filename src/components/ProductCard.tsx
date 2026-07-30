@@ -38,7 +38,7 @@ export function ProductCard({
   externalLanding,
   inStock = true,
 }: ProductCardProps) {
-  const { addItem } = useCart();
+  const { addItem, setIsCartOpen } = useCart();
 
   const discount = oldPrice
     ? Math.round(((oldPrice - price) / oldPrice) * 100)
@@ -120,9 +120,11 @@ export function ProductCard({
           </span>
         </div>
         <button
-          onClick={() =>
-            inStock && addItem({ id, name, price, emoji })
-          }
+          onClick={() => {
+            if (!inStock) return;
+            addItem({ id, name, price, emoji });
+            setIsCartOpen(true);
+          }}
           disabled={!inStock}
           className={`mt-1.5 w-full text-white text-[10px] font-semibold py-1.5 rounded-md transition-colors ${
             inStock

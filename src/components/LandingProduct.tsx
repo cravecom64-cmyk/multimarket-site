@@ -10,7 +10,7 @@ interface LandingProductProps {
 }
 
 export function LandingProduct({ product }: LandingProductProps) {
-  const { addItem, totalPrice } = useCart();
+  const { addItem, totalPrice, setIsCartOpen } = useCart();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [selectedColor, setSelectedColor] = useState(0);
   const landing = product.landing!;
@@ -279,6 +279,7 @@ export function LandingProduct({ product }: LandingProductProps) {
                   emoji: bp.emoji,
                 })
               );
+              setIsCartOpen(true);
             }}
             disabled={!inStock}
             className={`w-full mt-4 py-3.5 rounded-xl text-sm font-bold text-white transition-transform active:scale-[0.98] ${!inStock ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -352,12 +353,16 @@ export function LandingProduct({ product }: LandingProductProps) {
               )}
             </div>
             <button
-              onClick={() => inStock && addItem({
-                id: product.id,
-                name: orderName,
-                price: product.price,
-                emoji: product.emoji,
-              })}
+              onClick={() => {
+                if (!inStock) return;
+                addItem({
+                  id: product.id,
+                  name: orderName,
+                  price: product.price,
+                  emoji: product.emoji,
+                });
+                setIsCartOpen(true);
+              }}
               disabled={!inStock}
               className={`px-6 py-3 rounded-xl text-sm font-extrabold transition-transform ${
                 inStock

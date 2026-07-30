@@ -12,9 +12,15 @@ interface LandingProductProps {
 export function LandingProduct({ product }: LandingProductProps) {
   const { addItem, totalPrice } = useCart();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState(0);
   const landing = product.landing!;
   const bundleProducts = getBundleProducts(landing.bundleWith);
   const inStock = product.inStock !== false;
+  const hasColors = product.colors && product.colors.length > 0;
+  const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
+  const orderName = hasColors
+    ? `${product.name} (${product.colors![selectedColor].name})`
+    : product.name;
 
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;
   const freeShipLeft = Math.max(0, 800 - product.price);
@@ -60,11 +66,11 @@ export function LandingProduct({ product }: LandingProductProps) {
           </p>
 
           {/* Product visual */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-6 relative">
-            {product.image ? (
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-4 relative">
+            {activeImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={product.image}
+                src={activeImage}
                 alt={product.name}
                 className={`w-full aspect-square object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
               />
@@ -82,6 +88,29 @@ export function LandingProduct({ product }: LandingProductProps) {
               {product.name}
             </div>
           </div>
+
+          {/* Color swatches */}
+          {hasColors && (
+            <div className="flex items-center gap-2.5 mb-6">
+              <span className="text-white/70 text-xs font-semibold">Колір:</span>
+              {product.colors!.map((c, i) => (
+                <button
+                  key={c.name}
+                  onClick={() => setSelectedColor(i)}
+                  aria-label={c.name}
+                  className={`w-7 h-7 rounded-full border-2 transition-transform ${
+                    i === selectedColor
+                      ? "border-white scale-110"
+                      : "border-white/30"
+                  }`}
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+              <span className="text-white text-xs font-semibold ml-0.5">
+                {product.colors![selectedColor].name}
+              </span>
+            </div>
+          )}
 
           {/* Price block */}
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
@@ -238,7 +267,7 @@ export function LandingProduct({ product }: LandingProductProps) {
               if (!inStock) return;
               addItem({
                 id: product.id,
-                name: product.name,
+                name: orderName,
                 price: product.price,
                 emoji: product.emoji,
               });
@@ -325,7 +354,7 @@ export function LandingProduct({ product }: LandingProductProps) {
             <button
               onClick={() => inStock && addItem({
                 id: product.id,
-                name: product.name,
+                name: orderName,
                 price: product.price,
                 emoji: product.emoji,
               })}

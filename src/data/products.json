@@ -2162,9 +2162,26 @@
         "g13"
       ]
     },
-    "image": "/landing/blender/img/hero-flatlay.jpg",
+    "image": "/products/tt02/hero-pink.jpg",
     "similarWith": [
       "tt03"
+    ],
+    "colors": [
+      {
+        "name": "Рожевий",
+        "hex": "#E8A0A8",
+        "image": "/products/tt02/hero-pink.jpg"
+      },
+      {
+        "name": "Блакитний",
+        "hex": "#A8C5E0",
+        "image": "/products/tt02/hero-blue.jpg"
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/tt02/hero-white.jpg"
+      }
     ]
   },
   {

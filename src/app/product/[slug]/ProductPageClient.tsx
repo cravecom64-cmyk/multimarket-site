@@ -19,7 +19,7 @@ export function ProductPageClient() {
   const params = useParams();
   const slug = params.slug as string;
   const product = getProductBySlug(slug);
-  const { addItem } = useCart();
+  const { addItem, setIsCartOpen } = useCart();
   const [specsOpen, setSpecsOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -429,6 +429,7 @@ export function ProductPageClient() {
                 onClick={() => {
                   addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji });
                   bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji }));
+                  setIsCartOpen(true);
                 }}
                 className="w-full mt-1 bg-emerald-500 text-white py-3 rounded-xl text-xs font-extrabold tracking-wide"
               >
@@ -540,14 +541,15 @@ export function ProductPageClient() {
           </div>
         </div>
         <button
-          onClick={() =>
+          onClick={() => {
             addItem({
               id: product.id,
               name: orderName,
               price: product.price,
               emoji: product.emoji,
-            })
-          }
+            });
+            setIsCartOpen(true);
+          }}
           className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl text-sm font-extrabold transition-colors"
         >
           Замовити

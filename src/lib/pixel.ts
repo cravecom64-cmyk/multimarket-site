@@ -68,6 +68,15 @@ export function trackInitiateCheckout(
   });
 }
 
+export function trackSearch(searchString: string, resultsCount?: number) {
+  if (!pixelReady()) return;
+  window.fbq!("track", "Search", {
+    search_string: searchString,
+    content_type: "product",
+    ...(typeof resultsCount === "number" ? { num_items: resultsCount } : {}),
+  });
+}
+
 // Оплата при отриманні (COD) — Purchase шлемо в момент прийняття
 // замовлення на сайті (заявка підтверджена формою), не в момент реальної
 // оплати. Коли підключимо онлайн-оплату — просто перенесемо цей виклик

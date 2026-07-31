@@ -25,11 +25,11 @@ export function Header() {
         {/* Marquee */}
         <div className="bg-amber-500 overflow-hidden whitespace-nowrap py-1.5">
           <div className="inline-block animate-marquee text-[11px] text-white font-medium">
-            &nbsp;&nbsp;📦 Безкоштовна доставка НП від 800₴ &nbsp;&nbsp;·&nbsp;&nbsp;
+            &nbsp;&nbsp;📦 Безкоштовна доставка НП від 2000₴ &nbsp;&nbsp;·&nbsp;&nbsp;
             💰 Оплата при отриманні — нічим не ризикуєш &nbsp;&nbsp;·&nbsp;&nbsp;
             ⚡ Замовляй до 15:00 — відправимо сьогодні &nbsp;&nbsp;·&nbsp;&nbsp;
             🔥 Знижки до -25% на товари для саду &nbsp;&nbsp;·&nbsp;&nbsp;
-            📦 Безкоштовна доставка НП від 800₴ &nbsp;&nbsp;·&nbsp;&nbsp;
+            📦 Безкоштовна доставка НП від 2000₴ &nbsp;&nbsp;·&nbsp;&nbsp;
             💰 Оплата при отриманні — нічим не ризикуєш &nbsp;&nbsp;·&nbsp;&nbsp;
             ⚡ Замовляй до 15:00 — відправимо сьогодні &nbsp;&nbsp;·&nbsp;&nbsp;
             🔥 Знижки до -25% на товари для саду

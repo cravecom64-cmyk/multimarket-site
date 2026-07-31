@@ -16,7 +16,7 @@ export function CartDrawer() {
   } = useCart();
   const [showOrder, setShowOrder] = useState(false);
 
-  const FREE_SHIPPING = 800;
+  const FREE_SHIPPING = 2000;
   const remaining = Math.max(0, FREE_SHIPPING - totalPrice);
 
   if (!isCartOpen) return null;

@@ -23,8 +23,8 @@ export function LandingProduct({ product }: LandingProductProps) {
     : product.name;
 
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;
-  const freeShipLeft = Math.max(0, 800 - product.price);
-  const freeShipProgress = Math.min(100, (product.price / 800) * 100);
+  const freeShipLeft = Math.max(0, 2000 - product.price);
+  const freeShipProgress = Math.min(100, (product.price / 2000) * 100);
 
   // Dynamic gradient style from landing config
   const gradientParts = landing.gradient

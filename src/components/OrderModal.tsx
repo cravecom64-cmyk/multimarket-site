@@ -18,6 +18,12 @@ export function OrderModal({ onClose }: OrderModalProps) {
     comment: "",
     website: "", // honeypot — hidden from users, bots fill it
   });
+  // Оплата карткою онлайн — пріоритетний спосіб (менша маржа = менше довіри
+  // до накладеного платежу, менше повернень). WayForPay ще не підключено —
+  // поки що обидва варіанти йдуть через ту саму заявку в Telegram, але вибір
+  // клієнта видно продавцю одразу. Коли з'являться API-ключі WayForPay —
+  // варіант "card" переключити на реальний редирект на оплату.
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cod">("card");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const formLoadedAt = useRef(Date.now());
 
@@ -37,6 +43,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           comment: form.comment,
           website: form.website,
           _t: formLoadedAt.current,
+          paymentMethod,
           items: items.map((i) => ({
             name: i.name,
             price: i.price,
@@ -71,10 +78,14 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="text-5xl mb-4">✅</div>
           <div className="text-lg font-extrabold mb-2">Замовлення прийнято!</div>
           <div className="text-sm text-gray-500 mb-1">
-            Ми зв&apos;яжемося з тобою протягом 30 хвилин для підтвердження.
+            {paymentMethod === "card"
+              ? "Ми зв'яжемося з тобою протягом 30 хвилин і надішлемо посилання на оплату карткою."
+              : "Ми зв'яжемося з тобою протягом 30 хвилин для підтвердження."}
           </div>
           <div className="text-xs text-gray-400 mb-6">
-            Відправка Новою Поштою · Оплата при отриманні
+            {paymentMethod === "card"
+              ? "Відправка Новою Поштою · Оплата карткою онлайн"
+              : "Відправка Новою Поштою · Оплата при отриманні"}
           </div>
           <button
             onClick={onClose}
@@ -116,6 +127,68 @@ export function OrderModal({ onClose }: OrderModalProps) {
             {totalPrice >= 2000
               ? "✅ Безкоштовна доставка"
               : `📦 Доставка НП ~60-80₴`}
+          </div>
+        </div>
+
+        {/* Payment method — картка онлайн пріоритетна: менше повернень і відмов при курєрі */}
+        <div className="mb-4">
+          <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+            Спосіб оплати
+          </label>
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("card")}
+              className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
+                paymentMethod === "card"
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-200"
+              }`}
+            >
+              <span className="text-xl">💳</span>
+              <span className="flex-1 min-w-0">
+                <span className="flex items-center gap-1.5">
+                  <span className="text-sm font-bold">Карткою онлайн</span>
+                  <span className="text-[9px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-full">
+                    Рекомендуємо
+                  </span>
+                </span>
+                <span className="block text-[11px] text-gray-500">
+                  Швидше обробимо і відправимо замовлення
+                </span>
+              </span>
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                  paymentMethod === "card"
+                    ? "border-emerald-500 bg-emerald-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("cod")}
+              className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
+                paymentMethod === "cod"
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-200"
+              }`}
+            >
+              <span className="text-xl">💰</span>
+              <span className="flex-1 min-w-0">
+                <span className="text-sm font-bold">Оплата при отриманні</span>
+                <span className="block text-[11px] text-gray-500">
+                  Готівкою або карткою на Новій Пошті
+                </span>
+              </span>
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                  paymentMethod === "cod"
+                    ? "border-emerald-500 bg-emerald-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </button>
           </div>
         </div>
 
@@ -207,11 +280,17 @@ export function OrderModal({ onClose }: OrderModalProps) {
             disabled={status === "sending"}
             className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white py-3.5 rounded-xl text-base font-extrabold transition-colors"
           >
-            {status === "sending" ? "Відправляю..." : "Замовити · Оплата при отриманні"}
+            {status === "sending"
+              ? "Відправляю..."
+              : paymentMethod === "card"
+              ? "Замовити · Оплата карткою"
+              : "Замовити · Оплата при отриманні"}
           </button>
 
           <div className="text-[10px] text-gray-400 text-center">
-            💰 Оплата при отриманні на Новій Пошті · ↩️ Повернення 14 днів
+            {paymentMethod === "card"
+              ? "💳 Посилання на оплату надішлемо одразу після підтвердження · ↩️ Повернення 14 днів"
+              : "💰 Оплата при отриманні на Новій Пошті · ↩️ Повернення 14 днів"}
           </div>
         </form>
       </div>

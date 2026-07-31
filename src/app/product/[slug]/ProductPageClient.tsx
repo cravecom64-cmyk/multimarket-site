@@ -440,7 +440,7 @@ export function ProductPageClient() {
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     <span className="text-sm font-black text-emerald-600">{bp.price}₴</span>
                     <button
-                      onClick={() => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji })}
+                      onClick={() => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji, image: bp.image, slug: bp.slug })}
                       className="w-6 h-6 bg-emerald-500 text-white rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0"
                     >
                       +
@@ -451,8 +451,8 @@ export function ProductPageClient() {
               <button
                 onClick={() => {
                   if (!inStock) return;
-                  addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji });
-                  bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji }));
+                  addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji, image: product.image, slug: product.slug });
+                  bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji, image: bp.image, slug: bp.slug }));
                   setIsCartOpen(true);
                 }}
                 disabled={!inStock}
@@ -577,6 +577,8 @@ export function ProductPageClient() {
               name: orderName,
               price: product.price,
               emoji: product.emoji,
+              image: product.image,
+              slug: product.slug,
             });
             setIsCartOpen(true);
           }}

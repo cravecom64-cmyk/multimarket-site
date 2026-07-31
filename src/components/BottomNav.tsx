@@ -7,7 +7,7 @@ import { useCart } from "./CartProvider";
 const navItems = [
   { href: "/", icon: "🏠", label: "Головна" },
   { href: "/category/home", icon: "📂", label: "Каталог" },
-  { href: "/", icon: "🔍", label: "Пошук" },
+  { href: "/search", icon: "🔍", label: "Пошук" },
   { href: "/", icon: "❤️", label: "Обране" },
   { href: "#cart", icon: "🛒", label: "Кошик" },
 ];

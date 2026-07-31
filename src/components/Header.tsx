@@ -47,7 +47,7 @@ export function Header() {
             MULTIMARKET
           </Link>
           <div className="flex gap-3.5 items-center">
-            <Link href="/" className="text-lg p-1" aria-label="Пошук">
+            <Link href="/search" className="text-lg p-1" aria-label="Пошук">
               🔍
             </Link>
           </div>

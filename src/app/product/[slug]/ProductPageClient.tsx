@@ -67,7 +67,7 @@ export function ProductPageClient() {
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
     : 0;
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;
-  const FREE_SHIPPING = 800;
+  const FREE_SHIPPING = 2000;
   const remaining = Math.max(0, FREE_SHIPPING - product.price);
   const hasColors = product.colors && product.colors.length > 0;
   const activeImage = hasColors ? product.colors![selectedColor].image : product.image;

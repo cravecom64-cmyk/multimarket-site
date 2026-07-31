@@ -122,7 +122,7 @@ export function ProductCard({
         <button
           onClick={() => {
             if (!inStock) return;
-            addItem({ id, name, price, emoji });
+            addItem({ id, name, price, emoji, image, slug });
             setIsCartOpen(true);
           }}
           disabled={!inStock}

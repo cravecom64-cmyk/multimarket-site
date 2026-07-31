@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
@@ -74,17 +75,57 @@ export function CartDrawer() {
                     key={item.id}
                     className="flex items-center gap-3 bg-gray-50 rounded-lg p-3 border border-gray-100"
                   >
-                    <div className="text-2xl w-10 h-10 flex items-center justify-center bg-gray-200 rounded-lg flex-shrink-0">
-                      {item.emoji}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold truncate">
-                        {item.name}
+                    {item.slug ? (
+                      <Link
+                        href={`/product/${item.slug}`}
+                        onClick={() => setIsCartOpen(false)}
+                        className="flex items-center gap-3 flex-1 min-w-0"
+                      >
+                        <div className="text-2xl w-10 h-10 flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                          {item.image ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            item.emoji
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold truncate">
+                            {item.name}
+                          </div>
+                          <div className="text-sm font-extrabold mt-0.5">
+                            {item.price * item.quantity}₴
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className="text-2xl w-10 h-10 flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                          {item.image ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            item.emoji
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold truncate">
+                            {item.name}
+                          </div>
+                          <div className="text-sm font-extrabold mt-0.5">
+                            {item.price * item.quantity}₴
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-sm font-extrabold mt-0.5">
-                        {item.price * item.quantity}₴
-                      </div>
-                    </div>
+                    )}
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <button
                         onClick={() =>

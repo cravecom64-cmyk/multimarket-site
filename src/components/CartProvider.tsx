@@ -9,6 +9,11 @@ export interface CartItem {
   price: number;
   emoji: string;
   quantity: number;
+  // Реальне фото товару і slug для посилання на картку — опціональні, щоб
+  // не ламати старі/невикористані місця додавання в кошик, які їх ще не
+  // передають (напр. legacy LandingProduct.tsx).
+  image?: string;
+  slug?: string;
 }
 
 interface CartContextType {

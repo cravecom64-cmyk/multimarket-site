@@ -16,42 +16,42 @@ const topProducts = getTopProducts(4);
 const tiktokProducts = getAllProducts().filter((p) => p.hasTiktok);
 const trendingProducts = getTrendingProducts();
 
+// Реальні відгуки, скопійовані з products.json (той самий текст, що й на
+// сторінках товарів) — щоб на головній не було фейкових відгуків під
+// товари, яких у каталозі взагалі нема.
 const reviews = [
   {
-    name: "Оксана М.",
-    initial: "О",
+    name: "Тетяна",
+    initial: "Т",
     color: "bg-emerald-500",
     city: "Київ",
-    date: "3 дні тому",
+    date: "9 днів тому",
     stars: 5,
-    product: "Лизальний килимок для собак",
-    text: "Замовляла для лабрадора — тепер годування це не хаос, а спокій на 15 хвилин. Якість силікону супер, присоски тримаються навіть на плитці. Доставка НП за 2 дні, все запаковано акуратно.",
-    hasPhotos: true,
-    likes: 12,
+    product: "Ігровий комплекс для котів з кігтеточкою MT05-2",
+    text: "Диван нарешті цілий! Кіт переключився на комплекс за перший же день.",
+    likes: 14,
   },
   {
-    name: "Андрій К.",
-    initial: "А",
+    name: "Роман",
+    initial: "Р",
     color: "bg-indigo-500",
-    city: "Дніпро",
-    date: "5 днів тому",
+    city: "Кропивницький",
+    date: "4 дні тому",
     stars: 5,
-    product: "Solar фонарі-факели (4 шт)",
-    text: 'Поставив вздовж доріжки до альтанки — ввечері виглядає просто вау. Жінка каже наче в ресторані. Заряджаються за день, світять до 3-ї ночі. За ці гроші — подарунок.',
-    hasPhotos: false,
-    likes: 8,
+    product: "Ліхтар з ефектом полум'я Solar Flame LED",
+    text: "Ефект вогню дуже реалістичний, гості думали що це справжні факели. Вітром не гасне, перевіряли.",
+    likes: 11,
   },
   {
-    name: "Марина Т.",
-    initial: "М",
+    name: "Катерина",
+    initial: "К",
     color: "bg-pink-500",
-    city: "Одеса",
-    date: "тиждень тому",
-    stars: 4,
-    product: 'LED Нічник "Зоряне небо"',
-    text: "Дитина в захваті, засинає за 10 хвилин замість години. Проекція дуже гарна, 16 кольорів реально є. Мінус — кабель коротенький, довелося подовжувач тягнути. Але сам нічник топ, рекомендую.",
-    hasPhotos: true,
-    likes: 19,
+    city: "Київ",
+    date: "4 дні тому",
+    stars: 5,
+    product: "Міні Кондиціонер Охолоджувач Arctic Storm Ultra",
+    text: "Стоїть на столі, дме прохолодою прямо в обличчя. У спеку рятує на робочому місці.",
+    likes: 17,
   },
 ];
 
@@ -353,16 +353,6 @@ export default function HomePage() {
               <div className="text-[11px] text-gray-700 mt-1 leading-relaxed">
                 {r.text}
               </div>
-              {r.hasPhotos && (
-                <div className="flex gap-1.5 mt-2">
-                  <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center text-sm">
-                    📷
-                  </div>
-                  <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center text-sm">
-                    📷
-                  </div>
-                </div>
-              )}
               <div className="flex items-center gap-1 mt-2 text-[10px] text-gray-400">
                 <span>👍 {r.likes}</span>
                 <span className="ml-2 text-emerald-500 font-semibold">

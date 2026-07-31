@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "./CartProvider";
 import { useState, useEffect } from "react";
 
 export function Header() {
-  const { totalItems, setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -52,18 +50,6 @@ export function Header() {
             <Link href="/" className="text-lg p-1" aria-label="Пошук">
               🔍
             </Link>
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="text-lg p-1 relative"
-              aria-label="Кошик"
-            >
-              🛒
-              {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                  {totalItems}
-                </span>
-              )}
-            </button>
           </div>
         </div>
       </header>

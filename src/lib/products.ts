@@ -109,14 +109,19 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 
   if (curated.length >= limit) return curated.slice(0, limit);
 
-  // Якщо кураторських пар не вистачає — добираємо популярними товарами
-  // з тієї ж категорії (як і раніше).
-  const usedIds = new Set([product.id, ...curated.map((p) => p.id)]);
+  // Якщо є хоча б один кураторський збіг — довіряємо йому і НЕ розбавляємо
+  // випадковим топ-продажем з категорії: категорія "tiktok" (та й інші)
+  // містить товари абсолютно різних типів (кондиціонер, блендер, лампа...),
+  // тож "топ по замовленнях у категорії" може підсунути зовсім не схожий
+  // товар (напр. блендер під кондиціонером). Добираємо філлером лише коли
+  // куратор взагалі нічого не задав для цього товару.
+  if (curated.length > 0) return curated;
+
   const filler = products
-    .filter((p) => !usedIds.has(p.id) && p.category === product.category)
+    .filter((p) => p.id !== product.id && p.category === product.category)
     .sort((a, b) => b.orderCount - a.orderCount);
 
-  return [...curated, ...filler].slice(0, limit);
+  return filler.slice(0, limit);
 }
 
 export function getCrossSellProducts(product: Product, limit = 4): Product[] {
@@ -128,14 +133,18 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
 
   if (curated.length >= limit) return curated.slice(0, limit);
 
-  // Якщо кураторських рекомендацій не вистачає — добираємо популярними
-  // товарами з ІНШИХ категорій (щоб не дублювати блок "Схожі товари").
-  const usedIds = new Set([product.id, ...curated.map((p) => p.id)]);
+  // Так само як у getRelatedProducts — якщо куратор щось задав, це і
+  // показуємо. Раніше філлер завжди добивав список до 4 товарів топ-продажем
+  // з інших категорій, тому майже кожна картка рекомендувала купити разом
+  // один і той самий хітовий товар (напр. міні-кондиціонер) незалежно від
+  // того, чи має це сенс.
+  if (curated.length > 0) return curated;
+
   const filler = products
-    .filter((p) => !usedIds.has(p.id) && p.category !== product.category)
+    .filter((p) => p.id !== product.id && p.category !== product.category)
     .sort((a, b) => b.orderCount - a.orderCount);
 
-  return [...curated, ...filler].slice(0, limit);
+  return filler.slice(0, limit);
 }
 
 export function getTrendingProducts(): Product[] {

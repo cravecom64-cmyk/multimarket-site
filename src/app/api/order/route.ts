@@ -60,6 +60,10 @@ interface OrderBody {
   comment: string;
   items: OrderItem[];
   totalPrice: number;
+  // "card" — клієнт обрав оплату карткою онлайн (WayForPay ще не підключено,
+  // тож продавець зв'язується і надсилає посилання на оплату вручну);
+  // "cod" — оплата при отриманні (за замовчуванням, якщо поле відсутнє)
+  paymentMethod?: "card" | "cod";
   // Honeypot field — must be empty
   website?: string;
   // Timing check — timestamp when form was loaded
@@ -169,6 +173,12 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
+    const paymentMethod = body.paymentMethod === "card" ? "card" : "cod";
+    const paymentLine =
+      paymentMethod === "card"
+        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН — клієнт чекає посилання на оплату\\!*"
+        : "💰 *Оплата: при отриманні \\(накладений платіж\\)*";
+
     const message = `🛒 *НОВЕ ЗАМОВЛЕННЯ!*
 
 👤 *Ім'я:* ${escapeMarkdown(name)}
@@ -182,6 +192,7 @@ ${itemsText}
 
 💰 *Сума: ${calculatedTotal}₴*
 ${calculatedTotal >= 2000 ? "✅ Безкоштовна доставка" : "📦 Доставка НП ~60\\-80₴"}
+${paymentLine}
 
 🌐 IP: ${ip}
 ⏰ ${new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" })}`;

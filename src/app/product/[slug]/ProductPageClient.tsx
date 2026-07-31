@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useCart } from "@/components/CartProvider";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
-import { LandingProduct } from "@/components/LandingProduct";
 import { trackViewContent } from "@/lib/pixel";
 import {
   getProductBySlug,
@@ -55,11 +54,6 @@ export function ProductPageClient() {
     return null;
   }
 
-  // Trending products get a unique landing page
-  if (product.isTrending && product.landing) {
-    return <LandingProduct product={product} />;
-  }
-
   const related = getRelatedProducts(product, 4);
   const crossSell = getCrossSellProducts(product, 4);
   const bundleItems = product.bundleWith ? getBundleProducts(product.bundleWith) : [];
@@ -74,6 +68,24 @@ export function ProductPageClient() {
   const orderName = hasColors
     ? `${product.name} (${product.colors![selectedColor].name})`
     : product.name;
+  const inStock = product.inStock !== false;
+  // Колишні tiktok-лендинги мали власний фірмовий градієнт під фото —
+  // залишаємо його тут (тільки як фон галереї), решта структури тепер
+  // ідентична звичайній картці товару. Tailwind не вміє статично
+  // проаналізувати динамічний arbitrary-value клас із JSON, тому парсимо
+  // рядок "from-[#xxx] to-[#yyy]" вручну і застосовуємо як inline style
+  // (той самий підхід, що раніше був у LandingProduct.tsx).
+  let galleryBgStyle: { background: string } | undefined;
+  if (product.landing) {
+    const gradientParts = product.landing.gradient
+      .replace("from-[", "")
+      .replace("] to-[", ",")
+      .replace("]", "")
+      .split(",");
+    galleryBgStyle = {
+      background: `linear-gradient(135deg, ${gradientParts[0]} 0%, ${gradientParts[1]} 100%)`,
+    };
+  }
 
   // Parse description markdown (simplified)
   const descHtml = product.description
@@ -136,13 +148,18 @@ export function ProductPageClient() {
 
       {/* Gallery area */}
       <div className="relative">
-        <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative overflow-hidden">
+        <div
+          className={`aspect-square flex items-center justify-center relative overflow-hidden ${
+            galleryBgStyle ? "" : "bg-gradient-to-br from-gray-800 to-gray-900"
+          }`}
+          style={galleryBgStyle}
+        >
           {activeImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={activeImage}
               alt={product.name}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
             />
           ) : (
             <span className="text-6xl">{product.emoji}</span>
@@ -158,6 +175,12 @@ export function ProductPageClient() {
             <div className="absolute bottom-3 left-3 bg-black/50 text-white text-[9px] px-2 py-1 rounded">
               ♪ Є в TikTok
             </div>
+          )}
+
+          {!inStock && (
+            <span className="absolute top-3 right-3 bg-gray-900/85 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">
+              Немає в наявності
+            </span>
           )}
         </div>
 
@@ -427,13 +450,19 @@ export function ProductPageClient() {
               ))}
               <button
                 onClick={() => {
+                  if (!inStock) return;
                   addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji });
                   bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji }));
                   setIsCartOpen(true);
                 }}
-                className="w-full mt-1 bg-emerald-500 text-white py-3 rounded-xl text-xs font-extrabold tracking-wide"
+                disabled={!inStock}
+                className={`w-full mt-1 py-3 rounded-xl text-xs font-extrabold tracking-wide ${
+                  inStock
+                    ? "bg-emerald-500 text-white"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
               >
-                🎁 Взяти все разом — {bundleTotal}₴
+                {inStock ? `🎁 Взяти все разом — ${bundleTotal}₴` : "Немає в наявності"}
               </button>
             </div>
           </div>
@@ -542,6 +571,7 @@ export function ProductPageClient() {
         </div>
         <button
           onClick={() => {
+            if (!inStock) return;
             addItem({
               id: product.id,
               name: orderName,
@@ -550,9 +580,14 @@ export function ProductPageClient() {
             });
             setIsCartOpen(true);
           }}
-          className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl text-sm font-extrabold transition-colors"
+          disabled={!inStock}
+          className={`flex-1 py-3.5 rounded-xl text-sm font-extrabold transition-colors ${
+            inStock
+              ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+          }`}
         >
-          Замовити
+          {inStock ? "Замовити" : "Немає в наявності"}
         </button>
         <button className="w-10 h-10 border-2 border-gray-200 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
           ♡

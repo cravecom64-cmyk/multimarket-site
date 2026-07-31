@@ -181,7 +181,7 @@ ${comment ? `💬 *Коментар:* ${escapeMarkdown(comment)}` : ""}
 ${itemsText}
 
 💰 *Сума: ${calculatedTotal}₴*
-${calculatedTotal >= 800 ? "✅ Безкоштовна доставка" : "📦 Доставка НП ~60\\-80₴"}
+${calculatedTotal >= 2000 ? "✅ Безкоштовна доставка" : "📦 Доставка НП ~60\\-80₴"}
 
 🌐 IP: ${ip}
 ⏰ ${new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" })}`;

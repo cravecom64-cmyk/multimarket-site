@@ -15,8 +15,13 @@ export function FloatingCart() {
   return (
     <button
       onClick={() => setIsCartOpen(true)}
-      className="fixed bottom-20 z-30 flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-xl pl-3 pr-4 py-2.5 transition-transform hover:scale-105 active:scale-95"
-      style={{ left: "max(1rem, calc(50% - 240px + 1rem))" }}
+      // bottom-36 (не bottom-20!) — на сторінці товару внизу вже є власна
+      // sticky-панель "Замовити" (bottom-16, z-40, на всю ширину), яка на
+      // тій самій висоті що й bottom-20 повністю перекривала б цю кнопку.
+      // Піднімаємо вище неї і ставимо z-45, щоб кошик завжди лишався
+      // видимим поверх будь-яких sticky-елементів на будь-якій сторінці.
+      className="fixed bottom-36 flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-xl pl-3 pr-4 py-2.5 transition-transform hover:scale-105 active:scale-95"
+      style={{ left: "max(1rem, calc(50% - 240px + 1rem))", zIndex: 45 }}
       aria-label="Відкрити кошик"
     >
       <span className="relative text-lg leading-none">

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useRef } from "react";
 import { useCart } from "./CartProvider";
 import { trackPurchase } from "@/lib/pixel";
@@ -110,14 +111,54 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
         {/* Order summary */}
         <div className="bg-gray-50 rounded-lg p-3 mb-4 border border-gray-100">
-          {items.map((item) => (
-            <div key={item.id} className="flex justify-between text-xs py-1">
-              <span>
-                {item.emoji} {item.name} ×{item.quantity}
-              </span>
-              <span className="font-bold">{item.price * item.quantity}₴</span>
-            </div>
-          ))}
+          {items.map((item) => {
+            const thumb = (
+              <div className="w-7 h-7 rounded-md bg-gray-200 flex items-center justify-center text-sm overflow-hidden flex-shrink-0">
+                {item.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  item.emoji
+                )}
+              </div>
+            );
+            return (
+              <div
+                key={item.id}
+                className="flex justify-between items-center gap-2 text-xs py-1"
+              >
+                {item.slug ? (
+                  // Відкриваємо в новій вкладці — щоб не втратити заповнену
+                  // форму замовлення, якщо покупець хоче ще раз глянути товар.
+                  <Link
+                    href={`/product/${item.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 min-w-0 hover:underline"
+                  >
+                    {thumb}
+                    <span className="truncate">
+                      {item.name} ×{item.quantity}
+                    </span>
+                  </Link>
+                ) : (
+                  <span className="flex items-center gap-2 min-w-0">
+                    {thumb}
+                    <span className="truncate">
+                      {item.name} ×{item.quantity}
+                    </span>
+                  </span>
+                )}
+                <span className="font-bold flex-shrink-0">
+                  {item.price * item.quantity}₴
+                </span>
+              </div>
+            );
+          })}
           <hr className="my-2" />
           <div className="flex justify-between text-sm font-extrabold">
             <span>Разом</span>

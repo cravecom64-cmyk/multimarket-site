@@ -117,6 +117,13 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
   // куратор взагалі нічого не задав для цього товару.
   if (curated.length > 0) return curated;
 
+  // similarWith: [] (порожній масив, а не відсутнє поле) означає "куратор
+  // свідомо перевірив і не знайшов жодного справді схожого товару в
+  // каталозі" (напр. останній товар свого типу лишився сам) — тоді чесно
+  // не показуємо блок "Схожі товари" замість того, щоб підсовувати
+  // випадковий топ-продаж з категорії.
+  if (product.similarWith && product.similarWith.length === 0) return [];
+
   const filler = products
     .filter((p) => p.id !== product.id && p.category === product.category)
     .sort((a, b) => b.orderCount - a.orderCount);

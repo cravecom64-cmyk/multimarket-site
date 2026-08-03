@@ -47,6 +47,10 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
     },
   },
+  verification: {
+    // Google Search Console — підтвердження власності сайту (2026-08-03)
+    google: "wOJayGkxAUsqIJZgRFD5ctTYULnA3ny3axYZU1Xhmjw",
+  },
 };
 
 export default function RootLayout({

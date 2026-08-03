@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { getAllProducts, getTopProducts, type Product } from "@/lib/products";
 import { trackSearch } from "@/lib/pixel";
+import { trackSearch as trackSearchGA4 } from "@/lib/ga4";
 
 const allProducts = getAllProducts();
 
@@ -44,6 +45,7 @@ export function SearchPageClient() {
 
       const count = searchProducts(q).length;
       trackSearch(q, count);
+      trackSearchGA4(q, count);
       fetch("/api/track-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -45,11 +45,11 @@ const nextConfig: NextConfig = {
           key: "Content-Security-Policy",
           value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com",
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https:",
             "font-src 'self'",
-            "connect-src 'self' https://api.telegram.org",
+            "connect-src 'self' https://api.telegram.org https://connect.facebook.net https://www.facebook.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'",

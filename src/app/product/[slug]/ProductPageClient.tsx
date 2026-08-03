@@ -7,6 +7,7 @@ import { useCart } from "@/components/CartProvider";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { trackViewContent } from "@/lib/pixel";
+import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
 import {
   getProductBySlug,
   getRelatedProducts,
@@ -28,6 +29,7 @@ export function ProductPageClient() {
   useEffect(() => {
     if (!product) return;
     trackViewContent({ id: product.id, name: product.name, price: product.price });
+    trackViewContentGA4({ id: product.id, name: product.name, price: product.price });
     if (product.externalLanding) {
       window.location.href = product.externalLanding;
     }

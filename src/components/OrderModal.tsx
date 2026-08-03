@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useCart } from "./CartProvider";
 import { trackPurchase, trackInitiateCheckout } from "@/lib/pixel";
+import {
+  trackPurchase as trackPurchaseGA4,
+  trackInitiateCheckout as trackInitiateCheckoutGA4,
+} from "@/lib/ga4";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -26,6 +30,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     trackInitiateCheckout(
+      items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+      totalPrice
+    );
+    trackInitiateCheckoutGA4(
       items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
       totalPrice
     );
@@ -70,6 +78,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
         // а не реальної оплати. Коли підключимо онлайн-оплату — перенесемо
         // цей виклик на сторінку успішної оплати.
         trackPurchase(
+          items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+          totalPrice
+        );
+        trackPurchaseGA4(
           items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
           totalPrice
         );

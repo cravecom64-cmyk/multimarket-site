@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { trackAddToCart } from "@/lib/pixel";
+import { trackAddToCart as trackAddToCartGA4 } from "@/lib/ga4";
 
 export interface CartItem {
   id: string;
@@ -36,6 +37,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
     trackAddToCart({ id: item.id, name: item.name, price: item.price });
+    trackAddToCartGA4({ id: item.id, name: item.name, price: item.price });
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {

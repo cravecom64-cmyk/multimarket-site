@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCart } from "./CartProvider";
-import { trackPurchase } from "@/lib/pixel";
+import { trackPurchase, trackInitiateCheckout } from "@/lib/pixel";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -19,6 +19,17 @@ export function OrderModal({ onClose }: OrderModalProps) {
     comment: "",
     website: "", // honeypot — hidden from users, bots fill it
   });
+
+  // InitiateCheckout — момент відкриття форми оформлення (між AddToCart і
+  // Purchase). Раніше функція була написана в pixel.ts, але ніде не
+  // викликалась — Meta не бачила цей крок воронки взагалі.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    trackInitiateCheckout(
+      items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+      totalPrice
+    );
+  }, []);
   // Оплата карткою онлайн — пріоритетний спосіб (менша маржа = менше довіри
   // до накладеного платежу, менше повернень). WayForPay ще не підключено —
   // поки що обидва варіанти йдуть через ту саму заявку в Telegram, але вибір

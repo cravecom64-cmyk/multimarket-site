@@ -32,6 +32,8 @@ export default function TrendingPage() {
             id={product.id}
             slug={product.slug}
             name={product.name}
+            category={product.category}
+            categoryName={product.categoryName}
             price={product.price}
             oldPrice={product.oldPrice}
             emoji={product.emoji}

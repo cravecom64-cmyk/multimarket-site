@@ -21,6 +21,7 @@ export function trackViewContent(product: {
   id: string;
   name: string;
   price: number;
+  category?: string;
 }) {
   if (!gtagReady()) return;
   window.gtag!("event", "view_item", {
@@ -30,6 +31,7 @@ export function trackViewContent(product: {
       {
         item_id: product.id,
         item_name: product.name,
+        item_category: product.category,
         price: product.price,
         quantity: 1,
       },
@@ -42,6 +44,7 @@ export function trackAddToCart(item: {
   name: string;
   price: number;
   quantity?: number;
+  category?: string;
 }) {
   if (!gtagReady()) return;
   const quantity = item.quantity ?? 1;
@@ -52,6 +55,7 @@ export function trackAddToCart(item: {
       {
         item_id: item.id,
         item_name: item.name,
+        item_category: item.category,
         price: item.price,
         quantity,
       },
@@ -60,7 +64,7 @@ export function trackAddToCart(item: {
 }
 
 export function trackInitiateCheckout(
-  items: { id: string; price: number; quantity: number }[],
+  items: { id: string; name: string; price: number; quantity: number; category?: string }[],
   value: number
 ) {
   if (!gtagReady()) return;
@@ -69,6 +73,8 @@ export function trackInitiateCheckout(
     value,
     items: items.map((i) => ({
       item_id: i.id,
+      item_name: i.name,
+      item_category: i.category,
       price: i.price,
       quantity: i.quantity,
     })),
@@ -87,7 +93,7 @@ export function trackSearch(searchString: string, resultsCount?: number) {
 // замовлення на сайті, так само як в pixel.ts. Коли підключимо онлайн-оплату
 // — перенесемо на сторінку "оплата пройшла успішно".
 export function trackPurchase(
-  items: { id: string; price: number; quantity: number }[],
+  items: { id: string; name: string; price: number; quantity: number; category?: string }[],
   value: number
 ) {
   if (!gtagReady()) return;
@@ -97,6 +103,8 @@ export function trackPurchase(
     value,
     items: items.map((i) => ({
       item_id: i.id,
+      item_name: i.name,
+      item_category: i.category,
       price: i.price,
       quantity: i.quantity,
     })),

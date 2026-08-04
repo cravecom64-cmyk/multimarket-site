@@ -19,44 +19,48 @@ const nextConfig: NextConfig = {
     ],
   }),
   headers: async () => [
-    {
-      source: "/:path*",
-      headers: [
-        // Prevent clickjacking — site cannot be embedded in iframes
-        { key: "X-Frame-Options", value: "DENY" },
-        // Prevent MIME type sniffing
-        { key: "X-Content-Type-Options", value: "nosniff" },
-        // XSS protection
-        { key: "X-XSS-Protection", value: "1; mode=block" },
-        // Referrer policy — don't leak full URL to external sites
-        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        // Permissions policy — disable unnecessary browser APIs
-        {
-          key: "Permissions-Policy",
-          value: "camera=(), microphone=(), geolocation=(), payment=()",
-        },
-        // Force HTTPS (Vercel handles this, but belt & suspenders)
-        {
-          key: "Strict-Transport-Security",
-          value: "max-age=63072000; includeSubDomains; preload",
-        },
-        // Content Security Policy
-        {
-          key: "Content-Security-Policy",
-          value: [
-            "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com",
-            "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data: blob: https:",
-            "font-src 'self'",
-            "connect-src 'self' https://api.telegram.org https://connect.facebook.net https://www.facebook.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com",
-            "frame-ancestors 'none'",
-            "base-uri 'self'",
-            "form-action 'self'",
-          ].join("; "),
-        },
-      ],
-    },
+    // ВРЕМЕННО ОТКЛЮЧЕНО (2026-08-04) — Павло попросив прибрати security-заголовки
+    // (X-Frame-Options / CSP / HSTS і т.д.), щоб перевірити, чи саме вони гасять
+    // Meta Pixel / GA4 (503 на трекінг-запитах). Увімкнути назад ПЕРЕД повним
+    // запуском реклами — блок нижче лишили як є, просто закоментували.
+    // {
+    //   source: "/:path*",
+    //   headers: [
+    //     // Prevent clickjacking — site cannot be embedded in iframes
+    //     { key: "X-Frame-Options", value: "DENY" },
+    //     // Prevent MIME type sniffing
+    //     { key: "X-Content-Type-Options", value: "nosniff" },
+    //     // XSS protection
+    //     { key: "X-XSS-Protection", value: "1; mode=block" },
+    //     // Referrer policy — don't leak full URL to external sites
+    //     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+    //     // Permissions policy — disable unnecessary browser APIs
+    //     {
+    //       key: "Permissions-Policy",
+    //       value: "camera=(), microphone=(), geolocation=(), payment=()",
+    //     },
+    //     // Force HTTPS (Vercel handles this, but belt & suspenders)
+    //     {
+    //       key: "Strict-Transport-Security",
+    //       value: "max-age=63072000; includeSubDomains; preload",
+    //     },
+    //     // Content Security Policy
+    //     {
+    //       key: "Content-Security-Policy",
+    //       value: [
+    //         "default-src 'self'",
+    //         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com",
+    //         "style-src 'self' 'unsafe-inline'",
+    //         "img-src 'self' data: blob: https:",
+    //         "font-src 'self'",
+    //         "connect-src 'self' https://api.telegram.org https://connect.facebook.net https://www.facebook.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com",
+    //         "frame-ancestors 'none'",
+    //         "base-uri 'self'",
+    //         "form-action 'self'",
+    //       ].join("; "),
+    //     },
+    //   ],
+    // },
     {
       // Block access to API from external origins
       source: "/api/:path*",

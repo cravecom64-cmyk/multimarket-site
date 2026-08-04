@@ -102,6 +102,8 @@ export function SearchPageClient() {
                 id={p.id}
                 slug={p.slug}
                 name={p.name}
+                category={p.category}
+                categoryName={p.categoryName}
                 price={p.price}
                 oldPrice={p.oldPrice}
                 emoji={p.emoji}
@@ -133,6 +135,8 @@ export function SearchPageClient() {
                 id={p.id}
                 slug={p.slug}
                 name={p.name}
+                category={p.category}
+                categoryName={p.categoryName}
                 price={p.price}
                 oldPrice={p.oldPrice}
                 emoji={p.emoji}

@@ -188,6 +188,8 @@ export default function HomePage() {
                 id={product.id}
                 slug={product.slug}
                 name={product.name}
+                category={product.category}
+                categoryName={product.categoryName}
                 price={product.price}
                 oldPrice={product.oldPrice}
                 emoji={product.emoji}
@@ -220,6 +222,8 @@ export default function HomePage() {
               id={product.id}
               slug={product.slug}
               name={product.name}
+              category={product.category}
+              categoryName={product.categoryName}
               price={product.price}
               oldPrice={product.oldPrice}
               emoji={product.emoji}

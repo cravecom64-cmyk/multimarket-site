@@ -15,6 +15,10 @@ export interface CartItem {
   // передають (напр. legacy LandingProduct.tsx).
   image?: string;
   slug?: string;
+  // Категорія товару — потрібна для content_category в подіях Pixel/GA4
+  // (вимога ТЗ трекінгу). Опціональна з тих самих причин, що image/slug.
+  category?: string;
+  categoryName?: string;
 }
 
 interface CartContextType {
@@ -36,8 +40,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
-    trackAddToCart({ id: item.id, name: item.name, price: item.price });
-    trackAddToCartGA4({ id: item.id, name: item.name, price: item.price });
+    trackAddToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      category: item.categoryName ?? item.category,
+    });
+    trackAddToCartGA4({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      category: item.categoryName ?? item.category,
+    });
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {

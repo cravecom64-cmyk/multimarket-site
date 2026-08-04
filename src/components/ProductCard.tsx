@@ -19,6 +19,8 @@ interface ProductCardProps {
   hasTiktok?: boolean;
   externalLanding?: string;
   inStock?: boolean;
+  category?: string;
+  categoryName?: string;
 }
 
 export function ProductCard({
@@ -37,6 +39,8 @@ export function ProductCard({
   hasTiktok,
   externalLanding,
   inStock = true,
+  category,
+  categoryName,
 }: ProductCardProps) {
   const { addItem, setIsCartOpen } = useCart();
 
@@ -122,7 +126,7 @@ export function ProductCard({
         <button
           onClick={() => {
             if (!inStock) return;
-            addItem({ id, name, price, emoji, image, slug });
+            addItem({ id, name, price, emoji, image, slug, category, categoryName });
             setIsCartOpen(true);
           }}
           disabled={!inStock}

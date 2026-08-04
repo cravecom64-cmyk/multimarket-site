@@ -251,6 +251,8 @@ export function LandingProduct({ product }: LandingProductProps) {
                     name: bp.name,
                     price: bp.price,
                     emoji: bp.emoji,
+                    category: bp.category,
+                    categoryName: bp.categoryName,
                   })}
                   className="px-3 py-2 rounded-lg text-xs font-bold text-white shrink-0"
                   style={{ backgroundColor: landing.accentColor }}
@@ -270,6 +272,8 @@ export function LandingProduct({ product }: LandingProductProps) {
                 name: orderName,
                 price: product.price,
                 emoji: product.emoji,
+                category: product.category,
+                categoryName: product.categoryName,
               });
               bundleProducts.forEach((bp) =>
                 addItem({
@@ -277,6 +281,8 @@ export function LandingProduct({ product }: LandingProductProps) {
                   name: bp.name,
                   price: bp.price,
                   emoji: bp.emoji,
+                  category: bp.category,
+                  categoryName: bp.categoryName,
                 })
               );
               setIsCartOpen(true);
@@ -360,6 +366,8 @@ export function LandingProduct({ product }: LandingProductProps) {
                   name: orderName,
                   price: product.price,
                   emoji: product.emoji,
+                  category: product.category,
+                  categoryName: product.categoryName,
                 });
                 setIsCartOpen(true);
               }}

@@ -30,11 +30,23 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     trackInitiateCheckout(
-      items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+      items.map((i) => ({
+        id: i.id,
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+        category: i.categoryName ?? i.category,
+      })),
       totalPrice
     );
     trackInitiateCheckoutGA4(
-      items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+      items.map((i) => ({
+        id: i.id,
+        name: i.name,
+        price: i.price,
+        quantity: i.quantity,
+        category: i.categoryName ?? i.category,
+      })),
       totalPrice
     );
   }, []);
@@ -78,11 +90,23 @@ export function OrderModal({ onClose }: OrderModalProps) {
         // а не реальної оплати. Коли підключимо онлайн-оплату — перенесемо
         // цей виклик на сторінку успішної оплати.
         trackPurchase(
-          items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+          items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            category: i.categoryName ?? i.category,
+          })),
           totalPrice
         );
         trackPurchaseGA4(
-          items.map((i) => ({ id: i.id, price: i.price, quantity: i.quantity })),
+          items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            category: i.categoryName ?? i.category,
+          })),
           totalPrice
         );
         setStatus("success");

@@ -146,6 +146,8 @@ export function CategoryPageClient() {
             id={product.id}
             slug={product.slug}
             name={product.name}
+            category={product.category}
+            categoryName={product.categoryName}
             price={product.price}
             oldPrice={product.oldPrice}
             emoji={product.emoji}
@@ -175,6 +177,8 @@ export function CategoryPageClient() {
                   id={p.id}
                   slug={p.slug}
                   name={p.name}
+                  category={p.category}
+                  categoryName={p.categoryName}
                   price={p.price}
                   oldPrice={p.oldPrice}
                   emoji={p.emoji}

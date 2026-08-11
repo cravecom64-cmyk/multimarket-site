@@ -33,6 +33,11 @@ const categoryMeta: Record<
     promo: "🔥 Встигни поки в тренді",
     promoSub: "Ці товари розлітаються найшвидше",
   },
+    blackout: {
+          subtitle: "Павербанки, ліхтарі, зарядні станції — готові до відключень",
+          promo: "🔋 2 товари для блекауту = -10%",
+          promoSub: "Павербанк + ліхтар — мінімальний набір на випадок",
+    },
 };
 
 export function CategoryPageClient() {

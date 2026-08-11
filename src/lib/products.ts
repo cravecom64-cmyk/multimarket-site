@@ -195,4 +195,11 @@ export const categories = [
     gradient: "from-[#7F1D1D] to-[#DC2626]",
     productCount: products.filter((p) => p.category === "tiktok").length,
   },
+  {
+        slug: "blackout",
+        name: "Блекаут",
+        emoji: "🔦",
+        gradient: "from-[#18181B] to-[#F59E0B]",
+        productCount: products.filter((p) => p.category === "blackout").length,
+  },
 ];

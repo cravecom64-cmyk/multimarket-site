@@ -310,6 +310,36 @@ export function ProductPageClient() {
         />
       </div>
 
+      {/* Як користуватися — тільки факти з опису постачальника, завжди видимо (не в акордеоні) */}
+      {product.usageTips && product.usageTips.length > 0 && (
+        <div className="mx-4 mt-4 bg-sky-50 border border-sky-200 rounded-xl p-3.5">
+          <h3 className="text-[12px] font-bold text-sky-900">🔧 Як користуватися</h3>
+          <ul className="mt-1.5 space-y-1">
+            {product.usageTips.map((tip, i) => (
+              <li key={i} className="text-[11px] text-sky-900/80 leading-relaxed flex gap-1.5">
+                <span className="text-sky-500">•</span>
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Техніка безпеки — тільки факти з опису постачальника, завжди видимо */}
+      {product.safetyNotes && product.safetyNotes.length > 0 && (
+        <div className="mx-4 mt-2.5 bg-amber-50 border border-amber-200 rounded-xl p-3.5">
+          <h3 className="text-[12px] font-bold text-amber-900">⚠️ Техніка безпеки</h3>
+          <ul className="mt-1.5 space-y-1">
+            {product.safetyNotes.map((note, i) => (
+              <li key={i} className="text-[11px] text-amber-900/80 leading-relaxed flex gap-1.5">
+                <span className="text-amber-500">•</span>
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Характеристики + Відгуки — одна під одною, обидві згорнуті за замовчуванням */}
       <div className="mx-4 mt-4 space-y-2">
         {/* Specs Accordion */}

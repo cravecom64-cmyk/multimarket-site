@@ -52,6 +52,14 @@ export interface Product {
   description: string;
   features: string[];
   specs: Record<string, string>;
+  // Практичні поради з використання (комплектація, що треба докупити окремо,
+  // як заряджати/підключати) — тільки факти з опису постачальника, без
+  // вигадування. Рендериться окремим видимим блоком на сторінці товару.
+  usageTips?: string[];
+  // Техніка безпеки / застереження (захист від перевантаження, КЗ,
+  // перегріву; вимоги до газового балона; батарейки не в комплекті тощо) —
+  // теж тільки з опису постачальника. Показується з іконкою попередження.
+  safetyNotes?: string[];
   badges: string[];
   isTrending?: boolean;
   bundleWith?: string[];
@@ -196,10 +204,10 @@ export const categories = [
     productCount: products.filter((p) => p.category === "tiktok").length,
   },
   {
-        slug: "blackout",
-        name: "Блекаут",
-        emoji: "🔦",
-        gradient: "from-[#18181B] to-[#F59E0B]",
-        productCount: products.filter((p) => p.category === "blackout").length,
+    slug: "blackout",
+    name: "Блекаут",
+    emoji: "🔦",
+    gradient: "from-[#18181B] to-[#F59E0B]",
+    productCount: products.filter((p) => p.category === "blackout").length,
   },
 ];

@@ -59,11 +59,38 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const formLoadedAt = useRef(Date.now());
+
+  // Серверні коди валідації → людське повідомлення українською. Раніше при
+  // будь-якій 400-помилці (напр. закоротке поле) показувався загальний
+  // "Щось пішло не так" — покупець не розумів що саме виправити.
+  const VALIDATION_MESSAGES: Record<string, string> = {
+    "Invalid name": "Перевір поле «Ім'я» — має бути мінімум 2 символи.",
+    "Invalid phone number": "Перевір номер телефону — формат +380XXXXXXXXX.",
+    "Invalid city": "Перевір поле «Місто» — має бути мінімум 2 символи.",
+    "Invalid NP branch": "Вкажи відділення Нової Пошти детальніше (мінімум 3 символи, напр. «Відділення №5»).",
+    "Invalid cart": "Кошик порожній або некоректний — онови сторінку і спробуй ще раз.",
+    "Invalid cart item": "Один з товарів у кошику некоректний — онови сторінку і спробуй ще раз.",
+    "Too many requests": "Забагато спроб поспіль — зачекай хвилину і спробуй ще раз.",
+  };
+
+  async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
+    try {
+      const data = await res.json();
+      if (data?.error && VALIDATION_MESSAGES[data.error]) {
+        return VALIDATION_MESSAGES[data.error];
+      }
+    } catch {
+      // не JSON — ігноруємо, повертаємо fallback
+    }
+    return fallback;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
+    setErrorMessage(null);
 
     // Спільний ID замовлення — йде і в Telegram-заявку, і в інвойс/платіж
     // конкретного еквайрингу (як reference), щоб продавець міг зіставити
@@ -95,6 +122,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
       });
 
       if (!res.ok) {
+        setErrorMessage(await extractErrorMessage(res, "Не вдалося відправити заявку. Спробуй ще раз або напиши нам у Telegram."));
         setStatus("error");
         return;
       }
@@ -119,6 +147,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         });
 
         if (!invoiceRes.ok) {
+          setErrorMessage("Не вдалося створити оплату mono. Спробуй ще раз, обери інший спосіб оплати або напиши нам у Telegram.");
           setStatus("error");
           return;
         }
@@ -168,6 +197,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         });
 
         if (!purchaseRes.ok) {
+          setErrorMessage("Не вдалося створити оплату WayForPay. Спробуй ще раз, обери інший спосіб оплати або напиши нам у Telegram.");
           setStatus("error");
           return;
         }
@@ -242,6 +272,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
       setStatus("success");
       clearCart();
     } catch {
+      setErrorMessage("Не вдалося з'єднатися з сервером. Перевір інтернет і спробуй ще раз.");
       setStatus("error");
     }
   };
@@ -506,7 +537,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
           {status === "error" && (
             <div className="text-xs text-red-500 text-center">
-              Щось пішло не так. Спробуй ще раз або напиши нам у Telegram.
+              {errorMessage || "Щось пішло не так. Спробуй ще раз або напиши нам у Telegram."}
             </div>
           )}
 

@@ -60,10 +60,10 @@ interface OrderBody {
   comment: string;
   items: OrderItem[];
   totalPrice: number;
-  // "card" — клієнт обрав оплату карткою онлайн (WayForPay ще не підключено,
-  // тож продавець зв'язується і надсилає посилання на оплату вручну);
+  // "card_mono" — оплата карткою через Monobank Acquiring;
+  // "card_wfp" — оплата карткою через WayForPay;
   // "cod" — оплата при отриманні (за замовчуванням, якщо поле відсутнє)
-  paymentMethod?: "card" | "cod";
+  paymentMethod?: "card_mono" | "card_wfp" | "cod";
   // Наш внутрішній ID замовлення — генерується на клієнті ДО відправки,
   // передається і сюди (для Telegram), і в /api/checkout/monobank (як
   // reference в інвойсі), і в webhook — так продавець може зіставити
@@ -178,10 +178,15 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
-    const paymentMethod = body.paymentMethod === "card" ? "card" : "cod";
+    const paymentMethod =
+      body.paymentMethod === "card_mono" || body.paymentMethod === "card_wfp"
+        ? body.paymentMethod
+        : "cod";
     const paymentLine =
-      paymentMethod === "card"
+      paymentMethod === "card_mono"
         ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через Monobank — очікуємо підтвердження оплати*"
+        : paymentMethod === "card_wfp"
+        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через WayForPay — очікуємо підтвердження оплати*"
         : "💰 *Оплата: при отриманні \\(накладений платіж\\)*";
     const orderIdLine = body.orderId ? `🔖 *№ ${escapeMarkdown(body.orderId)}*\n` : "";
 

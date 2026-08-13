@@ -8,7 +8,8 @@ import { trackPurchase as trackPurchaseGA4 } from "@/lib/ga4";
 
 interface PendingOrder {
   orderId: string;
-  invoiceId: string;
+  gateway?: "monobank" | "wayforpay";
+  invoiceId?: string; // тільки для monobank
   items: { id: string; name: string; price: number; quantity: number; category?: string }[];
   totalPrice: number;
 }
@@ -42,16 +43,43 @@ function SuccessContent() {
       return;
     }
 
-    fetch(`/api/checkout/monobank/status?invoiceId=${encodeURIComponent(pending.invoiceId)}`)
+    const markSuccess = () => {
+      // Purchase шлемо саме тут — момент реальної оплати, а не
+      // моменту заповнення форми (див. коментар у pixel.ts/ga4.ts).
+      trackPurchasePixel(pending.items, pending.totalPrice);
+      trackPurchaseGA4(pending.items, pending.totalPrice);
+      localStorage.removeItem("mm_pending_order");
+      setStatus("success");
+    };
+
+    if (pending.gateway === "wayforpay") {
+      fetch(`/api/checkout/wayforpay/status?orderReference=${encodeURIComponent(pending.orderId)}`)
+        .then((r) => r.json())
+        .then((data: { transactionStatus?: string }) => {
+          if (data.transactionStatus === "Approved") {
+            markSuccess();
+          } else if (
+            data.transactionStatus === "Declined" ||
+            data.transactionStatus === "Expired" ||
+            data.transactionStatus === "Refunded" ||
+            data.transactionStatus === "Voided"
+          ) {
+            setStatus("failure");
+          } else {
+            // InProcessing / Pending — оплата ще обробляється
+            setStatus("pending");
+          }
+        })
+        .catch(() => setStatus("failure"));
+      return;
+    }
+
+    // За замовчуванням — monobank (стара форма localStorage без gateway теж сюди)
+    fetch(`/api/checkout/monobank/status?invoiceId=${encodeURIComponent(pending.invoiceId || "")}`)
       .then((r) => r.json())
       .then((data: { status?: string }) => {
         if (data.status === "success") {
-          // Purchase шлемо саме тут — момент реальної оплати, а не
-          // моменту заповнення форми (див. коментар у pixel.ts/ga4.ts).
-          trackPurchasePixel(pending.items, pending.totalPrice);
-          trackPurchaseGA4(pending.items, pending.totalPrice);
-          localStorage.removeItem("mm_pending_order");
-          setStatus("success");
+          markSuccess();
         } else if (data.status === "failure" || data.status === "reversed" || data.status === "expired") {
           setStatus("failure");
         } else {

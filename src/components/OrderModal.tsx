@@ -13,6 +13,8 @@ interface OrderModalProps {
   onClose: () => void;
 }
 
+type PaymentMethod = "card_mono" | "card_wfp" | "cod";
+
 export function OrderModal({ onClose }: OrderModalProps) {
   const { items, totalPrice, clearCart } = useCart();
   const [form, setForm] = useState({
@@ -50,12 +52,12 @@ export function OrderModal({ onClose }: OrderModalProps) {
       totalPrice
     );
   }, []);
-  // Оплата карткою онлайн — пріоритетний спосіб (менша маржа = менше довіри
-  // до накладеного платежу, менше повернень). WayForPay ще не підключено —
-  // поки що обидва варіанти йдуть через ту саму заявку в Telegram, але вибір
-  // клієнта видно продавцю одразу. Коли з'являться API-ключі WayForPay —
-  // варіант "card" переключити на реальний редирект на оплату.
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "cod">("card");
+  // Два онлайн-еквайринги (mono і WayForPay) + оплата при отриманні. mono —
+  // пріоритетний варіант за замовчуванням (перевірений першим, надійніший
+  // за досвідом). Назви без логотипів — за брендбуком monobank для сайтів
+  // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
+  // "назва без лого" — валідний варіант поряд з варіантом із лого.
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const formLoadedAt = useRef(Date.now());
 
@@ -63,8 +65,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
     e.preventDefault();
     setStatus("sending");
 
-    // Спільний ID замовлення — йде і в Telegram-заявку, і в Monobank-інвойс
-    // (як reference), щоб продавець міг зіставити заявку з оплатою.
+    // Спільний ID замовлення — йде і в Telegram-заявку, і в інвойс/платіж
+    // конкретного еквайрингу (як reference), щоб продавець міг зіставити
+    // заявку з оплатою за одним номером незалежно від того, який гейтвей
+    // клієнт обрав.
     const orderId = `MM${Date.now().toString(36).toUpperCase()}`;
 
     try {
@@ -95,7 +99,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         return;
       }
 
-      if (paymentMethod === "card") {
+      if (paymentMethod === "card_mono") {
         // Онлайн-оплата Monobank — створюємо інвойс і редіректимо на
         // сторінку оплати. Purchase-подія летить НЕ тут, а на /order/success
         // після підтвердження реальної оплати (див. pixel.ts/ga4.ts).
@@ -127,6 +131,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           "mm_pending_order",
           JSON.stringify({
             orderId,
+            gateway: "monobank",
             invoiceId,
             items: items.map((i) => ({
               id: i.id,
@@ -141,6 +146,74 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
         clearCart();
         window.location.href = pageUrl;
+        return;
+      }
+
+      if (paymentMethod === "card_wfp") {
+        // WayForPay працює через класичний POST-редирект форми (не JSON-
+        // редирект як у Monobank) — сервер віддає готові поля з підписом,
+        // ми збираємо приховану форму і сабмітимо її на secure.wayforpay.com.
+        const purchaseRes = await fetch("/api/checkout/wayforpay", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId,
+            items: items.map((i) => ({
+              id: i.id,
+              name: i.name,
+              price: i.price,
+              quantity: i.quantity,
+            })),
+          }),
+        });
+
+        if (!purchaseRes.ok) {
+          setStatus("error");
+          return;
+        }
+
+        const { actionUrl, fields } = await purchaseRes.json();
+
+        localStorage.setItem(
+          "mm_pending_order",
+          JSON.stringify({
+            orderId,
+            gateway: "wayforpay",
+            items: items.map((i) => ({
+              id: i.id,
+              name: i.name,
+              price: i.price,
+              quantity: i.quantity,
+              category: i.categoryName ?? i.category,
+            })),
+            totalPrice,
+          })
+        );
+
+        clearCart();
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = actionUrl;
+        for (const [key, value] of Object.entries(fields as Record<string, unknown>)) {
+          if (Array.isArray(value)) {
+            for (const v of value) {
+              const input = document.createElement("input");
+              input.type = "hidden";
+              input.name = key;
+              input.value = String(v);
+              form.appendChild(input);
+            }
+          } else {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = String(value);
+            form.appendChild(input);
+          }
+        }
+        document.body.appendChild(form);
+        form.submit();
         return;
       }
 
@@ -180,14 +253,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="text-5xl mb-4">✅</div>
           <div className="text-lg font-extrabold mb-2">Замовлення прийнято!</div>
           <div className="text-sm text-gray-500 mb-1">
-            {paymentMethod === "card"
-              ? "Ми зв'яжемося з тобою протягом 30 хвилин і надішлемо посилання на оплату карткою."
-              : "Ми зв'яжемося з тобою протягом 30 хвилин для підтвердження."}
+            Ми зв&apos;яжемося з тобою протягом 30 хвилин для підтвердження.
           </div>
           <div className="text-xs text-gray-400 mb-6">
-            {paymentMethod === "card"
-              ? "Відправка Новою Поштою · Оплата карткою онлайн"
-              : "Відправка Новою Поштою · Оплата при отриманні"}
+            Відправка Новою Поштою · Оплата при отриманні
           </div>
           <button
             onClick={onClose}
@@ -280,9 +349,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="space-y-2">
             <button
               type="button"
-              onClick={() => setPaymentMethod("card")}
+              onClick={() => setPaymentMethod("card_mono")}
               className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
-                paymentMethod === "card"
+                paymentMethod === "card_mono"
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200"
               }`}
@@ -290,7 +359,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               <span className="text-xl">💳</span>
               <span className="flex-1 min-w-0">
                 <span className="flex items-center gap-1.5">
-                  <span className="text-sm font-bold">Карткою онлайн</span>
+                  <span className="text-sm font-bold">Оплата mono</span>
                   <span className="text-[9px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded-full">
                     Рекомендуємо
                   </span>
@@ -301,7 +370,31 @@ export function OrderModal({ onClose }: OrderModalProps) {
               </span>
               <span
                 className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
-                  paymentMethod === "card"
+                  paymentMethod === "card_mono"
+                    ? "border-emerald-500 bg-emerald-500"
+                    : "border-gray-300"
+                }`}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("card_wfp")}
+              className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
+                paymentMethod === "card_wfp"
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-200"
+              }`}
+            >
+              <span className="text-xl">💳</span>
+              <span className="flex-1 min-w-0">
+                <span className="text-sm font-bold">Оплата WayForPay</span>
+                <span className="block text-[11px] text-gray-500">
+                  Картка, Apple Pay, Google Pay
+                </span>
+              </span>
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                  paymentMethod === "card_wfp"
                     ? "border-emerald-500 bg-emerald-500"
                     : "border-gray-300"
                 }`}
@@ -424,15 +517,15 @@ export function OrderModal({ onClose }: OrderModalProps) {
           >
             {status === "sending"
               ? "Відправляю..."
-              : paymentMethod === "card"
-              ? "Замовити · Оплата карткою"
-              : "Замовити · Оплата при отриманні"}
+              : paymentMethod === "cod"
+              ? "Замовити · Оплата при отриманні"
+              : "Замовити · Оплата карткою"}
           </button>
 
           <div className="text-[10px] text-gray-400 text-center">
-            {paymentMethod === "card"
-              ? "💳 Посилання на оплату надішлемо одразу після підтвердження · ↩️ Повернення 14 днів"
-              : "💰 Оплата при отриманні на Новій Пошті · ↩️ Повернення 14 днів"}
+            {paymentMethod === "cod"
+              ? "💰 Оплата при отриманні на Новій Пошті · ↩️ Повернення 14 днів"
+              : "💳 Перейдеш на захищену сторінку оплати · ↩️ Повернення 14 днів"}
           </div>
         </form>
       </div>

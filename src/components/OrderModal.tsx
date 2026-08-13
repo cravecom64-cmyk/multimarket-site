@@ -63,11 +63,16 @@ export function OrderModal({ onClose }: OrderModalProps) {
     e.preventDefault();
     setStatus("sending");
 
+    // Спільний ID замовлення — йде і в Telegram-заявку, і в Monobank-інвойс
+    // (як reference), щоб продавець міг зіставити заявку з оплатою.
+    const orderId = `MM${Date.now().toString(36).toUpperCase()}`;
+
     try {
       const res = await fetch("/api/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          orderId,
           name: form.name,
           phone: form.phone,
           city: form.city,
@@ -85,35 +90,83 @@ export function OrderModal({ onClose }: OrderModalProps) {
         }),
       });
 
-      if (res.ok) {
-        // Оплата при отриманні — Purchase шлемо в момент прийняття заявки,
-        // а не реальної оплати. Коли підключимо онлайн-оплату — перенесемо
-        // цей виклик на сторінку успішної оплати.
-        trackPurchase(
-          items.map((i) => ({
-            id: i.id,
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity,
-            category: i.categoryName ?? i.category,
-          })),
-          totalPrice
-        );
-        trackPurchaseGA4(
-          items.map((i) => ({
-            id: i.id,
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity,
-            category: i.categoryName ?? i.category,
-          })),
-          totalPrice
-        );
-        setStatus("success");
-        clearCart();
-      } else {
+      if (!res.ok) {
         setStatus("error");
+        return;
       }
+
+      if (paymentMethod === "card") {
+        // Онлайн-оплата Monobank — створюємо інвойс і редіректимо на
+        // сторінку оплати. Purchase-подія летить НЕ тут, а на /order/success
+        // після підтвердження реальної оплати (див. pixel.ts/ga4.ts).
+        const invoiceRes = await fetch("/api/checkout/monobank", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId,
+            items: items.map((i) => ({
+              name: i.name,
+              price: i.price,
+              quantity: i.quantity,
+            })),
+            totalPrice,
+          }),
+        });
+
+        if (!invoiceRes.ok) {
+          setStatus("error");
+          return;
+        }
+
+        const { invoiceId, pageUrl } = await invoiceRes.json();
+
+        // Зберігаємо дані для пікселя/GA4, які вистрелять на сторінці
+        // успіху ПІСЛЯ підтвердження оплати, а не зараз.
+        localStorage.setItem(
+          "mm_pending_order",
+          JSON.stringify({
+            orderId,
+            invoiceId,
+            items: items.map((i) => ({
+              id: i.id,
+              name: i.name,
+              price: i.price,
+              quantity: i.quantity,
+              category: i.categoryName ?? i.category,
+            })),
+            totalPrice,
+          })
+        );
+
+        clearCart();
+        window.location.href = pageUrl;
+        return;
+      }
+
+      // Оплата при отриманні — Purchase шлемо в момент прийняття заявки,
+      // а не реальної оплати (для card-оплати перенесено на /order/success).
+      trackPurchase(
+        items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity,
+          category: i.categoryName ?? i.category,
+        })),
+        totalPrice
+      );
+      trackPurchaseGA4(
+        items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity,
+          category: i.categoryName ?? i.category,
+        })),
+        totalPrice
+      );
+      setStatus("success");
+      clearCart();
     } catch {
       setStatus("error");
     }

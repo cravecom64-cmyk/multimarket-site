@@ -64,6 +64,11 @@ interface OrderBody {
   // тож продавець зв'язується і надсилає посилання на оплату вручну);
   // "cod" — оплата при отриманні (за замовчуванням, якщо поле відсутнє)
   paymentMethod?: "card" | "cod";
+  // Наш внутрішній ID замовлення — генерується на клієнті ДО відправки,
+  // передається і сюди (для Telegram), і в /api/checkout/monobank (як
+  // reference в інвойсі), і в webhook — так продавець може зіставити
+  // заявку з підтвердженням оплати за одним номером.
+  orderId?: string;
   // Honeypot field — must be empty
   website?: string;
   // Timing check — timestamp when form was loaded
@@ -176,11 +181,12 @@ export async function POST(req: NextRequest) {
     const paymentMethod = body.paymentMethod === "card" ? "card" : "cod";
     const paymentLine =
       paymentMethod === "card"
-        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН — клієнт чекає посилання на оплату\\!*"
+        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через Monobank — очікуємо підтвердження оплати*"
         : "💰 *Оплата: при отриманні \\(накладений платіж\\)*";
+    const orderIdLine = body.orderId ? `🔖 *№ ${escapeMarkdown(body.orderId)}*\n` : "";
 
     const message = `🛒 *НОВЕ ЗАМОВЛЕННЯ!*
-
+${orderIdLine}
 👤 *Ім'я:* ${escapeMarkdown(name)}
 📞 *Телефон:* ${escapeMarkdown(phone)}
 🏙 *Місто:* ${escapeMarkdown(city)}

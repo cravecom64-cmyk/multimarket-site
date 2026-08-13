@@ -37,9 +37,46 @@ export interface CreateInvoiceResult {
   pageUrl: string;
 }
 
+// Деякі мерчант-акаунти Monobank налаштовані за агентською/маркетплейс-
+// схемою (кілька терміналів під одним токеном) — тоді invoice/create
+// вимагає явно вказати code конкретного субмерчанта, інакше 400
+// INVALID_MERCHANT_PAYM_INFO ("'code' is required"). Для звичайного
+// одиночного ФОП-акаунту список субмерчантів порожній — тоді code просто
+// не додаємо в запит, як і документовано (поле не обов'язкове).
+let cachedSubmerchantCode: { code: string | null; fetchedAt: number } | null = null;
+const SUBMERCHANT_TTL_MS = 60 * 60 * 1000;
+
+async function getSubmerchantCode(): Promise<string | null> {
+  if (
+    cachedSubmerchantCode &&
+    Date.now() - cachedSubmerchantCode.fetchedAt < SUBMERCHANT_TTL_MS
+  ) {
+    return cachedSubmerchantCode.code;
+  }
+
+  const res = await fetch(`${MONOBANK_API}/api/merchant/submerchant/list`, {
+    headers: { "X-Token": getToken() },
+  });
+
+  if (!res.ok) {
+    // Ендпоінт недоступний для звичайних (не агентських) акаунтів — це не
+    // помилка, просто означає "код не потрібен".
+    cachedSubmerchantCode = { code: null, fetchedAt: Date.now() };
+    return null;
+  }
+
+  const data = await res.json();
+  const code =
+    data.list && data.list.length > 0 ? (data.list[0].code as string) : null;
+  cachedSubmerchantCode = { code, fetchedAt: Date.now() };
+  return code;
+}
+
 export async function createInvoice(
   params: CreateInvoiceParams
 ): Promise<CreateInvoiceResult> {
+  const code = await getSubmerchantCode();
+
   const res = await fetch(`${MONOBANK_API}/api/merchant/invoice/create`, {
     method: "POST",
     headers: {
@@ -58,6 +95,7 @@ export async function createInvoice(
       webHookUrl: params.webHookUrl,
       validity: params.validitySeconds ?? 3600,
       paymentType: "debit",
+      ...(code ? { code } : {}),
     }),
   });
 

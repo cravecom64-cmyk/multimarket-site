@@ -54,6 +54,20 @@ export async function GET(req: NextRequest) {
       validity: 60,
       paymentType: "debit",
     };
+  } else if (variant === "with-item-code") {
+    body = {
+      amount: 100,
+      ccy: 980,
+      merchantPaymInfo: {
+        reference: "DEBUG3",
+        destination: "Debug test",
+        basketOrder: [{ name: "Test item", qty: 1, sum: 100, unit: "шт", code: "TEST-SKU-001" }],
+      },
+      redirectUrl,
+      webHookUrl,
+      validity: 60,
+      paymentType: "debit",
+    };
   } else {
     return NextResponse.json({ error: "Unknown variant" }, { status: 400 });
   }

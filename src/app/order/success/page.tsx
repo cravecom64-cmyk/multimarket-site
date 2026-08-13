@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { trackPurchase as trackPurchasePixel } from "@/lib/pixel";
 import { trackPurchase as trackPurchaseGA4 } from "@/lib/ga4";
@@ -19,6 +19,7 @@ type PageStatus = "checking" | "success" | "failure" | "pending" | "notfound";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const ref = searchParams.get("ref");
   const [status, setStatus] = useState<PageStatus>("checking");
 
@@ -53,6 +54,12 @@ function SuccessContent() {
       setStatus("success");
     };
 
+    // Окрема сторінка невдалої оплати (/order/failed) — свій URL, щоб
+    // рахувати/ретаргетити невдалі оплати окремо від успішних (Pixel/GA4).
+    const goToFailed = () => {
+      router.replace(`/order/failed?ref=${encodeURIComponent(pending.orderId)}`);
+    };
+
     if (pending.gateway === "wayforpay") {
       fetch(`/api/checkout/wayforpay/status?orderReference=${encodeURIComponent(pending.wfpRef || pending.orderId)}`)
         .then((r) => r.json())
@@ -65,13 +72,13 @@ function SuccessContent() {
             data.transactionStatus === "Refunded" ||
             data.transactionStatus === "Voided"
           ) {
-            setStatus("failure");
+            goToFailed();
           } else {
             // InProcessing / Pending — оплата ще обробляється
             setStatus("pending");
           }
         })
-        .catch(() => setStatus("failure"));
+        .catch(() => goToFailed());
       return;
     }
 
@@ -82,14 +89,14 @@ function SuccessContent() {
         if (data.status === "success") {
           markSuccess();
         } else if (data.status === "failure" || data.status === "reversed" || data.status === "expired") {
-          setStatus("failure");
+          goToFailed();
         } else {
           // created / processing / hold — оплата ще обробляється
           setStatus("pending");
         }
       })
-      .catch(() => setStatus("failure"));
-  }, [ref]);
+      .catch(() => goToFailed());
+  }, [ref, router]);
 
   if (status === "checking") {
     return (
@@ -130,18 +137,24 @@ function SuccessContent() {
     );
   }
 
-  return (
-    <div className="text-center">
-      <div className="text-5xl mb-4">❌</div>
-      <div className="text-xl font-extrabold mb-2">Оплата не пройшла</div>
-      <div className="text-sm text-gray-500 mb-6">
-        Спробуй оформити замовлення ще раз або обери оплату при отриманні.
+  if (status === "notfound") {
+    return (
+      <div className="text-center">
+        <div className="text-5xl mb-4">🤔</div>
+        <div className="text-xl font-extrabold mb-2">Замовлення не знайдено</div>
+        <div className="text-sm text-gray-500 mb-6">
+          Схоже, ти вже оформив(-ла) це замовлення раніше або перейшов(-шла) за старим посиланням.
+        </div>
+        <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
+          На головну
+        </Link>
       </div>
-      <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
-        На головну
-      </Link>
-    </div>
-  );
+    );
+  }
+
+  // status === "failure" більше сюди не доходить — редіректимо на
+  // /order/failed одразу, як тільки дізнаємось про відмову (goToFailed()).
+  return null;
 }
 
 export default function OrderSuccessPage() {

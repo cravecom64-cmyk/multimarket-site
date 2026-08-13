@@ -141,6 +141,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               name: i.name,
               price: i.price,
               quantity: i.quantity,
+              image: i.image,
             })),
             totalPrice,
           }),

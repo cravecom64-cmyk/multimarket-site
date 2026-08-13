@@ -23,6 +23,7 @@ interface OrderItem {
   name: string;
   price: number;
   quantity: number;
+  image?: string;
 }
 
 interface CheckoutBody {
@@ -88,6 +89,8 @@ export async function POST(req: NextRequest) {
         // з нашого фронтенду) — падаємо на порядковий номер, аби не зривати
         // весь чек через одну позицію без id.
         code: i.id || `item-${idx + 1}`,
+        // Абсолютний URL — Monobank не приймає відносні шляхи для icon.
+        icon: i.image ? `${SITE_URL}${i.image}` : undefined,
       })),
       redirectUrl: `${SITE_URL}/order/success?ref=${encodeURIComponent(body.orderId)}`,
       webHookUrl: `${SITE_URL}/api/webhook/monobank`,

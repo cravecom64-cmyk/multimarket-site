@@ -24,6 +24,9 @@ export interface BasketItem {
   // фіскалізація (ПРРО), і invoice/create віддає 400 INVALID_MERCHANT_PAYM_INFO
   // ("'code' is required") без нього. Використовуємо внутрішній id товару.
   code?: string;
+  // Абсолютний URL фото товару — показується на сторінці оплати поряд з
+  // позицією кошика. Без нього Monobank малює пусту сіру плашку-заглушку.
+  icon?: string;
 }
 
 export interface CreateInvoiceParams {

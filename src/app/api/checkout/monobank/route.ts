@@ -19,6 +19,7 @@ function isRateLimited(ip: string): boolean {
 }
 
 interface OrderItem {
+  id?: string;
   name: string;
   price: number;
   quantity: number;
@@ -77,11 +78,16 @@ export async function POST(req: NextRequest) {
       amount: Math.round(calculatedTotal * 100), // копійки
       reference: body.orderId,
       destination: `Замовлення ${body.orderId} — Multimarket`,
-      basketOrder: body.items.map((i) => ({
+      basketOrder: body.items.map((i, idx) => ({
         name: i.name.slice(0, 128),
         qty: i.quantity,
         sum: Math.round(i.price * 100),
         unit: "шт",
+        // Код позиції — обов'язковий, бо на акаунті увімкнена фіскалізація.
+        // Беремо id товару з каталогу; якщо його немає (не мало б траплятись
+        // з нашого фронтенду) — падаємо на порядковий номер, аби не зривати
+        // весь чек через одну позицію без id.
+        code: i.id || `item-${idx + 1}`,
       })),
       redirectUrl: `${SITE_URL}/order/success?ref=${encodeURIComponent(body.orderId)}`,
       webHookUrl: `${SITE_URL}/api/webhook/monobank`,

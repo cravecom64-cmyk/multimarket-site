@@ -20,6 +20,10 @@ export interface BasketItem {
   qty: number;
   sum: number; // ціна за одиницю, у копійках
   unit?: string;
+  // Код товару — обов'язковий на цьому акаунті: у Monobank увімкнена
+  // фіскалізація (ПРРО), і invoice/create віддає 400 INVALID_MERCHANT_PAYM_INFO
+  // ("'code' is required") без нього. Використовуємо внутрішній id товару.
+  code?: string;
 }
 
 export interface CreateInvoiceParams {

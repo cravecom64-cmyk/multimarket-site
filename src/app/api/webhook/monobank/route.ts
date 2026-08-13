@@ -18,14 +18,22 @@ function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
 }
 
-// reference має формат "orderId" або "orderId-phoneDigits" (телефон додається
-// в /api/checkout/monobank, якщо клієнт його вказав). Розбираємо назад, щоб
-// показати номер у сповіщенні без пошуку заявки в історії Telegram.
-function parseReference(reference: string | undefined): { orderId: string; phone: string | null } {
-  if (!reference) return { orderId: "?", phone: null };
-  const match = reference.match(/^(.+)-(\d{9,15})$/);
-  if (match) return { orderId: match[1], phone: match[2] };
-  return { orderId: reference, phone: null };
+// reference має формат "orderId--pPHONE--iITEMSUMMARY" (додається в
+// /api/checkout/monobank). Розбираємо назад, щоб показати номер телефону і
+// товар у сповіщенні без пошуку заявки в історії Telegram.
+function parseReference(
+  reference: string | undefined
+): { orderId: string; phone: string | null; itemSummary: string | null } {
+  if (!reference) return { orderId: "?", phone: null, itemSummary: null };
+  const match = reference.match(/^(.+?)--p(\d*)--i(.*)$/);
+  if (match) {
+    return {
+      orderId: match[1],
+      phone: match[2] || null,
+      itemSummary: match[3] ? decodeURIComponent(match[3]) : null,
+    };
+  }
+  return { orderId: reference, phone: null, itemSummary: null };
 }
 
 function formatPhoneLink(phoneDigits: string): string {
@@ -77,19 +85,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { orderId, phone } = parseReference(payload.reference);
+  const { orderId, phone, itemSummary } = parseReference(payload.reference);
   const ref = escapeMarkdown(orderId);
   const phoneLine = phone ? `\n📞 Телефон: ${formatPhoneLink(phone)}` : "";
+  const itemLine = itemSummary ? `\n📦 Товар: ${escapeMarkdown(itemSummary)}` : "";
   const sum = ((payload.finalAmount ?? payload.amount) / 100).toFixed(2);
 
   if (payload.status === "success") {
     await sendTelegram(
-      `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: Monobank Acquiring${phoneLine}`
+      `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: Monobank Acquiring${itemLine}${phoneLine}`
     );
   } else if (payload.status === "failure" || payload.status === "reversed") {
     const reason = payload.failureReason ? escapeMarkdown(payload.failureReason) : "невідома причина";
     await sendTelegram(
-      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
+      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${itemLine}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
     );
   }
   // created/processing/hold — проміжні статуси, окремо не сповіщаємо,

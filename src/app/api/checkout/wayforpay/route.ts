@@ -70,7 +70,12 @@ export async function POST(req: NextRequest) {
     }
 
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
-    const technicalRef = phoneDigits ? `${body.orderId}-${phoneDigits}` : body.orderId;
+    const itemSummary = body.items
+      .map((i) => i.name)
+      .slice(0, 2)
+      .join(", ")
+      .slice(0, 100) + (body.items.length > 2 ? ` +${body.items.length - 2}` : "");
+    const technicalRef = `${body.orderId}--p${phoneDigits}--i${encodeURIComponent(itemSummary)}`;
 
     const { actionUrl, fields } = buildPurchaseFields({
       orderReference: technicalRef,

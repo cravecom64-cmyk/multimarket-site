@@ -82,8 +82,14 @@ export async function POST(req: NextRequest) {
 
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
     // reference не показується клієнту (на відміну від destination) — сюди
-    // безпечно додати телефон, щоб мати його під рукою у webhook-сповіщенні.
-    const reference = phoneDigits ? `${body.orderId}-${phoneDigits}` : body.orderId;
+    // безпечно додати телефон і назву товару, щоб у webhook-сповіщенні про
+    // відмову оплати одразу було видно і кому телефонувати, і що замовляли.
+    const itemSummary = body.items
+      .map((i) => i.name)
+      .slice(0, 2)
+      .join(", ")
+      .slice(0, 100) + (body.items.length > 2 ? ` +${body.items.length - 2}` : "");
+    const reference = `${body.orderId}--p${phoneDigits}--i${encodeURIComponent(itemSummary)}`;
 
     const invoice = await createInvoice({
       amount: Math.round(calculatedTotal * 100), // копійки

@@ -5,12 +5,20 @@ function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
 }
 
-// orderReference має формат "orderId" або "orderId-phoneDigits" (телефон
-// додається в /api/checkout/wayforpay, якщо клієнт його вказав).
-function parseReference(reference: string): { orderId: string; phone: string | null } {
-  const match = reference.match(/^(.+)-(\d{9,15})$/);
-  if (match) return { orderId: match[1], phone: match[2] };
-  return { orderId: reference, phone: null };
+// orderReference має формат "orderId--pPHONE--iITEMSUMMARY" (додається в
+// /api/checkout/wayforpay).
+function parseReference(
+  reference: string
+): { orderId: string; phone: string | null; itemSummary: string | null } {
+  const match = reference.match(/^(.+?)--p(\d*)--i(.*)$/);
+  if (match) {
+    return {
+      orderId: match[1],
+      phone: match[2] || null,
+      itemSummary: match[3] ? decodeURIComponent(match[3]) : null,
+    };
+  }
+  return { orderId: reference, phone: null, itemSummary: null };
 }
 
 function formatPhoneLink(phoneDigits: string): string {
@@ -45,14 +53,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
   }
 
-  const { orderId, phone } = parseReference(payload.orderReference);
+  const { orderId, phone, itemSummary } = parseReference(payload.orderReference);
   const ref = escapeMarkdown(orderId);
   const phoneLine = phone ? `\n📞 Телефон: ${formatPhoneLink(phone)}` : "";
+  const itemLine = itemSummary ? `\n📦 Товар: ${escapeMarkdown(itemSummary)}` : "";
   const sum = payload.amount;
 
   if (payload.transactionStatus === "Approved") {
     await sendTelegram(
-      `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: WayForPay${phoneLine}`
+      `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: WayForPay${itemLine}${phoneLine}`
     );
   } else if (
     payload.transactionStatus === "Declined" ||
@@ -62,7 +71,7 @@ export async function POST(req: NextRequest) {
   ) {
     const reason = payload.reason ? escapeMarkdown(payload.reason) : "невідома причина";
     await sendTelegram(
-      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
+      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${itemLine}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
     );
   }
   // InProcessing/Pending — проміжні статуси, окремо не сповіщаємо.

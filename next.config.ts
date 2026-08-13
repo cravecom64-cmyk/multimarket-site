@@ -57,7 +57,10 @@ const nextConfig: NextConfig = {
             "frame-src 'self' https://www.facebook.com",
             "frame-ancestors 'none'",
             "base-uri 'self'",
-            "form-action 'self' https://www.facebook.com",
+            // WayForPay і Monobank отримують сабмит форми/редирект на свій
+            // домен для оплати — без явного дозволу тут CSP тихо блокує
+            // form.submit() на чужий origin, без помилки в консолі.
+            "form-action 'self' https://www.facebook.com https://secure.wayforpay.com https://pay.monobank.ua",
           ].join("; "),
         },
       ],

@@ -144,6 +144,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
               image: i.image,
             })),
             totalPrice,
+            // Йде тільки в невидиме клієнту поле reference — щоб у сповіщенні
+            // про відмову оплати одразу було видно кому телефонувати.
+            customerPhone: form.phone,
           }),
         });
 
@@ -194,6 +197,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               price: i.price,
               quantity: i.quantity,
             })),
+            customerPhone: form.phone,
           }),
         });
 
@@ -210,6 +214,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
           JSON.stringify({
             orderId,
             gateway: "wayforpay",
+            // Технічний orderReference, який реально пішов у WayForPay (може
+            // містити телефон-суфікс) — саме його треба слати в CHECK_STATUS
+            // на /order/success, а не "чистий" orderId.
+            wfpRef: fields.orderReference,
             items: items.map((i) => ({
               id: i.id,
               name: i.name,
@@ -223,9 +231,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
         clearCart();
 
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = actionUrl;
+        const wfpForm = document.createElement("form");
+        wfpForm.method = "POST";
+        wfpForm.action = actionUrl;
         for (const [key, value] of Object.entries(fields as Record<string, unknown>)) {
           if (Array.isArray(value)) {
             for (const v of value) {
@@ -233,18 +241,18 @@ export function OrderModal({ onClose }: OrderModalProps) {
               input.type = "hidden";
               input.name = key;
               input.value = String(v);
-              form.appendChild(input);
+              wfpForm.appendChild(input);
             }
           } else {
             const input = document.createElement("input");
             input.type = "hidden";
             input.name = key;
             input.value = String(value);
-            form.appendChild(input);
+            wfpForm.appendChild(input);
           }
         }
-        document.body.appendChild(form);
-        form.submit();
+        document.body.appendChild(wfpForm);
+        wfpForm.submit();
         return;
       }
 

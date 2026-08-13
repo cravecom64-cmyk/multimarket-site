@@ -30,6 +30,11 @@ interface CheckoutBody {
   orderId: string;
   items: OrderItem[];
   totalPrice: number;
+  // Телефон клієнта — не показується покупцю (Monobank не виводить
+  // "reference" на сторінці оплати, на відміну від "destination"), але
+  // повертається нам назад у webhook/status — так у сповіщенні про відмову
+  // оплати одразу видно кому телефонувати, без пошуку заявки в Telegram.
+  customerPhone?: string;
 }
 
 const SITE_URL = "https://www.multi-market.com.ua";
@@ -75,9 +80,14 @@ export async function POST(req: NextRequest) {
       0
     );
 
+    const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
+    // reference не показується клієнту (на відміну від destination) — сюди
+    // безпечно додати телефон, щоб мати його під рукою у webhook-сповіщенні.
+    const reference = phoneDigits ? `${body.orderId}-${phoneDigits}` : body.orderId;
+
     const invoice = await createInvoice({
       amount: Math.round(calculatedTotal * 100), // копійки
-      reference: body.orderId,
+      reference,
       destination: `Замовлення ${body.orderId} — Multimarket`,
       basketOrder: body.items.map((i, idx) => ({
         name: i.name.slice(0, 128),

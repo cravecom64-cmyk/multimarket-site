@@ -10,6 +10,7 @@ interface PendingOrder {
   orderId: string;
   gateway?: "monobank" | "wayforpay";
   invoiceId?: string; // тільки для monobank
+  wfpRef?: string; // тільки для wayforpay — технічний orderReference з телефоном
   items: { id: string; name: string; price: number; quantity: number; category?: string }[];
   totalPrice: number;
 }
@@ -53,7 +54,7 @@ function SuccessContent() {
     };
 
     if (pending.gateway === "wayforpay") {
-      fetch(`/api/checkout/wayforpay/status?orderReference=${encodeURIComponent(pending.orderId)}`)
+      fetch(`/api/checkout/wayforpay/status?orderReference=${encodeURIComponent(pending.wfpRef || pending.orderId)}`)
         .then((r) => r.json())
         .then((data: { transactionStatus?: string }) => {
           if (data.transactionStatus === "Approved") {

@@ -25,6 +25,12 @@ interface OrderItem {
 interface CheckoutBody {
   orderId: string;
   items: OrderItem[];
+  // Телефон клієнта — вшивається у технічний orderReference, який іде до
+  // WayForPay (і повертається назад у webhook/CHECK_STATUS). Видимий для
+  // клієнта orderId (у ?ref= і localStorage) лишається БЕЗ телефону —
+  // технічний reference потрібен лише щоб webhook-сповіщення про відмову
+  // оплати одразу показувало кому телефонувати.
+  customerPhone?: string;
 }
 
 const SITE_URL = "https://www.multi-market.com.ua";
@@ -63,13 +69,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
+    const technicalRef = phoneDigits ? `${body.orderId}-${phoneDigits}` : body.orderId;
+
     const { actionUrl, fields } = buildPurchaseFields({
-      orderReference: body.orderId,
+      orderReference: technicalRef,
       items: body.items.map((i) => ({
         name: i.name.slice(0, 128),
         price: i.price,
         count: i.quantity,
       })),
+      // ?ref= лишається чистим orderId (без телефону) — саме з ним звіряє
+      // /order/success localStorage-запис.
       returnUrl: `${SITE_URL}/order/success?ref=${encodeURIComponent(body.orderId)}&gw=wfp`,
       serviceUrl: `${SITE_URL}/api/webhook/wayforpay`,
     });

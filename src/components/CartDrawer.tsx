@@ -20,10 +20,11 @@ export function CartDrawer() {
   const FREE_SHIPPING = 2000;
   const remaining = Math.max(0, FREE_SHIPPING - totalPrice);
 
-  if (!isCartOpen) return null;
+  if (!isCartOpen && !showOrder) return null;
 
   return (
     <>
+      {isCartOpen && (
       <div className="fixed inset-0 z-[70] overlay" onClick={() => setIsCartOpen(false)}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl"
@@ -208,6 +209,7 @@ export function CartDrawer() {
           )}
         </div>
       </div>
+      )}
 
       {showOrder && <OrderModal onClose={() => setShowOrder(false)} />}
     </>

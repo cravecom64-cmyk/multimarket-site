@@ -3226,6 +3226,11 @@
     "usageTips": [
       "Заряджається від звичайної розетки 220V (~10 годин до повного заряду); сонячна панель — додаткове/резервне джерело",
       "USB-порт лампи можна використати, щоб зарядити телефон — ліхтар працює як повербанк"
+    ],
+    "images": [
+      "/products/bk09/lifestyle-tent.jpg",
+      "/products/bk09/functions-collage.jpg",
+      "/products/bk09/specs-card.jpg"
     ]
   },
   {
@@ -3300,6 +3305,11 @@
     "usageTips": [
       "Для перемикання режимів можна або натиснути кнопку, або провести рукою біля сенсора (спрацьовує на відстані до 15 см) — зручно коли руки брудні чи зайняті",
       "IP44 означає захист від бризок і легкого дощу, але ліхтар не призначений для занурення у воду"
+    ],
+    "images": [
+      "/products/bk10/lifestyle-mechanic.jpg",
+      "/products/bk10/functions-collage.jpg",
+      "/products/bk10/specs-card.jpg"
     ]
   },
   {
@@ -3358,7 +3368,12 @@
         "text": "За такі гроші непогано. Легкий, не муляє на голові, для коротких вилазок у темряві вистачає."
       }
     ],
-    "image": "/products/bk11/hero.jpg"
+    "image": "/products/bk11/hero.jpg",
+    "images": [
+      "/products/bk11/lifestyle-jogging.jpg",
+      "/products/bk11/functions-collage.jpg",
+      "/products/bk11/specs-card.jpg"
+    ]
   },
   {
     "id": "bk12",

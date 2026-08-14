@@ -84,9 +84,12 @@ export async function POST(req: NextRequest) {
         price: i.price,
         count: i.quantity,
       })),
+      // Повертаємо НЕ напряму на /order/success (сторінку), а на проміжний
+      // API-роут — WayForPay POST-ить сюди дані оплати, а звичайна Next.js
+      // сторінка не вміє приймати POST ("Server action not found").
       // ?ref= лишається чистим orderId (без телефону) — саме з ним звіряє
       // /order/success localStorage-запис.
-      returnUrl: `${SITE_URL}/order/success?ref=${encodeURIComponent(body.orderId)}&gw=wfp`,
+      returnUrl: `${SITE_URL}/api/checkout/wayforpay/return?ref=${encodeURIComponent(body.orderId)}`,
       serviceUrl: `${SITE_URL}/api/webhook/wayforpay`,
     });
 

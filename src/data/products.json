@@ -66,6 +66,11 @@
     "similarWith": [
       "h02",
       "h07"
+    ],
+    "images": [
+      "/products/h01/lifestyle-bedroom.jpg",
+      "/products/h01/functions-collage.jpg",
+      "/products/h01/specs-card.jpg"
     ]
   },
   {
@@ -1467,6 +1472,11 @@
       "g07",
       "g09",
       "g10"
+    ],
+    "images": [
+      "/products/g11/lifestyle-pathway.jpg",
+      "/products/g11/functions-collage.jpg",
+      "/products/g11/specs-card.jpg"
     ]
   },
   {
@@ -1880,6 +1890,11 @@
     ],
     "similarWith": [
       "p12"
+    ],
+    "images": [
+      "/products/p07/lifestyle-walk.jpg",
+      "/products/p07/functions-collage.jpg",
+      "/products/p07/specs-card.jpg"
     ]
   },
   {
@@ -2490,6 +2505,11 @@
     "image": "/products/tt07/hero.jpg",
     "similarWith": [
       "tt08"
+    ],
+    "images": [
+      "/products/tt07/lifestyle-sink.jpg",
+      "/products/tt07/functions-collage.jpg",
+      "/products/tt07/specs-card.jpg"
     ]
   },
   {
@@ -2706,6 +2726,11 @@
     "image": "/products/bk02/hero.jpg",
     "safetyNotes": [
       "Вбудований захист від перевантаження струмом, перенапруги, короткого замикання, перегріву та перезаряду"
+    ],
+    "images": [
+      "/products/bk02/lifestyle-cafe.jpg",
+      "/products/bk02/functions-collage.jpg",
+      "/products/bk02/specs-card.jpg"
     ]
   },
   {

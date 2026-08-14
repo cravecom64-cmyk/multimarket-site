@@ -2409,6 +2409,11 @@
     "image": "/products/tt06/hero.jpg",
     "similarWith": [
       "tt05"
+    ],
+    "images": [
+      "/products/tt06/lifestyle-vlog.jpg",
+      "/products/tt06/functions-collage.jpg",
+      "/products/tt06/specs-card.jpg"
     ]
   },
   {

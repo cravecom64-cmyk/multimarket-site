@@ -2651,7 +2651,12 @@
         "text": "Гарний розмір, в кишеню влазить вільно. Хотілось би трохи більшу ємність, але як варіант на день вистачає."
       }
     ],
-    "image": "/products/bk01/hero.jpg"
+    "image": "/products/bk01/hero.jpg",
+    "images": [
+      "/products/bk01/lifestyle-hiking.jpg",
+      "/products/bk01/functions-collage.jpg",
+      "/products/bk01/specs-card.jpg"
+    ]
   },
   {
     "id": "bk02",
@@ -2876,6 +2881,11 @@
     "safetyNotes": [
       "Вбудований захист від короткого замикання, перенапруги на вході й виході, перегріву та перевантаження",
       "Робочий температурний діапазон: від -10°C до +60°C"
+    ],
+    "images": [
+      "/products/bk04/lifestyle-camping.jpg",
+      "/products/bk04/functions-collage.jpg",
+      "/products/bk04/specs-card.jpg"
     ]
   },
   {
@@ -2948,6 +2958,11 @@
     "safetyNotes": [
       "Вбудований захист від короткого замикання, перенапруги на вході й виході, перегріву та перевантаження",
       "Робочий температурний діапазон: від -10°C до +60°C"
+    ],
+    "images": [
+      "/products/bk05/lifestyle-rv.jpg",
+      "/products/bk05/functions-collage.jpg",
+      "/products/bk05/specs-card.jpg"
     ]
   },
   {

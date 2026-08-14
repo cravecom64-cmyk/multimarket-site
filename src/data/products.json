@@ -3447,6 +3447,11 @@
     ],
     "safetyNotes": [
       "Використовуйте якісні акумулятори 18650 від перевіреного виробника — від їхньої якості залежить безпека та термін служби пристрою"
+    ],
+    "images": [
+      "/products/bk12/lifestyle-blackout.jpg",
+      "/products/bk12/functions-collage.jpg",
+      "/products/bk12/specs-card.jpg"
     ]
   },
   {
@@ -3513,6 +3518,11 @@
     "safetyNotes": [
       "Підключення пристрою на неправильній напрузі може його пошкодити — уважно звіряйте напругу з блоком живлення вашого обладнання",
       "Вбудований захист від короткого замикання, перевантаження, перенапруги та перегріву"
+    ],
+    "images": [
+      "/products/bk13/lifestyle-office.jpg",
+      "/products/bk13/functions-collage.jpg",
+      "/products/bk13/specs-card.jpg"
     ]
   },
   {
@@ -3577,6 +3587,11 @@
     "image": "/products/bk14/hero.jpg",
     "usageTips": [
       "Це компактна панель для прямого заряджання гаджетів через USB (7W) — для заряджання зарядних станцій LM-9019/LM-9300 підходять їхні власні комплектні панелі більшої потужності (28W)"
+    ],
+    "images": [
+      "/products/bk14/lifestyle-hiking.jpg",
+      "/products/bk14/functions-collage.jpg",
+      "/products/bk14/specs-card.jpg"
     ]
   },
   {

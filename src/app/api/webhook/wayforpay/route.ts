@@ -5,8 +5,12 @@ function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
 }
 
-// orderReference має формат "orderId--pPHONE--iITEMSUMMARY" (додається в
-// /api/checkout/wayforpay).
+// orderReference тепер ЗАВЖДИ чистий orderId (без телефону/товару) — до
+// 2026-08-14 сюди вшивався технічний "orderId--pPHONE--iITEM", але
+// з'ясувалось, що WayForPay показує orderReference клієнту прямо в чеку
+// як номер замовлення (на відміну від Monobank, де reference прихований),
+// тож технічні дані там більше не приховати. Regex лишили для сумісності
+// зі старими платежами, які могли зависнути в обробці на момент фікса.
 function parseReference(
   reference: string
 ): { orderId: string; phone: string | null; itemSummary: string | null } {
@@ -70,8 +74,14 @@ export async function POST(req: NextRequest) {
     payload.transactionStatus === "Voided"
   ) {
     const reason = payload.reason ? escapeMarkdown(payload.reason) : "невідома причина";
+    // phone/item тепер зазвичай порожні (orderReference більше не несе
+    // цих даних) — телефон+товар шукай у ПЕРШОМУ повідомленні з цим самим
+    // номером замовлення, воно приходить одразу при оформленні (/api/order).
+    const lookupHint = !phoneLine && !itemLine
+      ? `\n\n🔎 Знайди повідомлення з номером ${ref} вище в чаті — там ім'я, телефон і товари.`
+      : "";
     await sendTelegram(
-      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${itemLine}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
+      `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${itemLine}${phoneLine}${lookupHint}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`
     );
   }
   // InProcessing/Pending — проміжні статуси, окремо не сповіщаємо.

@@ -25,11 +25,13 @@ interface OrderItem {
 interface CheckoutBody {
   orderId: string;
   items: OrderItem[];
-  // Телефон клієнта — вшивається у технічний orderReference, який іде до
-  // WayForPay (і повертається назад у webhook/CHECK_STATUS). Видимий для
-  // клієнта orderId (у ?ref= і localStorage) лишається БЕЗ телефону —
-  // технічний reference потрібен лише щоб webhook-сповіщення про відмову
-  // оплати одразу показувало кому телефонувати.
+  // ВАЖЛИВО: customerPhone більше НЕ вшивається у orderReference — на
+  // відміну від Monobank (де reference прихований), WayForPay показує
+  // orderReference клієнту прямо в чеку/сповіщенні про оплату як "номер
+  // замовлення" (підтверджено реальним чеком 2026-08-14 — там був сирий
+  // URL-encoded текст замість номера). Телефон+товар для сповіщення про
+  // відмову беремо не звідси, а з першого Telegram-повідомлення, яке вже
+  // йде на /api/order одразу при оформленні (містить ім'я/телефон/товари).
   customerPhone?: string;
 }
 
@@ -69,16 +71,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
-    const itemSummary = body.items
-      .map((i) => i.name)
-      .slice(0, 2)
-      .join(", ")
-      .slice(0, 100) + (body.items.length > 2 ? ` +${body.items.length - 2}` : "");
-    const technicalRef = `${body.orderId}--p${phoneDigits}--i${encodeURIComponent(itemSummary)}`;
-
     const { actionUrl, fields } = buildPurchaseFields({
-      orderReference: technicalRef,
+      // Чистий orderId — WayForPay показує це значення клієнту в чеку як
+      // номер замовлення, тому сюди не можна вшивати технічні дані.
+      orderReference: body.orderId,
       items: body.items.map((i) => ({
         name: i.name.slice(0, 128),
         price: i.price,

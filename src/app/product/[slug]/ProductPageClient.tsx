@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartProvider";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
@@ -23,6 +23,8 @@ export function ProductPageClient() {
   const [specsOpen, setSpecsOpen] = useState(false);
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const galleryScrollRef = useRef<HTMLDivElement>(null);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
   // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
@@ -67,6 +69,26 @@ export function ProductPageClient() {
   const remaining = Math.max(0, FREE_SHIPPING - product.price);
   const hasColors = product.colors && product.colors.length > 0;
   const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
+  // Галерея з декількох фото — тільки коли є images[] і нема вибору кольору
+  // (колір і так перемикає фото, поєднувати з галереєю поки не потрібно).
+  const galleryImages =
+    !hasColors && product.images && product.images.length > 0
+      ? [product.image, ...product.images].filter((img): img is string => Boolean(img))
+      : undefined;
+
+  const scrollToImage = (i: number) => {
+    setSelectedImage(i);
+    galleryScrollRef.current?.scrollTo({
+      left: i * galleryScrollRef.current.clientWidth,
+      behavior: "smooth",
+    });
+  };
+
+  const handleGalleryScroll = () => {
+    const el = galleryScrollRef.current;
+    if (!el || el.clientWidth === 0) return;
+    setSelectedImage(Math.round(el.scrollLeft / el.clientWidth));
+  };
   const orderName = hasColors
     ? `${product.name} (${product.colors![selectedColor].name})`
     : product.name;
@@ -150,58 +172,109 @@ export function ProductPageClient() {
 
       {/* Gallery area */}
       <div className="relative">
-        <div
-          className={`aspect-square flex items-center justify-center relative overflow-hidden ${
-            galleryBgStyle ? "" : "bg-gradient-to-br from-gray-800 to-gray-900"
-          }`}
-          style={galleryBgStyle}
-        >
-          {activeImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={activeImage}
-              alt={product.name}
-              className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
-            />
-          ) : (
-            <span className="text-6xl">{product.emoji}</span>
-          )}
-
-          {discount > 0 && (
-            <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold">
-              -{discount}%
-            </span>
-          )}
-
-          {product.hasTiktok && (
-            <div className="absolute bottom-3 left-3 bg-black/50 text-white text-[9px] px-2 py-1 rounded">
-              ♪ Є в TikTok
-            </div>
-          )}
-
-          {!inStock && (
-            <span className="absolute top-3 right-3 bg-gray-900/85 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">
-              Немає в наявності
-            </span>
-          )}
-        </div>
-
-        {/* Thumbnail strip — тільки коли нема реального фото (fallback на emoji-заглушку) */}
-        {!product.image && (
-          <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide">
-            {[product.emoji, product.emoji, product.emoji, "📦"].map((e, i) => (
-              <div
-                key={i}
-                className={`w-14 h-14 rounded-md flex-shrink-0 flex items-center justify-center text-lg ${
-                  i === 0
-                    ? "border-2 border-emerald-500 bg-gray-100"
-                    : "border-2 border-transparent bg-gray-100"
-                }`}
-              >
-                {e}
+        {galleryImages ? (
+          <div
+            ref={galleryScrollRef}
+            onScroll={handleGalleryScroll}
+            className="aspect-square flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+          >
+            {galleryImages.map((img, i) => (
+              <div key={i} className="w-full h-full flex-shrink-0 snap-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={img}
+                  alt={`${product.name} — фото ${i + 1}`}
+                  className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
+                />
               </div>
             ))}
           </div>
+        ) : (
+          <div
+            className={`aspect-square flex items-center justify-center relative overflow-hidden ${
+              galleryBgStyle ? "" : "bg-gradient-to-br from-gray-800 to-gray-900"
+            }`}
+            style={galleryBgStyle}
+          >
+            {activeImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={activeImage}
+                alt={product.name}
+                className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
+              />
+            ) : (
+              <span className="text-6xl">{product.emoji}</span>
+            )}
+          </div>
+        )}
+
+        {discount > 0 && (
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold">
+            -{discount}%
+          </span>
+        )}
+
+        {product.hasTiktok && (
+          <div className="absolute bottom-3 left-3 bg-black/50 text-white text-[9px] px-2 py-1 rounded">
+            ♪ Є в TikTok
+          </div>
+        )}
+
+        {!inStock && (
+          <span className="absolute top-3 right-3 bg-gray-900/85 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">
+            Немає в наявності
+          </span>
+        )}
+
+        {/* Крапки-індикатори поверх галереї (тільки коли більше 1 фото) */}
+        {galleryImages && galleryImages.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {galleryImages.map((_, i) => (
+              <span
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  i === selectedImage ? "bg-white" : "bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Мініатюри під галереєю */}
+        {galleryImages && galleryImages.length > 1 ? (
+          <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide">
+            {galleryImages.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToImage(i)}
+                aria-label={`Фото ${i + 1}`}
+                className={`w-14 h-14 rounded-md flex-shrink-0 overflow-hidden border-2 ${
+                  i === selectedImage ? "border-emerald-500" : "border-transparent"
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img} alt="" className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        ) : (
+          !product.image && (
+            <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide">
+              {[product.emoji, product.emoji, product.emoji, "📦"].map((e, i) => (
+                <div
+                  key={i}
+                  className={`w-14 h-14 rounded-md flex-shrink-0 flex items-center justify-center text-lg ${
+                    i === 0
+                      ? "border-2 border-emerald-500 bg-gray-100"
+                      : "border-2 border-transparent bg-gray-100"
+                  }`}
+                >
+                  {e}
+                </div>
+              ))}
+            </div>
+          )
         )}
       </div>
 

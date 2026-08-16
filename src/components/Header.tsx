@@ -91,6 +91,13 @@ export function Header() {
                 🐾 Улюбленцям
               </Link>
               <Link
+                href="/category/blackout"
+                className="text-base font-semibold hover:text-emerald-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                🔦 Блекаут
+              </Link>
+              <Link
                 href="/trending"
                 className="text-base font-semibold text-amber-500 hover:text-amber-600 transition-colors"
                 onClick={() => setMenuOpen(false)}

@@ -18,6 +18,9 @@ export function Footer() {
               <Link href="/category/pets" className="block hover:text-white transition-colors">
                 Улюбленцям
               </Link>
+              <Link href="/category/blackout" className="block hover:text-white transition-colors">
+                Блекаут
+              </Link>
             </div>
           </div>
           <div>

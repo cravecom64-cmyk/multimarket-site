@@ -113,6 +113,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           _t: formLoadedAt.current,
           paymentMethod,
           items: items.map((i) => ({
+            id: i.id, // для командного центру (Supabase) — зіставлення з поставщиками
             name: i.name,
             price: i.price,
             quantity: i.quantity,

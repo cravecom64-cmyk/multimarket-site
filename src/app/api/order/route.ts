@@ -1,4 +1,113 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+// ==================== КОМАНДНИЙ ЦЕНТР (Supabase) ====================
+// Незалежна база — джерело істини по замовленнях. Пишеться ПЕРШОЮ, до
+// Telegram і до CRM: навіть якщо Telegram чи KeyCRM зараз недоступні,
+// замовлення все одно збережеться тут і нічого не загубиться.
+// Ключі — тільки серверні env vars (Vercel → Project Settings → Environment
+// Variables): NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SECRET_KEY.
+function supabaseServer() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) return null; // не налаштовано — просто пропускаємо крок
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number): Promise<number | null> {
+  const supabase = supabaseServer();
+  if (!supabase) return null;
+
+  try {
+    const { data: orderRow, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        customer_name: body.name,
+        customer_phone: body.phone,
+        city: body.city,
+        np_warehouse: body.branch,
+        payment_method: body.paymentMethod === "cod" ? "cod" : "prepay_card",
+        payment_status: "not_paid",
+        total_amount: calculatedTotal,
+        status: "new",
+      })
+      .select("id")
+      .single();
+
+    if (orderError || !orderRow) {
+      console.error("[order] Supabase order insert failed:", orderError);
+      return null;
+    }
+
+    const orderId = orderRow.id as number;
+
+    const itemsToInsert = await Promise.all(
+      body.items.map(async (item) => {
+        let cheapest: { supplier_name: string; supplier_price: number; supplier_url: string } | null = null;
+        if (item.id) {
+          const { data } = await supabase
+            .from("product_cheapest_supplier")
+            .select("supplier_name, supplier_price, supplier_url")
+            .eq("product_id", item.id)
+            .maybeSingle();
+          cheapest = data;
+        }
+        return {
+          order_id: orderId,
+          product_id: item.id ?? null,
+          product_name_snap: item.name,
+          qty: item.quantity,
+          price_snap: item.price,
+          supplier_name_snap: cheapest?.supplier_name ?? null,
+          supplier_price_snap: cheapest?.supplier_price ?? null,
+          supplier_url_snap: cheapest?.supplier_url ?? null,
+        };
+      })
+    );
+
+    const { error: itemsError } = await supabase.from("order_items").insert(itemsToInsert);
+    if (itemsError) console.error("[order] Supabase order_items insert failed:", itemsError);
+
+    return orderId;
+  } catch (err) {
+    console.error("[order] Supabase step threw:", err);
+    return null;
+  }
+}
+
+// ==================== KeyCRM (вимкнено, поки немає ключа) ====================
+async function pushOrderToKeyCRM(body: OrderBody, orderId: number | null) {
+  const apiKey = process.env.KEYCRM_API_KEY;
+  const sourceId = process.env.KEYCRM_SOURCE_ID;
+  if (!apiKey || !sourceId) return; // ключа ще нема — просто виходимо
+
+  try {
+    const res = await fetch("https://openapi.keycrm.app/v1/order", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source_id: sourceId,
+        buyer: { full_name: body.name, phone: body.phone },
+        products: body.items.map((i) => ({ sku: i.id, name: i.name, quantity: i.quantity, price: i.price })),
+        comment: orderId ? `Командний центр Multimarket #${orderId}` : undefined,
+      }),
+    });
+    if (!res.ok) {
+      console.error("[order] KeyCRM push failed:", res.status, await res.text());
+      return;
+    }
+    const data = await res.json();
+    if (orderId) {
+      const supabase = supabaseServer();
+      await supabase
+        ?.from("orders")
+        .update({ keycrm_order_id: String(data.id), keycrm_synced_at: new Date().toISOString() })
+        .eq("id", orderId);
+    }
+  } catch (err) {
+    console.error("[order] KeyCRM push error:", err);
+  }
+}
 
 // ==================== RATE LIMITING ====================
 // In-memory store: IP → timestamps of recent requests
@@ -51,6 +160,7 @@ function validatePhone(phone: string): boolean {
 
 // ==================== TYPES ====================
 interface OrderItem {
+  id?: string; // id товару з products.json ('h01', 'bk19', ...) — для командного центру
   name: string;
   price: number;
   quantity: number;
@@ -182,6 +292,10 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
+    // --- Командний центр: пишемо ПЕРШИМИ, до Telegram і CRM ---
+    // Не блокує відповідь користувачу, якщо Supabase недоступний.
+    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal);
+
     const paymentMethod =
       body.paymentMethod === "card_mono" || body.paymentMethod === "card_wfp"
         ? body.paymentMethod
@@ -237,6 +351,9 @@ ${paymentLine}
     if (!tgRes.ok) {
       console.error("Telegram API error:", await tgRes.text());
     }
+
+    // --- KeyCRM: no-op, поки немає ключа (див. функцію вище) ---
+    await pushOrderToKeyCRM(body, commandCenterOrderId);
 
     return NextResponse.json({ success: true, notified: tgRes.ok });
   } catch (error) {

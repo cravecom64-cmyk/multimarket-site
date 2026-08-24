@@ -4031,7 +4031,7 @@
     ],
     "price": 3799,
     "oldPrice": 4749,
-    "buyPrice": 2730,
+    "buyPrice": 2730.0,
     "badges": [
       "sale"
     ],

@@ -4,15 +4,14 @@ import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import {
-  getTopProducts,
   getSaleProducts,
   getAllProducts,
   getTrendingProducts,
   categories,
 } from "@/lib/products";
+import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
 const saleProducts = getSaleProducts();
-const topProducts = getTopProducts(4);
 const tiktokProducts = getAllProducts().filter((p) => p.hasTiktok);
 const trendingProducts = getTrendingProducts();
 
@@ -79,6 +78,12 @@ const trustItems = [
 ];
 
 export default function HomePage() {
+  // Живе ранжування "Топ продажів" — переглядів/кошика/покупок за 30 днів
+  // (product_events у Supabase), з фолбеком на orderCount, поки даних
+  // немає. Див. lib/popularityClient.ts.
+  const popularityMap = usePopularityMap();
+  const topProducts = rankProducts(getAllProducts(), popularityMap).slice(0, 4);
+
   return (
     <>
       {/* Hero Banner */}

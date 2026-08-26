@@ -6,6 +6,7 @@ import { useState, useMemo } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { getProductsByCategory, categories, getCrossSellProducts } from "@/lib/products";
+import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
 type SortMode = "popular" | "cheap" | "expensive";
 
@@ -44,6 +45,9 @@ export function CategoryPageClient() {
   const params = useParams();
   const slug = params.slug as string;
   const [sort, setSort] = useState<SortMode>("popular");
+  // Живе ранжування "🔥 Популярне" — перегляди/кошик/покупки за 30 днів
+  // (Supabase product_events), з фолбеком на orderCount, поки даних немає.
+  const popularityMap = usePopularityMap();
 
   const category = categories.find((c) => c.slug === slug);
   const meta = categoryMeta[slug];
@@ -57,9 +61,9 @@ export function CategoryPageClient() {
       case "expensive":
         return arr.sort((a, b) => b.price - a.price);
       default:
-        return arr.sort((a, b) => b.orderCount - a.orderCount);
+        return rankProducts(arr, popularityMap);
     }
-  }, [products, sort]);
+  }, [products, sort, popularityMap]);
 
   // Cross-sell: products from OTHER categories
   const crossSell = products[0] ? getCrossSellProducts(products[0], 4) : [];

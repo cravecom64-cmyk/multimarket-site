@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { trackAddToCart } from "@/lib/pixel";
 import { trackAddToCart as trackAddToCartGA4 } from "@/lib/ga4";
+import { trackAddToCartEvent } from "@/lib/analytics";
 
 export interface CartItem {
   id: string;
@@ -52,6 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       price: item.price,
       category: item.categoryName ?? item.category,
     });
+    trackAddToCartEvent(item.id);
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {

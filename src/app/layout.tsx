@@ -8,6 +8,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { FloatingCart } from "@/components/FloatingCart";
 import { MetaPixel } from "@/components/MetaPixel";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { SiteAnalytics } from "@/components/SiteAnalytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://multi-market.com.ua"),
@@ -78,6 +79,7 @@ export default function RootLayout({
       <body className="font-sans bg-gray-50 text-gray-900 antialiased select-none">
         <GoogleAnalytics />
         <MetaPixel />
+        <SiteAnalytics />
         <CartProvider>
           <div className="max-w-[480px] mx-auto bg-white min-h-screen shadow-sm lg:shadow-lg">
             <Header />

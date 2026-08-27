@@ -78,6 +78,22 @@ export interface Product {
   // свотчі вибору кольору, що перемикають фото. hex — колір кружечка-свотча,
   // image — фото товару саме в цьому кольорі.
   colors?: { name: string; hex: string; image: string }[];
+  // Розмірні варіанти товару з РІЗНОЮ ціною (напр. довжина шланга, розмір
+  // гамака) — якщо задано, на сторінці товару показується селектор розміру,
+  // що перемикає price/oldPrice/buyPrice. Верхньорівневі price/oldPrice/
+  // buyPrice товару завжди дублюють варіант з default:true (для каталогу,
+  // ProductCard, схема.org — вони показують один товар без варіантів).
+  // slug — унікальний суфікс варіанту для id товару в кошику
+  // (`${product.id}__${slug}`), щоб різні розміри не зливались в один
+  // рядок кошика.
+  sizes?: {
+    slug: string;
+    label: string;
+    price: number;
+    oldPrice: number | null;
+    buyPrice: number;
+    default?: boolean;
+  }[];
   landing?: LandingConfig;
   // Готовий бренд-лендинг товару (окрема сторінка в public/landing) — якщо задано,
   // картка товару і /product/[slug] ведуть туди замість стандартного шаблону

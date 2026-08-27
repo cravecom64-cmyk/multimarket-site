@@ -4908,7 +4908,13 @@
     ],
     "similarWith": [],
     "oldPrice": 469,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152857_edc43f82-008c-4747-82f8-44373dae07ea.png"
+    "image": "/products/g18/hero.jpg",
+    "images": [
+      "/products/g18/hero.jpg",
+      "/products/g18/flatlay-kit.jpg",
+      "/products/g18/lifestyle-white-garden.jpg",
+      "/products/g18/lifestyle-brown-garden.jpg"
+    ]
   },
   {
     "id": "g20",

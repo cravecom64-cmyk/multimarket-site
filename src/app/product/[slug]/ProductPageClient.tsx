@@ -24,6 +24,10 @@ export function ProductPageClient() {
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(() => {
+    const idx = product?.sizes?.findIndex((s) => s.default);
+    return idx && idx >= 0 ? idx : 0;
+  });
   const galleryScrollRef = useRef<HTMLDivElement>(null);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
@@ -61,12 +65,22 @@ export function ProductPageClient() {
   const related = getRelatedProducts(product, 4);
   const crossSell = getCrossSellProducts(product, 4);
   const bundleItems = product.bundleWith ? getBundleProducts(product.bundleWith) : [];
-  const discount = product.oldPrice
-    ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
+
+  // Розмірний варіант (якщо є) перекриває price/oldPrice/id товару всюди
+  // нижче — каталожні product.price/oldPrice лишаються лише дефолтним
+  // фолбеком (напр. для JSON-LD, поки варіант не вибрано).
+  const hasSizes = Boolean(product.sizes && product.sizes.length > 0);
+  const activeSize = hasSizes ? product.sizes![selectedSizeIndex] ?? product.sizes![0] : undefined;
+  const effectivePrice = activeSize ? activeSize.price : product.price;
+  const effectiveOldPrice = activeSize ? activeSize.oldPrice : product.oldPrice;
+  const cartItemId = activeSize ? `${product.id}__${activeSize.slug}` : product.id;
+
+  const discount = effectiveOldPrice
+    ? Math.round(((effectiveOldPrice - effectivePrice) / effectiveOldPrice) * 100)
     : 0;
-  const savings = product.oldPrice ? product.oldPrice - product.price : 0;
+  const savings = effectiveOldPrice ? effectiveOldPrice - effectivePrice : 0;
   const FREE_SHIPPING = 2000;
-  const remaining = Math.max(0, FREE_SHIPPING - product.price);
+  const remaining = Math.max(0, FREE_SHIPPING - effectivePrice);
   const hasColors = product.colors && product.colors.length > 0;
   const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
   // Галерея з декількох фото — тільки коли є images[] і нема вибору кольору
@@ -91,7 +105,9 @@ export function ProductPageClient() {
   };
   const orderName = hasColors
     ? `${product.name} (${product.colors![selectedColor].name})`
-    : product.name;
+    : activeSize
+      ? `${product.name} (${activeSize.label})`
+      : product.name;
   const inStock = product.inStock !== false;
   // Колишні tiktok-лендинги мали власний фірмовий градієнт під фото —
   // залишаємо його тут (тільки як фон галереї), решта структури тепер
@@ -136,7 +152,7 @@ export function ProductPageClient() {
       "@type": "Offer",
       url: `https://multi-market.com.ua/product/${product.slug}`,
       priceCurrency: "UAH",
-      price: product.price,
+      price: effectivePrice,
       availability:
         product.inStock === false
           ? "https://schema.org/OutOfStock"
@@ -313,15 +329,15 @@ export function ProductPageClient() {
         <div className="flex items-center gap-2.5 mt-2">
           <span
             className={`text-2xl font-black ${
-              product.oldPrice ? "text-red-500" : ""
+              effectiveOldPrice ? "text-red-500" : ""
             }`}
           >
-            {product.price}₴
+            {effectivePrice}₴
           </span>
-          {product.oldPrice && (
+          {effectiveOldPrice && (
             <>
               <span className="text-sm text-gray-400 line-through">
-                {product.oldPrice}₴
+                {effectiveOldPrice}₴
               </span>
               <span className="bg-amber-50 text-amber-600 text-[10px] px-2 py-0.5 rounded font-bold">
                 Економія {savings}₴
@@ -330,6 +346,30 @@ export function ProductPageClient() {
           )}
         </div>
       </div>
+
+      {/* Size selector — товари з розмірними варіантами (різна ціна/собівартість
+          на розмір, напр. довжина шланга чи розмір гамака). Горизонтальний
+          скрол кнопок-піллів працює однаково добре і для 3, і для 10 варіантів. */}
+      {hasSizes && (
+        <div className="px-4 mt-3">
+          <span className="text-gray-400 text-xs font-semibold">Розмір:</span>
+          <div className="flex gap-1.5 mt-1.5 overflow-x-auto pb-1 scrollbar-hide">
+            {product.sizes!.map((s, i) => (
+              <button
+                key={s.slug}
+                onClick={() => setSelectedSizeIndex(i)}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border-2 transition-colors ${
+                  i === selectedSizeIndex
+                    ? "border-emerald-500 bg-emerald-500 text-white"
+                    : "border-gray-200 text-gray-600"
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Free shipping progress */}
       <div className="mx-4 mt-3 bg-emerald-50 rounded-lg p-2.5 border border-emerald-200">
@@ -343,12 +383,12 @@ export function ProductPageClient() {
               <div
                 className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-full rounded-full"
                 style={{
-                  width: `${Math.min(100, (product.price / FREE_SHIPPING) * 100)}%`,
+                  width: `${Math.min(100, (effectivePrice / FREE_SHIPPING) * 100)}%`,
                 }}
               />
             </div>
             <div className="text-[9px] text-gray-400 mt-1">
-              {product.price}₴ з {FREE_SHIPPING}₴ · Додай ще 1 товар!
+              {effectivePrice}₴ з {FREE_SHIPPING}₴ · Додай ще 1 товар!
             </div>
           </>
         ) : (
@@ -497,7 +537,7 @@ export function ProductPageClient() {
 
       {/* Bundle / Upsell */}
       {bundleItems.length > 0 && (() => {
-        const bundleTotal = product.price + bundleItems.reduce((s, p) => s + p.price, 0);
+        const bundleTotal = effectivePrice + bundleItems.reduce((s, p) => s + p.price, 0);
         return (
           <div className="mx-4 mt-5 border-2 border-emerald-200 rounded-2xl overflow-hidden">
             <div className="bg-emerald-500 px-4 py-2.5 flex items-center gap-2">
@@ -516,10 +556,10 @@ export function ProductPageClient() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] font-semibold text-gray-700 truncate">{product.name}</div>
+                  <div className="text-[11px] font-semibold text-gray-700 truncate">{orderName}</div>
                   <div className="text-[10px] text-gray-400">Обраний товар</div>
                 </div>
-                <span className="text-sm font-black text-gray-800">{product.price}₴</span>
+                <span className="text-sm font-black text-gray-800">{effectivePrice}₴</span>
               </div>
               {bundleItems.map((bp) => (
                 <div key={bp.id} className="flex items-center gap-3 border-t border-emerald-100 pt-2.5">
@@ -556,8 +596,8 @@ export function ProductPageClient() {
               <button
                 onClick={() => {
                   if (!inStock) return;
-                  addItem({ id: product.id, name: orderName, price: product.price, emoji: product.emoji, image: product.image, slug: product.slug, category: product.category, categoryName: product.categoryName });
-                  bundleItems.forEach((bp) => addItem({ id: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji, image: bp.image, slug: bp.slug, category: bp.category, categoryName: bp.categoryName }));
+                  addItem({ id: cartItemId, productId: product.id, name: orderName, price: effectivePrice, emoji: product.emoji, image: product.image, slug: product.slug, category: product.category, categoryName: product.categoryName });
+                  bundleItems.forEach((bp) => addItem({ id: bp.id, productId: bp.id, name: bp.name, price: bp.price, emoji: bp.emoji, image: bp.image, slug: bp.slug, category: bp.category, categoryName: bp.categoryName }));
                   setIsCartOpen(true);
                 }}
                 disabled={!inStock}
@@ -663,26 +703,27 @@ export function ProductPageClient() {
       {/* Sticky Bottom CTA */}
       <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-gray-200 px-4 py-2.5 flex items-center gap-3 z-40">
         <div className="flex-shrink-0">
-          {product.oldPrice && (
+          {effectiveOldPrice && (
             <div className="text-[9px] text-gray-400 line-through">
-              {product.oldPrice}₴
+              {effectiveOldPrice}₴
             </div>
           )}
           <div
             className={`text-lg font-black ${
-              product.oldPrice ? "text-red-500" : ""
+              effectiveOldPrice ? "text-red-500" : ""
             }`}
           >
-            {product.price}₴
+            {effectivePrice}₴
           </div>
         </div>
         <button
           onClick={() => {
             if (!inStock) return;
             addItem({
-              id: product.id,
+              id: cartItemId,
+              productId: product.id,
               name: orderName,
-              price: product.price,
+              price: effectivePrice,
               emoji: product.emoji,
               image: product.image,
               slug: product.slug,

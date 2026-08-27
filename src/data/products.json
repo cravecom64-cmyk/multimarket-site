@@ -857,6 +857,79 @@
     ],
     "similarWith": [
       "g02"
+    ],
+    "sizes": [
+      {
+        "slug": "7-5m",
+        "label": "7.5 м",
+        "price": 410,
+        "oldPrice": 570,
+        "buyPrice": 250.0
+      },
+      {
+        "slug": "15m",
+        "label": "15 м",
+        "price": 380,
+        "oldPrice": 540,
+        "buyPrice": 235.87
+      },
+      {
+        "slug": "22-5m",
+        "label": "22.5 м",
+        "price": 390,
+        "oldPrice": 550,
+        "buyPrice": 241.43
+      },
+      {
+        "slug": "30m",
+        "label": "30 м",
+        "price": 499,
+        "oldPrice": 699,
+        "buyPrice": 307.4,
+        "default": true
+      },
+      {
+        "slug": "45m",
+        "label": "45 м",
+        "price": 580,
+        "oldPrice": 810,
+        "buyPrice": 355.71
+      },
+      {
+        "slug": "52-5m",
+        "label": "52.5 м",
+        "price": 730,
+        "oldPrice": 1020,
+        "buyPrice": 450.3
+      },
+      {
+        "slug": "60m",
+        "label": "60 м",
+        "price": 790,
+        "oldPrice": 1100,
+        "buyPrice": 484.77
+      },
+      {
+        "slug": "75m",
+        "label": "75 м",
+        "price": 960,
+        "oldPrice": 1350,
+        "buyPrice": 593.18
+      },
+      {
+        "slug": "90m",
+        "label": "90 м",
+        "price": 1380,
+        "oldPrice": 1930,
+        "buyPrice": 850.88
+      },
+      {
+        "slug": "120m",
+        "label": "120 м",
+        "price": 1760,
+        "oldPrice": 2470,
+        "buyPrice": 1085.14
+      }
     ]
   },
   {
@@ -1128,6 +1201,30 @@
     ],
     "similarWith": [
       "g04"
+    ],
+    "sizes": [
+      {
+        "slug": "80x200",
+        "label": "80×200 см",
+        "price": 680,
+        "oldPrice": 960,
+        "buyPrice": 392.86
+      },
+      {
+        "slug": "120x200",
+        "label": "120×200 см",
+        "price": 730,
+        "oldPrice": 1030,
+        "buyPrice": 421.42
+      },
+      {
+        "slug": "150x200",
+        "label": "150×200 см",
+        "price": 849,
+        "oldPrice": 1199,
+        "buyPrice": 491.43,
+        "default": true
+      }
     ]
   },
   {

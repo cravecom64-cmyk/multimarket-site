@@ -6,6 +6,9 @@ import { trackAddToCart as trackAddToCartGA4 } from "@/lib/ga4";
 import { trackAddToCartEvent } from "@/lib/analytics";
 
 export interface CartItem {
+  // Унікальний ключ рядка кошика. Для звичайного товару = product.id.
+  // Для товару з розмірним варіантом (product.sizes) = `${productId}__${sizeSlug}`,
+  // щоб різні розміри одного товару не зливались в один рядок з чужою ціною.
   id: string;
   name: string;
   price: number;
@@ -20,6 +23,10 @@ export interface CartItem {
   // (вимога ТЗ трекінгу). Опціональна з тих самих причин, що image/slug.
   category?: string;
   categoryName?: string;
+  // Справжній id товару в каталозі (products.json) — для варіантних рядків
+  // кошика `id` вище є складеним ключем, тут завжди чистий product.id
+  // (потрібно для аналітики/трекінгу, які очікують реальний id товару).
+  productId?: string;
 }
 
 interface CartContextType {
@@ -41,19 +48,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
+    // Для трекінгу завжди використовуємо реальний id товару з каталогу
+    // (productId), а не складений ключ рядка кошика id__sizeSlug —
+    // аналітика має бачити один і той самий товар незалежно від розміру.
+    const trackId = item.productId ?? item.id;
     trackAddToCart({
-      id: item.id,
+      id: trackId,
       name: item.name,
       price: item.price,
       category: item.categoryName ?? item.category,
     });
     trackAddToCartGA4({
-      id: item.id,
+      id: trackId,
       name: item.name,
       price: item.price,
       category: item.categoryName ?? item.category,
     });
-    trackAddToCartEvent(item.id);
+    trackAddToCartEvent(trackId);
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {

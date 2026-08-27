@@ -1348,6 +1348,10 @@
       "g07",
       "g10",
       "g11"
+    ],
+    "images": [
+      "/products/g09/lifestyle-flowerbed.jpg",
+      "/products/g09/functions-collage.jpg"
     ]
   },
   {
@@ -1418,6 +1422,10 @@
       "g07",
       "g09",
       "g11"
+    ],
+    "images": [
+      "/products/g10/lifestyle-lit-table.jpg",
+      "/products/g10/lifestyle-lit-dark.jpg"
     ]
   },
   {

@@ -4833,7 +4833,11 @@
       "g18"
     ],
     "oldPrice": 339,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152557_19ed25a1-bf5a-4fbf-a5d1-163f5f55c195.png"
+    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152557_19ed25a1-bf5a-4fbf-a5d1-163f5f55c195.png",
+    "images": [
+      "/products/g17/lifestyle-colors.jpg",
+      "/products/g17/lifestyle-path.jpg"
+    ]
   },
   {
     "id": "g18",

@@ -1642,6 +1642,12 @@
     "similarWith": [
       "h08",
       "p11"
+    ],
+    "images": [
+      "/products/g13/hero.jpg",
+      "/products/g13/product-closed.jpg",
+      "/products/g13/detail-handle.jpg",
+      "/products/g13/open-lining.jpg"
     ]
   },
   {
@@ -4033,7 +4039,13 @@
       "h15"
     ],
     "oldPrice": 969,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260819_111742_5438372e-7759-438f-828a-d4192b7c99ea.png"
+    "image": "/products/h14/hero.jpg",
+    "images": [
+      "/products/h14/hero.jpg",
+      "/products/h14/white-bg.jpg",
+      "/products/h14/unboxing.jpg",
+      "/products/h14/accessories-flatlay.jpg"
+    ]
   },
   {
     "id": "h15",
@@ -4710,7 +4722,13 @@
       "g07"
     ],
     "oldPrice": 399,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_153450_7a848184-a19c-4f02-bbc8-70a8b7224cf1.png"
+    "image": "/products/g14/hero.jpg",
+    "images": [
+      "/products/g14/hero.jpg",
+      "/products/g14/hose-kit.jpg",
+      "/products/g14/nozzle-detail.jpg",
+      "/products/g14/misting-flowers.jpg"
+    ]
   },
   {
     "id": "g15",
@@ -4778,7 +4796,13 @@
       "g14"
     ],
     "oldPrice": 1019,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_151551_63e9afc1-1644-47af-a8e4-3f7f782a22f9.png"
+    "image": "/products/g15/hero.jpg",
+    "images": [
+      "/products/g15/hero.jpg",
+      "/products/g15/gravel-side.jpg",
+      "/products/g15/angled-white.jpg",
+      "/products/g15/nozzle-disc.jpg"
+    ]
   },
   {
     "id": "g17",

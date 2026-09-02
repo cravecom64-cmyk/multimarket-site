@@ -5210,7 +5210,12 @@
       "g15"
     ],
     "oldPrice": 429,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152856_5bf281b9-b9ec-4306-920b-a87e083f0d0e.png"
+    "image": "/products/g23/hero.jpg",
+    "images": [
+      "/products/g23/hero.jpg",
+      "/products/g23/product-kit.jpg",
+      "/products/g23/connector-detail.jpg"
+    ]
   },
   {
     "id": "p13",

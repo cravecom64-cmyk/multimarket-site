@@ -5007,7 +5007,13 @@
       "g15"
     ],
     "oldPrice": 2829,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152856_405efeea-45e4-4dd6-9379-1bbb69da9392.png"
+    "image": "/products/g20/hero.jpg",
+    "images": [
+      "/products/g20/hero.jpg",
+      "/products/g20/studio.jpg",
+      "/products/g20/in-use.jpg",
+      "/products/g20/kit.jpg"
+    ]
   },
   {
     "id": "g21",

@@ -5081,7 +5081,12 @@
       "g20"
     ],
     "oldPrice": 1889,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152857_ae9dd9fa-dde8-4f42-9ad1-07af545218ca.png"
+    "image": "/products/g21/hero.jpg",
+    "images": [
+      "/products/g21/hero.jpg",
+      "/products/g21/studio.jpg",
+      "/products/g21/kit.jpg"
+    ]
   },
   {
     "id": "g22",

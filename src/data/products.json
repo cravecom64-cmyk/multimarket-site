@@ -2622,6 +2622,12 @@
       }
     ],
     "image": "/products/bk03/hero.jpg",
+    "images": [
+      "/products/bk03/hero.jpg",
+      "/products/bk03/ports.jpg",
+      "/products/bk03/charging.jpg",
+      "/products/bk03/angle.jpg"
+    ],
     "usageTips": [
       "Живить не лише телефони, а й домашній роутер — зручно як резерв для інтернету під час відключення світла"
     ],

@@ -5153,7 +5153,12 @@
       "g20"
     ],
     "oldPrice": 979,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152857_f8de6924-991f-4277-8598-f0175c6d29db.png"
+    "image": "/products/g22/hero.jpg",
+    "images": [
+      "/products/g22/hero.jpg",
+      "/products/g22/box.jpg",
+      "/products/g22/detail.jpg"
+    ]
   },
   {
     "id": "g23",

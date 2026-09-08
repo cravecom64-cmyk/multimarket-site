@@ -3055,6 +3055,12 @@
       }
     ],
     "image": "/products/bk09/hero.jpg",
+    "images": [
+      "/products/bk09/hero.jpg",
+      "/products/bk09/collapsed.jpg",
+      "/products/bk09/handle.jpg",
+      "/products/bk09/detail.jpg"
+    ],
     "usageTips": [
       "Заряджається від звичайної розетки 220V (~10 годин до повного заряду); сонячна панель — додаткове/резервне джерело",
       "USB-порт лампи можна використати, щоб зарядити телефон — ліхтар працює як повербанк"

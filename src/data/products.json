@@ -2912,7 +2912,13 @@
         "text": "Маленьке і легке, зручно возити з собою. Звук радіо не дуже гучний, але для новин достатньо."
       }
     ],
-    "image": "/products/bk07/hero.jpg"
+    "image": "/products/bk07/hero.jpg",
+    "images": [
+      "/products/bk07/hero.jpg",
+      "/products/bk07/angle.jpg",
+      "/products/bk07/ports.jpg",
+      "/products/bk07/lifestyle.jpg"
+    ]
   },
   {
     "id": "bk08",

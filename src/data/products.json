@@ -3724,9 +3724,8 @@
     "emoji": "🔦",
     "image": "/products/bk19/hero.jpg",
     "images": [
-      "/products/bk19/lifestyle-blackout.jpg",
-      "/products/bk19/functions-collage.jpg",
-      "/products/bk19/specs-card.jpg"
+      "/products/bk19/back.jpg",
+      "/products/bk19/kit.jpg"
     ],
     "price": 449,
     "oldPrice": 649,

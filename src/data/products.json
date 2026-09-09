@@ -6119,6 +6119,11 @@
     "id": "bk23",
     "slug": "puskozaryadnyi-prystriy-avto-chohol",
     "name": "Автомобільний пускозарядний пристрій + чохол (jump starter/повербанк)",
+    "image": "/products/bk23/hero.jpg",
+    "images": [
+      "/products/bk23/case.jpg",
+      "/products/bk23/detail.jpg"
+    ],
     "category": "blackout",
     "categoryName": "Блекаут",
     "price": 2199,
@@ -6179,8 +6184,7 @@
       "bk18",
       "bk01"
     ],
-    "oldPrice": 2969,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152234_90ec1ae1-d2db-4139-bf04-548456653b98.png"
+    "oldPrice": 2969
   },
   {
     "id": "bk24",

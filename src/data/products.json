@@ -6190,6 +6190,11 @@
     "id": "bk24",
     "slug": "radiopryimach-golon-rx382-mp3-likhtar",
     "name": "Радіоприймач GOLON RX-382 з MP3, USB + ліхтарик",
+    "image": "/products/bk24/hero.jpg",
+    "images": [
+      "/products/bk24/ports.jpg",
+      "/products/bk24/flashlight.jpg"
+    ],
     "category": "blackout",
     "categoryName": "Блекаут",
     "price": 719,
@@ -6250,8 +6255,7 @@
       "bk09",
       "bk01"
     ],
-    "oldPrice": 969,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152234_5c24e410-6d5a-44f0-b577-29acaeca2416.png"
+    "oldPrice": 969
   },
   {
     "id": "bk25",

@@ -4257,7 +4257,10 @@
       "h17"
     ],
     "oldPrice": 2159,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_151551_0b32647d-d44d-451f-9f1c-b1a8b6014cfa.png"
+    "image": "/products/h18/hero.jpg",
+    "images": [
+      "/products/h18/lifestyle.jpg"
+    ]
   },
   {
     "id": "h19",

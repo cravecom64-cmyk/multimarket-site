@@ -4471,8 +4471,8 @@
     "name": "Контейнер-сітка для прання взуття та білизни",
     "category": "home",
     "categoryName": "Дім і затишок",
-    "price": 149,
-    "buyPrice": 95,
+    "price": 299,
+    "buyPrice": 174,
     "emoji": "🧺",
     "rating": 4.6,
     "reviewCount": 27,
@@ -4530,7 +4530,7 @@
       "h21"
     ],
     "oldPrice": 199,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_152557_dfbcc9c6-6045-4c94-baa6-44cd2ff9c640.png"
+    "image": "/products/h22/hero.jpg"
   },
   {
     "id": "h23",

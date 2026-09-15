@@ -29,6 +29,7 @@ export function ProductPageClient() {
     return idx && idx >= 0 ? idx : 0;
   });
   const galleryScrollRef = useRef<HTMLDivElement>(null);
+  const gallerySlideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
   // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
@@ -87,14 +88,20 @@ export function ProductPageClient() {
   // (колір і так перемикає фото, поєднувати з галереєю поки не потрібно).
   const galleryImages =
     !hasColors && product.images && product.images.length > 0
-      ? [product.image, ...product.images].filter((img): img is string => Boolean(img))
+      ? Array.from(
+          new Set([product.image, ...product.images].filter((img): img is string => Boolean(img)))
+        )
       : undefined;
 
   const scrollToImage = (i: number) => {
     setSelectedImage(i);
-    galleryScrollRef.current?.scrollTo({
-      left: i * galleryScrollRef.current.clientWidth,
+    // scrollIntoView на конкретному слайді — надійніше за scrollTo() з
+    // обчисленим offset (i * clientWidth), який ламався, якщо контейнер
+    // ще не мав актуального clientWidth у момент кліку.
+    gallerySlideRefs.current[i]?.scrollIntoView({
       behavior: "smooth",
+      inline: "center",
+      block: "nearest",
     });
   };
 
@@ -195,7 +202,13 @@ export function ProductPageClient() {
             className="aspect-square flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
           >
             {galleryImages.map((img, i) => (
-              <div key={i} className="w-full h-full flex-shrink-0 snap-center">
+              <div
+                key={i}
+                ref={(el) => {
+                  gallerySlideRefs.current[i] = el;
+                }}
+                className="w-full h-full flex-shrink-0 snap-center"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img}

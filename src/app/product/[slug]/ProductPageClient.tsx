@@ -214,6 +214,7 @@ export function ProductPageClient() {
                   src={img}
                   alt={`${product.name} — фото ${i + 1}`}
                   className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
+                  loading={i === 0 ? "eager" : "lazy"}
                 />
               </div>
             ))}
@@ -283,7 +284,7 @@ export function ProductPageClient() {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt="" className="w-full h-full object-cover" />
+                <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
               </button>
             ))}
           </div>
@@ -563,7 +564,7 @@ export function ProductPageClient() {
                 <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
                   {activeImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={activeImage} alt={product.name} className="w-full h-full object-cover" />
+                    <img src={activeImage} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
                     product.emoji
                   )}
@@ -583,7 +584,7 @@ export function ProductPageClient() {
                     <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
                       {bp.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" />
+                        <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" loading="lazy" />
                       ) : (
                         bp.emoji
                       )}
@@ -714,7 +715,7 @@ export function ProductPageClient() {
       </div>
 
       {/* Sticky Bottom CTA */}
-      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-gray-200 px-4 py-2.5 flex items-center gap-3 z-40">
+      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] bg-white border-t border-gray-200 px-4 py-2.5 flex items-center gap-3 z-40">
         <div className="flex-shrink-0">
           {effectiveOldPrice && (
             <div className="text-[9px] text-gray-400 line-through">

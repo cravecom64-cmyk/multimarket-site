@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartProvider";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import { trackViewContent } from "@/lib/pixel";
 import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
 import {
@@ -655,9 +656,12 @@ export function ProductPageClient() {
       {crossSell.length > 0 && (
         <div className="px-4 mt-5">
           <h3 className="text-[13px] font-extrabold">🛍 З цим купують</h3>
-          <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide">
-            {crossSell.map((p) => (
-              <div key={p.id} className="w-[140px] flex-shrink-0">
+          <InfiniteScrollRow
+            items={crossSell}
+            keyFn={(p) => p.id}
+            className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide"
+            renderItem={(p) => (
+              <div className="w-[140px] flex-shrink-0">
                 <ProductCard
                   id={p.id}
                   slug={p.slug}
@@ -677,8 +681,8 @@ export function ProductPageClient() {
                   inStock={p.inStock}
                 />
               </div>
-            ))}
-          </div>
+            )}
+          />
         </div>
       )}
 

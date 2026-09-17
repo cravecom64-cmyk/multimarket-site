@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import {
   getSaleProducts,
   getAllProducts,
@@ -119,8 +120,11 @@ export default function HomePage() {
         <p className="text-[11px] text-gray-400 mt-0.5">
           Товари які зараз вибухають у TikTok
         </p>
-        <div className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-          {trendingProducts.map((product) => {
+        <InfiniteScrollRow
+          items={trendingProducts}
+          keyFn={(product) => product.id}
+          className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
+          renderItem={(product) => {
             const gradientParts = product.landing?.gradient
               .replace("from-[", "")
               .replace("] to-[", ",")
@@ -128,7 +132,6 @@ export default function HomePage() {
               .split(",") || ["#333", "#555"];
             return (
               <Link
-                key={product.id}
                 href={product.externalLanding || `/product/${product.slug}`}
                 className="min-w-[160px] h-[200px] rounded-xl flex flex-col items-center justify-center relative flex-shrink-0 snap-start overflow-hidden"
                 style={
@@ -171,8 +174,8 @@ export default function HomePage() {
                 </div>
               </Link>
             );
-          })}
-        </div>
+          }}
+        />
       </section>
 
       {/* Акції */}
@@ -186,9 +189,12 @@ export default function HomePage() {
         <p className="text-[11px] text-gray-400 mt-0.5">
           Встигни поки є. Кількість обмежена.
         </p>
-        <div className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-          {saleProducts.map((product) => (
-            <div key={product.id} className="w-[155px] flex-shrink-0 snap-start">
+        <InfiniteScrollRow
+          items={saleProducts}
+          keyFn={(product) => product.id}
+          className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
+          renderItem={(product) => (
+            <div className="w-[155px] flex-shrink-0 snap-start">
               <ProductCard
                 id={product.id}
                 slug={product.slug}
@@ -208,8 +214,8 @@ export default function HomePage() {
                 inStock={product.inStock}
               />
             </div>
-          ))}
-        </div>
+          )}
+        />
       </section>
 
       {/* Топ продажів */}
@@ -278,10 +284,12 @@ export default function HomePage() {
         <p className="text-[11px] text-gray-400 mt-0.5">
           Ці товари зараз крутяться у наших відео
         </p>
-        <div className="flex gap-2 mt-2.5 overflow-x-auto pb-2 scrollbar-hide">
-          {tiktokProducts.slice(0, 5).map((product) => (
+        <InfiniteScrollRow
+          items={tiktokProducts.slice(0, 5)}
+          keyFn={(product) => product.id}
+          className="flex gap-2 mt-2.5 overflow-x-auto pb-2 scrollbar-hide"
+          renderItem={(product) => (
             <Link
-              key={product.id}
               href={`/product/${product.slug}`}
               className="w-[130px] aspect-square bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
             >
@@ -307,8 +315,8 @@ export default function HomePage() {
                 ♪ TikTok
               </div>
             </Link>
-          ))}
-        </div>
+          )}
+        />
       </section>
 
       {/* Відгуки */}

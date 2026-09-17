@@ -81,7 +81,7 @@ export default function RootLayout({
         <MetaPixel />
         <SiteAnalytics />
         <CartProvider>
-          <div className="max-w-[480px] mx-auto bg-white min-h-screen shadow-sm lg:shadow-lg">
+          <div className="max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto bg-white min-h-screen shadow-sm lg:shadow-lg">
             <Header />
             <main className="pb-16">{children}</main>
             <BottomNav />

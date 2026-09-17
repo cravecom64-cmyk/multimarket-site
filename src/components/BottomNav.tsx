@@ -17,7 +17,7 @@ export function BottomNav() {
   const { setIsCartOpen, totalItems } = useCart();
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-gray-100 z-40 flex justify-around items-center py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] bg-white border-t border-gray-100 z-40 flex justify-around items-center py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
       {navItems.map((item) => {
         const isActive =
           item.href === "/"

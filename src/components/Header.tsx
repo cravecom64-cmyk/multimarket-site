@@ -16,7 +16,7 @@ export function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 bg-white transition-shadow max-w-[480px] mx-auto ${
+        className={`sticky top-0 z-50 bg-white transition-shadow max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto ${
           scrolled ? "shadow-md" : ""
         }`}
       >

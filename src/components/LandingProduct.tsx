@@ -230,7 +230,7 @@ export function LandingProduct({ product }: LandingProductProps) {
                   <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-2xl overflow-hidden shrink-0">
                     {bp.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" />
+                      <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       bp.emoji
                     )}
@@ -348,7 +348,7 @@ export function LandingProduct({ product }: LandingProductProps) {
       </section>
 
       {/* ===== STICKY CTA ===== */}
-      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
+      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] z-50">
         <div className="mx-3 rounded-2xl shadow-2xl p-3 text-white"
           style={{ backgroundColor: landing.accentColor }}>
           <div className="flex items-center justify-between">

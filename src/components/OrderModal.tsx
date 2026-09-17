@@ -331,6 +331,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                     src={item.image}
                     alt={item.name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   item.emoji

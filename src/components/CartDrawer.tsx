@@ -27,7 +27,7 @@ export function CartDrawer() {
       {isCartOpen && (
       <div className="fixed inset-0 z-[70] overlay" onClick={() => setIsCartOpen(false)}>
         <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] bg-white rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Handle */}
@@ -89,6 +89,7 @@ export function CartDrawer() {
                               src={item.image}
                               alt={item.name}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           ) : (
                             item.emoji
@@ -112,6 +113,7 @@ export function CartDrawer() {
                               src={item.image}
                               alt={item.name}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           ) : (
                             item.emoji

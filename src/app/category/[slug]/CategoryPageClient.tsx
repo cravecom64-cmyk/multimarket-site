@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import { getProductsByCategory, categories, getCrossSellProducts } from "@/lib/products";
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
@@ -179,9 +180,12 @@ export function CategoryPageClient() {
           <h3 className="text-[13px] font-extrabold">
             🛍 Також дивляться
           </h3>
-          <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide">
-            {crossSell.map((p) => (
-              <div key={p.id} className="w-[140px] flex-shrink-0">
+          <InfiniteScrollRow
+            items={crossSell}
+            keyFn={(p) => p.id}
+            className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide"
+            renderItem={(p) => (
+              <div className="w-[140px] flex-shrink-0">
                 <ProductCard
                   id={p.id}
                   slug={p.slug}
@@ -201,8 +205,8 @@ export function CategoryPageClient() {
                   inStock={p.inStock}
                 />
               </div>
-            ))}
-          </div>
+            )}
+          />
         </div>
       )}
 

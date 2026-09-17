@@ -77,6 +77,20 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    {
+      // Product/category photos у /public/products — content-hashed by
+      // тому, що ми ніколи не перезаписуємо файл під тим самим ім'ям (нова
+      // фотка = новий файл), тому їх безпечно кешувати надовго на клієнті/CDN.
+      // Закриває PageSpeed-знахідку аудиту 16.09.2026 ("efficient cache
+      // lifetimes", ~173 КіБ потенційної економії).
+      source: "/products/:path*",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+    },
   ],
 };
 

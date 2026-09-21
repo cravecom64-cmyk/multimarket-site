@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
@@ -143,12 +144,12 @@ export default function HomePage() {
                 }
               >
                 {product.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
+                    fill
+                    sizes="160px"
+                    className="object-cover"
                   />
                 )}
                 {product.image && (
@@ -294,12 +295,12 @@ export default function HomePage() {
               className="w-[130px] aspect-square bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
             >
               {product.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="130px"
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

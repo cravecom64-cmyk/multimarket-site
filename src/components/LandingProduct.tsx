@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Product, getBundleProducts } from "@/lib/products";
 import { useCart } from "./CartProvider";
@@ -68,12 +69,16 @@ export function LandingProduct({ product }: LandingProductProps) {
           {/* Product visual */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden mb-4 relative">
             {activeImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={activeImage}
-                alt={product.name}
-                className={`w-full aspect-square object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
-              />
+              <div className={`relative w-full aspect-square ${!inStock ? "grayscale opacity-60" : ""}`}>
+                <Image
+                  src={activeImage}
+                  alt={product.name}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 100vw, 480px"
+                  className="object-cover"
+                />
+              </div>
             ) : (
               <div className="pt-8 text-center">
                 <div className="text-7xl mb-3">{product.emoji}</div>
@@ -138,7 +143,7 @@ export function LandingProduct({ product }: LandingProductProps) {
       <section className="px-5 py-8">
         {/* Problem */}
         <div className="bg-red-50 border border-red-100 rounded-xl p-5 mb-4">
-          <div className="text-sm font-bold text-red-700 mb-2">😤 Знайома ситуація?</div>
+          <div className="text-sm font-bold text-red-700 mb-2">😔 Знайома ситуація?</div>
           <p className="text-sm text-red-800 leading-relaxed">{landing.problem}</p>
         </div>
 
@@ -227,10 +232,9 @@ export function LandingProduct({ product }: LandingProductProps) {
                   href={bp.externalLanding || `/product/${bp.slug}`}
                   className="flex items-center gap-3 flex-1 min-w-0"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-2xl overflow-hidden shrink-0">
+                  <div className="w-12 h-12 relative rounded-lg bg-white border border-gray-200 flex items-center justify-center text-2xl overflow-hidden shrink-0">
                     {bp.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" loading="lazy" />
+                      <Image src={bp.image} alt={bp.name} fill sizes="48px" className="object-cover" />
                     ) : (
                       bp.emoji
                     )}

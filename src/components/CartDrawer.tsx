@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { useState } from "react";
@@ -82,14 +83,14 @@ export function CartDrawer() {
                         onClick={() => setIsCartOpen(false)}
                         className="flex items-center gap-3 flex-1 min-w-0"
                       >
-                        <div className="text-2xl w-10 h-10 flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="text-2xl w-10 h-10 relative flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                           {item.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
+                            <Image
                               src={item.image}
                               alt={item.name}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
+                              fill
+                              sizes="40px"
+                              className="object-cover"
                             />
                           ) : (
                             item.emoji
@@ -106,14 +107,14 @@ export function CartDrawer() {
                       </Link>
                     ) : (
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="text-2xl w-10 h-10 flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="text-2xl w-10 h-10 relative flex items-center justify-center bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                           {item.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
+                            <Image
                               src={item.image}
                               alt={item.name}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
+                              fill
+                              sizes="40px"
+                              className="object-cover"
                             />
                           ) : (
                             item.emoji

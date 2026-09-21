@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "./CartProvider";
 
@@ -55,12 +56,12 @@ export function ProductCard({
       <Link href={href}>
         <div className="aspect-square bg-gray-200 relative flex items-center justify-center text-3xl overflow-hidden">
           {image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={image}
               alt={name}
-              className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
-              loading="lazy"
+              fill
+              sizes="(max-width: 640px) 45vw, 160px"
+              className={`object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
             />
           ) : (
             emoji

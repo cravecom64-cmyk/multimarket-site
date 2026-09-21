@@ -54,8 +54,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
     );
   }, []);
   // Два онлайн-еквайринги (mono і WayForPay) + оплата при отриманні. mono —
-  // пріоритетний варіант за замовчуванням (перевірений перший, надійніший
-  // за доставом). Назви без логотипів — за брендбуком monobank для сайтів
+  // пріоритетний варіант за замовчуванням (перевірений першим, надійніший
+  // за досвідом). Назви без логотипів — за брендбуком monobank для сайтів
   // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
@@ -114,7 +114,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           _t: formLoadedAt.current,
           paymentMethod,
           items: items.map((i) => ({
-            id: i.id, // для командного центру (Supabase) — зіставлення з постачщиками
+            id: i.id, // для командного центру (Supabase) — зіставлення з поставщиками
             name: i.name,
             price: i.price,
             quantity: i.quantity,
@@ -146,7 +146,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               image: i.image,
             })),
             totalPrice,
-            // Йде тільки в невидиме клієнту поле reference — щоб у спвіщенні
+            // Йде тільки в невидиме клієнту поле reference — щоб у сповіщенні
             // про відмову оплати одразу було видно кому телефонувати.
             customerPhone: form.phone,
           }),
@@ -384,7 +384,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           </div>
         </div>
 
-        {/* Payment method — картка онлайн пріоритетна: менше повернень і відмов при кур'єрі */}
+        {/* Payment method — картка онлайн пріоритетна: менше повернень і відмов при курєрі */}
         <div className="mb-4">
           <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
             Спосіб оплати

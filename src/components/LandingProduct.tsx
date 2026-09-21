@@ -143,7 +143,7 @@ export function LandingProduct({ product }: LandingProductProps) {
       <section className="px-5 py-8">
         {/* Problem */}
         <div className="bg-red-50 border border-red-100 rounded-xl p-5 mb-4">
-          <div className="text-sm font-bold text-red-700 mb-2">😔 Знайома ситуація?</div>
+          <div className="text-sm font-bold text-red-700 mb-2">😤 Знайома ситуація?</div>
           <p className="text-sm text-red-800 leading-relaxed">{landing.problem}</p>
         </div>
 
@@ -207,7 +207,7 @@ export function LandingProduct({ product }: LandingProductProps) {
       {/* ===== BUNDLE / UPSELL ===== */}
       {bundleProducts.length > 0 && (
         <section className="px-5 pb-8">
-          <h2 className="text-lg font-black mb-2">Часто беруть разом</h2>
+          <h2 className="text-lg font-black mb-2">Часто бергть разом</h2>
           {freeShipLeft > 0 && (
             <p className="text-xs text-gray-500 mb-4">
               Додай ще на {freeShipLeft}₴ — доставка безкоштовна 🚚

@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/CartProvider";
@@ -208,14 +209,15 @@ export function ProductPageClient() {
                 ref={(el) => {
                   gallerySlideRefs.current[i] = el;
                 }}
-                className="w-full h-full flex-shrink-0 snap-center"
+                className="relative w-full h-full flex-shrink-0 snap-center"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={img}
                   alt={`${product.name} — фото ${i + 1}`}
-                  className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
-                  loading={i === 0 ? "eager" : "lazy"}
+                  fill
+                  priority={i === 0}
+                  sizes="(max-width: 640px) 100vw, 480px"
+                  className={`object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
                 />
               </div>
             ))}
@@ -228,11 +230,13 @@ export function ProductPageClient() {
             style={galleryBgStyle}
           >
             {activeImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={activeImage}
                 alt={product.name}
-                className={`w-full h-full object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 480px"
+                className={`object-cover ${!inStock ? "grayscale opacity-60" : ""}`}
               />
             ) : (
               <span className="text-6xl">{product.emoji}</span>
@@ -280,12 +284,11 @@ export function ProductPageClient() {
                 key={i}
                 onClick={() => scrollToImage(i)}
                 aria-label={`Фото ${i + 1}`}
-                className={`w-14 h-14 rounded-md flex-shrink-0 overflow-hidden border-2 ${
+                className={`relative w-14 h-14 rounded-md flex-shrink-0 overflow-hidden border-2 ${
                   i === selectedImage ? "border-emerald-500" : "border-transparent"
                 }`}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
+                <Image src={img} alt="" fill sizes="56px" className="object-cover" />
               </button>
             ))}
           </div>
@@ -562,10 +565,9 @@ export function ProductPageClient() {
             <div className="px-4 py-3 space-y-2.5 bg-emerald-50/50">
               {/* Current product */}
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
+                <div className="w-11 h-11 relative rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
                   {activeImage ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={activeImage} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+                    <Image src={activeImage} alt={product.name} fill sizes="44px" className="object-cover" />
                   ) : (
                     product.emoji
                   )}
@@ -582,10 +584,9 @@ export function ProductPageClient() {
                     href={bp.externalLanding || `/product/${bp.slug}`}
                     className="flex items-center gap-3 flex-1 min-w-0"
                   >
-                    <div className="w-11 h-11 rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
+                    <div className="w-11 h-11 relative rounded-lg bg-white border border-emerald-100 flex items-center justify-center text-xl overflow-hidden flex-shrink-0">
                       {bp.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={bp.image} alt={bp.name} className="w-full h-full object-cover" loading="lazy" />
+                        <Image src={bp.image} alt={bp.name} fill sizes="44px" className="object-cover" />
                       ) : (
                         bp.emoji
                       )}

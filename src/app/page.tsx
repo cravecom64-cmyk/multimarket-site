@@ -88,6 +88,28 @@ export default function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "Multimarket",
+                url: "https://multi-market.com.ua",
+                sameAs: ["https://t.me/multimarket_ua"],
+              },
+              {
+                "@type": "WebSite",
+                name: "Multimarket",
+                url: "https://multi-market.com.ua",
+              },
+            ],
+          }),
+        }}
+      />
       {/* Hero Banner */}
       <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] px-6 py-7 relative overflow-hidden">
         <h1 className="text-xl font-extrabold text-white leading-tight">

@@ -96,8 +96,32 @@ export function CategoryPageClient() {
     { mode: "expensive", label: "💎 Дорожче" },
   ];
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Головна",
+        item: "https://multi-market.com.ua",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: category.name,
+        item: `https://multi-market.com.ua/category/${category.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Category Hero */}
       <div
         className={`mx-3 mt-3 rounded-2xl bg-gradient-to-br ${category.gradient} px-5 py-6`}

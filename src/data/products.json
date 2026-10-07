@@ -1893,7 +1893,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "h11",
       "h12"
@@ -1996,7 +1996,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "g13"
     ],
@@ -2082,7 +2082,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [],
     "landing": {
       "gradient": "from-[#DB2777] to-[#EC4899]",
@@ -2152,7 +2152,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "h09"
     ],
@@ -2227,7 +2227,7 @@
       "new",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "tt01"
     ],
@@ -2300,7 +2300,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk08",
       "bk10"
@@ -2536,7 +2536,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk14"
     ],
@@ -2613,7 +2613,7 @@
     "badges": [
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk14"
     ],
@@ -2964,7 +2964,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk08"
     ],
@@ -3322,7 +3322,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk08"
     ],
@@ -3391,7 +3391,7 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [],
     "similarWith": [
       "bk17"

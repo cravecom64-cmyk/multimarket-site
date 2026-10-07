@@ -207,7 +207,7 @@ export function LandingProduct({ product }: LandingProductProps) {
       {/* ===== BUNDLE / UPSELL ===== */}
       {bundleProducts.length > 0 && (
         <section className="px-5 pb-8">
-          <h2 className="text-lg font-black mb-2">Часто бергть разом</h2>
+          <h2 className="text-lg font-black mb-2">Часто беруть разом</h2>
           {freeShipLeft > 0 && (
             <p className="text-xs text-gray-500 mb-4">
               Додай ще на {freeShipLeft}₴ — доставка безкоштовна 🚚

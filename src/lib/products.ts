@@ -104,12 +104,31 @@ export interface Product {
   // Реальні посилання на TikTok-відео цього товару — якщо порожньо/немає,
   // блок TikTok не рендериться (замість фейкових ▶-плашок що нічого не грають)
   tiktokVideos?: { label: string; url: string }[];
+  // "М'яке приховування" — товар прибирається з каталогу/категорій/головної/
+  // sitemap/товарного фіда (Meta/Google), але залишається в products.json і
+  // його сторінка /product/[slug] і далі відкривається за прямим посиланням
+  // (щоб не втрачати індексацію Google). Використовується для сезонних
+  // товарів поза сезоном (07.10.2026, запит Павла: влітку "вентилятор/
+  // кондиціонер/комарі" актуальні, взимку — ні, а показувати їх у каталозі
+  // поза сезоном штучно роздуває кількість товарів). Той самий прапорець
+  // виключає товар і з щоденного моніторингу наявності/цін у постачальників
+  // (/api/cron/check-suppliers) — немає сенсу перевіряти те, чого немає на
+  // вітрині. Щоб повернути товар навесні — просто прибрати isHidden.
+  isHidden?: boolean;
 }
 
 const products: Product[] = productsData as unknown as Product[];
 
+// Товари, видимі на вітрині (каталог/категорії/головна/sitemap/фід) —
+// isHidden-товари виключені звідусіль, КРІМ прямого доступу за slug
+// (getProductBySlug нижче навмисно читає сирий products[], а не цю
+// функцію) — сторінка товару лишається доступною за посиланням.
+function visibleProducts(): Product[] {
+  return products.filter((p) => !p.isHidden);
+}
+
 export function getAllProducts(): Product[] {
-  return products;
+  return visibleProducts();
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
@@ -117,17 +136,17 @@ export function getProductBySlug(slug: string): Product | undefined {
 }
 
 export function getProductsByCategory(category: string): Product[] {
-  return products.filter((p) => p.category === category);
+  return visibleProducts().filter((p) => p.category === category);
 }
 
 export function getTopProducts(limit = 8): Product[] {
-  return [...products]
+  return [...visibleProducts()]
     .sort((a, b) => b.orderCount - a.orderCount)
     .slice(0, limit);
 }
 
 export function getSaleProducts(): Product[] {
-  return products.filter((p) => p.oldPrice && p.oldPrice > p.price);
+  return visibleProducts().filter((p) => p.oldPrice && p.oldPrice > p.price);
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
@@ -136,7 +155,7 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
   // просто топ-продажі в тій самій категорії.
   const curated = (product.similarWith ?? [])
     .map((id) => products.find((p) => p.id === id))
-    .filter((p): p is Product => !!p && p.id !== product.id);
+    .filter((p): p is Product => !!p && p.id !== product.id && !p.isHidden);
 
   if (curated.length >= limit) return curated.slice(0, limit);
 
@@ -155,7 +174,7 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
   // випадковий топ-продаж з категорії.
   if (product.similarWith && product.similarWith.length === 0) return [];
 
-  const filler = products
+  const filler = visibleProducts()
     .filter((p) => p.id !== product.id && p.category === product.category)
     .sort((a, b) => b.orderCount - a.orderCount);
 
@@ -167,7 +186,7 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
   // те, що реально доповнює обраний товар, а не випадковий топ з інших категорій.
   const curated = (product.bundleWith ?? [])
     .map((id) => products.find((p) => p.id === id))
-    .filter((p): p is Product => !!p && p.id !== product.id);
+    .filter((p): p is Product => !!p && p.id !== product.id && !p.isHidden);
 
   if (curated.length >= limit) return curated.slice(0, limit);
 
@@ -178,7 +197,7 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
   // того, чи має це сенс.
   if (curated.length > 0) return curated;
 
-  const filler = products
+  const filler = visibleProducts()
     .filter((p) => p.id !== product.id && p.category !== product.category)
     .sort((a, b) => b.orderCount - a.orderCount);
 
@@ -186,7 +205,7 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
 }
 
 export function getTrendingProducts(): Product[] {
-  return products
+  return visibleProducts()
     .filter((p) => p.isTrending)
     .sort((a, b) => b.orderCount - a.orderCount);
 }
@@ -203,34 +222,34 @@ export const categories = [
     name: "Дім і затишок",
     emoji: "🏠",
     gradient: "from-[#2D3748] to-[#4A5568]",
-    productCount: products.filter((p) => p.category === "home").length,
+    productCount: visibleProducts().filter((p) => p.category === "home").length,
   },
   {
     slug: "garden",
     name: "Сад і подвір'я",
     emoji: "🌿",
     gradient: "from-[#1B4332] to-[#2D6A4F]",
-    productCount: products.filter((p) => p.category === "garden").length,
+    productCount: visibleProducts().filter((p) => p.category === "garden").length,
   },
   {
     slug: "pets",
     name: "Улюбленцям",
     emoji: "🐾",
     gradient: "from-[#4A1D6A] to-[#7C3AED]",
-    productCount: products.filter((p) => p.category === "pets").length,
+    productCount: visibleProducts().filter((p) => p.category === "pets").length,
   },
   {
     slug: "tiktok",
     name: "ТОП TikTok 🔥",
     emoji: "🔥",
     gradient: "from-[#7F1D1D] to-[#DC2626]",
-    productCount: products.filter((p) => p.category === "tiktok").length,
+    productCount: visibleProducts().filter((p) => p.category === "tiktok").length,
   },
   {
     slug: "blackout",
     name: "Блекаут",
     emoji: "🔦",
     gradient: "from-[#18181B] to-[#F59E0B]",
-    productCount: products.filter((p) => p.category === "blackout").length,
+    productCount: visibleProducts().filter((p) => p.category === "blackout").length,
   },
 ];

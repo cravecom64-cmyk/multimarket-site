@@ -34,6 +34,16 @@ interface InfiniteScrollRowProps<T> {
  * к-стю товарів) дробове blockWidth проти цілого el.scrollLeft іноді
  * різняться на частку пікселя, onScroll одразу бачить "ми в
  * попередньому блоці" і зайвий раз перестрибує на блок вперед.
+ *
+ * Виправлення 07.10.2026 (знайдено Павлом — "товари як дублюються"
+ * в секції "З цим купують" на сторінці товару з лише 2 bundleWith):
+ * коли ОДНА копія items уже вміщується в видиму область без скролу
+ * взагалі (напр. 2 товари на широкому екрані), дублювання для
+ * безкінечного скролу не просто зайве — воно відразу видиме як
+ * повторювані картки, бо користувачу нема куди скролити, щоб "не
+ * побачити" дублі. В такому разі рендеримо items один раз, без
+ * потрійного блоку й без scroll-обробника — секція коротша за екран,
+ * тож нескінченний скрол їй і не потрібен.
  */
 export function InfiniteScrollRow<T>({
   items,
@@ -43,6 +53,7 @@ export function InfiniteScrollRow<T>({
 }: InfiniteScrollRowProps<T>) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [copiesPerBlock, setCopiesPerBlock] = useState(1);
+  const [isStatic, setIsStatic] = useState(false);
   const blockWidthRef = useRef(0);
   const initializedRef = useRef(false);
 
@@ -50,11 +61,29 @@ export function InfiniteScrollRow<T>({
     const el = scrollRef.current;
     if (!el || items.length === 0) return;
 
-    const totalCopies = copiesPerBlock * 3;
+    const totalCopies = copiesPerBlock * (isStatic ? 1 : 3);
     const naturalSetWidth = el.scrollWidth / totalCopies;
     const viewport = el.clientWidth || 1;
 
     if (naturalSetWidth <= 0) return;
+
+    // Один комплект items уже вміщується без скролу — переходимо (або
+    // лишаємось) у статичний режим: без дублювання, без зациклення.
+    if (naturalSetWidth <= viewport) {
+      if (!isStatic) {
+        initializedRef.current = false;
+        setIsStatic(true);
+      }
+      return;
+    }
+
+    if (isStatic) {
+      // Контент виріс (напр. resize вікна) і більше не вміщується —
+      // повертаємось у режим нескінченного скролу.
+      initializedRef.current = false;
+      setIsStatic(false);
+      return;
+    }
 
     const needed = Math.max(1, Math.ceil((viewport * 1.5) / naturalSetWidth));
 
@@ -71,7 +100,7 @@ export function InfiniteScrollRow<T>({
       el.scrollLeft = blockWidth;
       initializedRef.current = true;
     }
-  }, [items, copiesPerBlock]);
+  }, [items, copiesPerBlock, isStatic]);
 
   useLayoutEffect(() => {
     recalc();
@@ -91,6 +120,7 @@ export function InfiniteScrollRow<T>({
   }, [recalc]);
 
   const handleScroll = useCallback(() => {
+    if (isStatic) return;
     const el = scrollRef.current;
     const blockWidth = blockWidthRef.current;
     if (!el || !blockWidth) return;
@@ -100,9 +130,19 @@ export function InfiniteScrollRow<T>({
     } else if (el.scrollLeft > blockWidth * 2) {
       el.scrollLeft -= blockWidth;
     }
-  }, []);
+  }, [isStatic]);
 
   if (items.length === 0) return null;
+
+  if (isStatic) {
+    return (
+      <div ref={scrollRef} className={className}>
+        {items.map((item, i) => (
+          <Fragment key={String(keyFn(item, i))}>{renderItem(item, i)}</Fragment>
+        ))}
+      </div>
+    );
+  }
 
   const blocks = [0, 1, 2];
 

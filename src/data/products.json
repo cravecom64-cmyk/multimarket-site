@@ -46,6 +46,7 @@
   },
   {
     "id": "h03",
+    "isHidden": true,
     "slug": "ventilyator-crownberg-sv413",
     "name": "Вентилятор настільний подвійний Crownberg SV-413 LED",
     "category": "home",
@@ -93,6 +94,7 @@
   },
   {
     "id": "h05",
+    "isHidden": true,
     "slug": "shtora-antymoskytnaya-magic-mesh",
     "name": "Антимоскітна магнітна штора Magic Mesh 210×100",
     "category": "home",
@@ -160,6 +162,7 @@
   },
   {
     "id": "h06",
+    "isHidden": true,
     "slug": "znyschuval-komariv-mosquito-killer",
     "name": "Знищувач комарів Mosquito Killer 360 USB лампа-пастка",
     "category": "home",
@@ -431,6 +434,7 @@
   },
   {
     "id": "h10",
+    "isHidden": true,
     "slug": "ventilyator-zvolozhuval-fs03",
     "name": "Вентилятор-зволожувач Mini Fan FS-03 LED Type-C",
     "category": "home",
@@ -501,6 +505,7 @@
   },
   {
     "id": "h12",
+    "isHidden": true,
     "slug": "kuler-pidlohovyy-germatic-am030jr",
     "name": "Підлоговий кулер-вентилятор Germatic AM-030JR 1200W",
     "category": "home",
@@ -1860,6 +1865,7 @@
   },
   {
     "id": "tt01",
+    "isHidden": true,
     "slug": "kondytsioner-arctic-storm",
     "name": "Міні Кондиціонер Охолоджувач Arctic Storm Ultra",
     "category": "tiktok",
@@ -1962,6 +1968,7 @@
   },
   {
     "id": "tt02",
+    "isHidden": true,
     "slug": "blender-fresh-juice-portatyvnyy",
     "name": "Портативний фітнес-блендер Fresh Juice смузі",
     "category": "tiktok",

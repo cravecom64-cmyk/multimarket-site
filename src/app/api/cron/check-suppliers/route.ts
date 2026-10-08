@@ -174,6 +174,18 @@ function extractPrice(text: string): number | null {
   return parseFloat(match[1].replace(",", "."));
 }
 
+// ДОДАНО 08.10.2026 (відгук Павла: "мне ну понятны коды бк... тисячі треба
+// якось зрозуміліше писати" — після того, як він побачив "11₴ → 11375₴" у
+// звіті, поки я саме ловив і правив баг з парсингом ціни). Форматуємо суми
+// в Telegram-звіті по-людськи: пробіл як розділювач тисяч, кома замість
+// крапки для копійок (укр. формат), без ",00" коли копійок немає.
+function formatUAH(value: number): string {
+  const rounded = Math.round(value * 100) / 100;
+  const [intPart, fracPart] = rounded.toFixed(2).split(".");
+  const withSpaces = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return fracPart === "00" ? `${withSpaces}₴` : `${withSpaces},${fracPart}₴`;
+}
+
 // Тану Опт (od.tanu.ua) блокує серверні IP — для цього домену, якщо є
 // SCRAPERAPI_KEY, запит іде через ScraperAPI замість напряму. Решта
 // постачальників такої проблеми не мають, тож проксі їм не потрібен.
@@ -346,6 +358,15 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // ДОДАНО 08.10.2026: під час налагодження ScraperAPI-проксі я кілька разів
+  // руками викликав цей ендпоінт, щоб перевірити виправлення на живих даних
+  // — і Павлу прилетіло кілька Telegram-звітів поспіль із різними цифрами,
+  // що виглядало як збій. ?notify=false дозволяє запустити перевірку й
+  // записати результат у Supabase, не турбуючи Telegram — для ручного
+  // тестування (справжній щоденний крон від Vercel завжди йде без цього
+  // параметра, тож його сповіщення не зачіпає).
+  const notify = req.nextUrl.searchParams.get("notify") !== "false";
+
   const supabase = supabaseServer();
   if (!supabase) {
     return NextResponse.json({ error: "Supabase не налаштовано" }, { status: 500 });
@@ -398,15 +419,15 @@ export async function GET(req: NextRequest) {
       const icon = result.inStock ? "✅" : "⛔";
       const statusWord = result.inStock ? "знову в наявності" : "закінчився";
       changes.push(
-        `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${prevPrice}₴ → ${result.price}₴`
+        `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`
       );
     } else if (stockChanged) {
       changes.push(
         `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${productLabel(row.product_id)} у ${supplierName}` +
-          (result.price !== null ? ` (${result.price}₴)` : "")
+          (result.price !== null ? ` (${formatUAH(result.price)})` : "")
       );
     } else if (priceChanged) {
-      changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${prevPrice}₴ → ${result.price}₴`);
+      changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
     }
 
     await supabase
@@ -486,7 +507,7 @@ export async function GET(req: NextRequest) {
             expected ? `&secret=${expected}` : ""
           }`;
           proposalLines.push(
-            `💡 *${p.product_name}* у ${p.supplier_name} подорожчав на ${p.pct_change}% — підняти нашу ціну ${p.old_site_price}₴ → ${p.new_site_price}₴? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
+            `💡 *${p.product_name}* у ${p.supplier_name} подорожчав на ${p.pct_change}% — підняти нашу ціну ${formatUAH(Number(p.old_site_price))} → ${formatUAH(Number(p.new_site_price))}? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
           );
         }
       }
@@ -495,7 +516,13 @@ export async function GET(req: NextRequest) {
     console.error("[check-suppliers] price proposal logic failed:", err instanceof Error ? err.message : err);
   }
 
-  if (changes.length > 0 || failures.length > 0 || proposalLines.length > 0) {
+  // ЗМІНЕНО 08.10.2026 (прохання Павла: "присылай отчеты новые каждый день
+  // если изменений нет так и пишем") — раніше звіт у Telegram летів тільки
+  // коли щось змінилось/не перевірилось, і мовчання в дні без подій можна
+  // було сплутати зі збоєм крона. Тепер звіт іде щодня завжди (гілка "Без
+  // змін — усе як учора" у sendTelegramReport вже була готова до цього),
+  // крім ручних тестових викликів з ?notify=false.
+  if (notify) {
     await sendTelegramReport(changes, failures, proposalLines, checked, scoped.length);
   }
 

@@ -23,9 +23,8 @@ import productsData from "@/data/products.json";
 // по мірі зростання каталогу (прохання Павла).
 //
 // Для кожного товару з Supabase product_suppliers читається сторінка
-// постачальника (звичайний fetch, без headless-браузера — усі 4 постачальники
-// віддають готовий HTML на сервері, JS не потрібен) і парситься cheerio за
-// правилами, підібраними вручну під кожну платформу (перевірено 07.10.2026
+// постачальника (звичайний fetch, без headless-браузера) і парситься cheerio
+// за правилами, підібраними вручну під кожну платформу (перевірено 07.10.2026
 // через Chrome-девтулз на реальних сторінках):
 //   - Aveopt і Фантом — WooCommerce: `.summary .stock` / `.summary .price`
 //   - HUGO — маркетплейс Prom.ua: клас `b-product-data__item_type_*` для
@@ -37,6 +36,27 @@ import productsData from "@/data/products.json";
 // 3%) — летить одне зведене повідомлення в той самий Telegram-канал, куди
 // приходять сповіщення про замовлення (той самий TELEGRAM_BOT_TOKEN/
 // TELEGRAM_CHAT_ID, що й у /api/order).
+//
+// ОНОВЛЕННЯ 08.10.2026 (перший реальний прогін, 125 товарів):
+// 1) Павлу незрозумілі внутрішні коди товарів (bk02, g18...) у звіті —
+//    тепер у звіті показується назва товару з products.json, код лишається
+//    в дужках для довідки/пошуку в адмінці.
+// 2) od.tanu.ua і phantom-drop.com.ua систематично (майже 100% товарів цих
+//    двох постачальників) повертали "не знайдено блок наявності", хоча
+//    та сама сторінка, відкрита звичайним браузером (fetch() з вкладки
+//    Chrome, без кук), містить потрібний HTML і текст без проблем. Це НЕ
+//    помилка верстки/селектора — дуже схоже на бот-захист, який віддає інший
+//    (урізаний/challenge) контент дата-центровим IP (Vercel serverless), а
+//    не звичайним відвідувачам. HUGO і Aveopt такої проблеми не мають.
+//    Додано діагностику в fetchSupplierStatus: якщо шуканий блок не
+//    знайдено, перевіряється, чи є в отриманому HTML взагалі слово
+//    "наявність" — якщо немає, це явна ознака бот-захисту, а не зламаної
+//    верстки. Звіт про збої тепер згрупований по постачальнику (кількість +
+//    приклад причини), а не плаский список з дублями кодів товарів.
+// 3) "Закінчився" + "Зміна ціни" для одного й того ж товару/постачальника
+//    в одному прогоні (типово для HUGO — вони показують останню ціну навіть
+//    для товару not in stock) тепер об'єднані в один рядок звіту, а не два
+//    окремих — так зрозуміліше, що це одна подія, а не дві різні.
 
 export const maxDuration = 60;
 
@@ -62,6 +82,23 @@ interface CheckResult {
   error?: string;
 }
 
+interface FailureInfo {
+  productId: string;
+  supplier: string;
+  reason: string;
+}
+
+// id -> назва товару (products.json) — щоб у звіті було видно, що саме це
+// за товар, а не тільки внутрішній код типу "bk02".
+const productNameById = new Map<string, string>(
+  (productsData as Array<{ id: string; name: string }>).map((p) => [p.id, p.name])
+);
+
+function productLabel(productId: string): string {
+  const name = productNameById.get(productId);
+  return name ? `${name} (${productId})` : productId;
+}
+
 function supplierNameOf(row: SupplierRow): string {
   const s = row.suppliers;
   if (!s) return "?";
@@ -69,7 +106,7 @@ function supplierNameOf(row: SupplierRow): string {
 }
 
 function extractPrice(text: string): number | null {
-  const match = text.replace(/ /g, " ").match(/(\d+(?:[.,]\d+)?)/);
+  const match = text.replace(/ /g, " ").match(/(\d+(?:[.,]\d+)?)/);
   if (!match) return null;
   return parseFloat(match[1].replace(",", "."));
 }
@@ -81,6 +118,8 @@ async function fetchSupplierStatus(url: string): Promise<CheckResult> {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
         "Accept-Language": "uk-UA,uk;q=0.9,ru;q=0.8",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
       },
       cache: "no-store",
       signal: AbortSignal.timeout(15000),
@@ -114,7 +153,15 @@ async function fetchSupplierStatus(url: string): Promise<CheckResult> {
     }
 
     if (!stockText) {
-      return { inStock: false, price: null, error: "не знайдено блок наявності (можливо, змінилась верстка сайту)" };
+      // Діагностика (08.10.2026): якщо в усьому отриманому HTML взагалі
+      // немає слова "наявність"/"відсутн", це не збіг селектора з версткою,
+      // а ознака того, що сервер віддав зовсім іншу сторінку (бот-захист/
+      // challenge) — на відміну від того, що бачить звичайний браузер.
+      const hasAvailWordAnywhere = /наявн|відсутн/i.test(html);
+      const reason = hasAvailWordAnywhere
+        ? `блок наявності не знайдено (верстка відрізняється, html ${html.length}б)`
+        : `схоже на бот-захист: у відповіді взагалі немає слова "наявність" (html ${html.length}б) — ймовірно, сайт віддає інший контент серверним IP`;
+      return { inStock: false, price: null, error: reason };
     }
 
     const inStock = !/немає|нема\s|нема в|відсутн/i.test(stockText);
@@ -139,7 +186,21 @@ async function runWithConcurrency<T, R>(items: T[], limit: number, worker: (item
   return results;
 }
 
-async function sendTelegramReport(changes: string[], failures: string[], checked: number, scoped: number) {
+// Групує збої по постачальнику: кількість + один приклад причини —
+// замість плаского списку з купою дублів однакової причини під різними
+// кодами товарів, яким незрозуміло що робити.
+function summarizeFailures(failures: FailureInfo[]): string[] {
+  const bySupplier = new Map<string, FailureInfo[]>();
+  for (const f of failures) {
+    if (!bySupplier.has(f.supplier)) bySupplier.set(f.supplier, []);
+    bySupplier.get(f.supplier)!.push(f);
+  }
+  return Array.from(bySupplier.entries()).map(
+    ([supplier, items]) => `• ${supplier}: ${items.length} шт. — ${items[0].reason}`
+  );
+}
+
+async function sendTelegramReport(changes: string[], failures: FailureInfo[], checked: number, scoped: number) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!botToken || !chatId) return;
@@ -153,8 +214,7 @@ async function sendTelegramReport(changes: string[], failures: string[], checked
   }
 
   if (failures.length > 0) {
-    lines.push("", `⚠️ Не вдалось перевірити (${failures.length}):`, ...failures.slice(0, 10).map((f) => `• ${f}`));
-    if (failures.length > 10) lines.push(`…і ще ${failures.length - 10}`);
+    lines.push("", `⚠️ Не вдалось перевірити (${failures.length}):`, ...summarizeFailures(failures));
   }
 
   const text = lines.join("\n");
@@ -205,7 +265,7 @@ export async function GET(req: NextRequest) {
   const scoped = (rows as unknown as SupplierRow[]).filter((r) => activeProductIds.has(r.product_id));
 
   const changes: string[] = [];
-  const failures: string[] = [];
+  const failures: FailureInfo[] = [];
   let checked = 0;
 
   await runWithConcurrency(scoped, 6, async (row) => {
@@ -214,7 +274,7 @@ export async function GET(req: NextRequest) {
     checked++;
 
     if (result.error) {
-      failures.push(`${row.product_id} (${supplierName}): ${result.error}`);
+      failures.push({ productId: row.product_id, supplier: supplierName, reason: result.error });
       return;
     }
 
@@ -227,14 +287,22 @@ export async function GET(req: NextRequest) {
       prevPrice > 0 &&
       Math.abs(result.price - prevPrice) / prevPrice > 0.03;
 
-    if (stockChanged) {
+    // Якщо і наявність, і ціна змінились одночасно (типово для HUGO — вони
+    // показують останню ціну навіть для товару not in stock) — один рядок
+    // замість двох, щоб було зрозуміло, що це одна подія.
+    if (stockChanged && priceChanged) {
+      const icon = result.inStock ? "✅" : "⛔";
+      const statusWord = result.inStock ? "знову в наявності" : "закінчився";
       changes.push(
-        `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${row.product_id} у ${supplierName}` +
+        `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${prevPrice}₴ → ${result.price}₴`
+      );
+    } else if (stockChanged) {
+      changes.push(
+        `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${productLabel(row.product_id)} у ${supplierName}` +
           (result.price !== null ? ` (${result.price}₴)` : "")
       );
-    }
-    if (priceChanged) {
-      changes.push(`💰 Зміна ціни: ${row.product_id} у ${supplierName}: ${prevPrice}₴ → ${result.price}₴`);
+    } else if (priceChanged) {
+      changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${prevPrice}₴ → ${result.price}₴`);
     }
 
     await supabase

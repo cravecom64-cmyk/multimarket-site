@@ -200,7 +200,18 @@ function buildFetchTarget(url: string): { fetchUrl: string; viaProxy: boolean } 
   return { fetchUrl: url, viaProxy: false };
 }
 
-async function fetchSupplierStatus(url: string): Promise<CheckResult> {
+// ДОДАНО 08.10.2026 (питання Павла: "что будем делать с теми, что не
+// удалось спарсить?") — ScraperAPI бере IP з пулу, і частина IP вже
+// забанена в Тану Опт, а частина ще ні; тому результат "пливе" від прогону
+// до прогону (сьогодні бачили і 23/35, і 17/35). Один повторний запит через
+// проксі зазвичай дістає ІНШИЙ IP з пулу, тож непогано піднімає відсоток
+// успіху без додаткової плати (ScraperAPI не рахує з клієнта запити, на
+// які він сам визначив помилку відповіді — рахуються тільки успішні HTTP
+// 200 від їхнього боку, а наш "бот-захист" це саме такий 200 з коротким
+// тілом, тож повтор коштує як ще один звичайний запит). Повторюємо лише
+// коли це явно той самий патерн (короткий HTML без слова "наявність") —
+// інші помилки (мережа, таймаут) повторювати сенсу мало.
+async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
   try {
     const { fetchUrl, viaProxy } = buildFetchTarget(url);
     const res = await fetch(fetchUrl, {
@@ -277,6 +288,20 @@ async function fetchSupplierStatus(url: string): Promise<CheckResult> {
   } catch (err) {
     return { inStock: false, price: null, error: err instanceof Error ? err.message : String(err) };
   }
+}
+
+function looksLikeBotBlock(error: string | undefined): boolean {
+  return !!error && error.includes("схоже на бот-захист");
+}
+
+async function fetchSupplierStatus(url: string): Promise<CheckResult> {
+  const first = await fetchSupplierStatusOnce(url);
+  const { viaProxy } = buildFetchTarget(url);
+  if (viaProxy && looksLikeBotBlock(first.error)) {
+    const retry = await fetchSupplierStatusOnce(url);
+    if (!looksLikeBotBlock(retry.error)) return retry; // другий IP пройшов — беремо його
+  }
+  return first;
 }
 
 async function runWithConcurrency<T, R>(items: T[], limit: number, worker: (item: T) => Promise<R>): Promise<R[]> {
@@ -393,7 +418,11 @@ export async function GET(req: NextRequest) {
   const failures: FailureInfo[] = [];
   let checked = 0;
 
-  await runWithConcurrency(scoped, 6, async (row) => {
+  // Піднято з 6 до 9 (08.10.2026): після додавання одного повтору для
+  // "бот-захист"-помилок через проксі частина товарів тепер чекає на 2
+  // запити замість 1 — без підняття паралельності це ризикувало впертись у
+  // maxDuration=60с.
+  await runWithConcurrency(scoped, 9, async (row) => {
     const supplierName = supplierNameOf(row);
     const result = await fetchSupplierStatus(row.url);
     checked++;

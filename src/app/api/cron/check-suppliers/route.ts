@@ -57,6 +57,19 @@ import productsData from "@/data/products.json";
 //    в одному прогоні (типово для HUGO — вони показують останню ціну навіть
 //    для товару not in stock) тепер об'єднані в один рядок звіту, а не два
 //    окремих — так зрозуміліше, що це одна подія, а не дві різні.
+//
+// УТОЧНЕННЯ 08.10.2026 (другий прогін, з діагностикою вище): виявилось, що
+// дві різні причини ховались під однією помилкою:
+//   - od.tanu.ua дійсно блокує дата-центрові IP — замість сторінки (~270Kб)
+//     повертає заглушку ~885 байт без жодного тексту про наявність. Це не
+//     лагодиться селекторами; потрібен інший канал перевірки (проксі-сервіс
+//     з ротацією IP, або періодична ручна перевірка) — питання Павлу.
+//   - phantom-drop.com.ua НЕ блокує — повертає повноцінну сторінку (~165Кб),
+//     але в їхній темі WooCommerce `.stock` — порожній бейдж без тексту
+//     (<p class="stock out-of-stock"></p>), текст лежить окремо в
+//     `.outstock-qty`. Виправлено: якщо текст `.stock` порожній, статус
+//     читається з CSS-класу (in-stock/out-of-stock), з фолбеком на сусідній
+//     блок. Aveopt текст має одразу, тому для нього це просто не спрацьовує.
 
 export const maxDuration = 60;
 
@@ -135,7 +148,20 @@ async function fetchSupplierStatus(url: string): Promise<CheckResult> {
 
     if (url.includes("aveopt.com.ua") || url.includes("phantom-drop.com.ua")) {
       // WooCommerce
-      stockText = $(".summary .stock, .entry-summary .stock").first().text().trim();
+      const $stock = $(".summary .stock, .entry-summary .stock").first();
+      stockText = $stock.text().trim();
+      // Знахідка 08.10.2026: у теми Фантома `.stock` — порожній бейдж без
+      // тексту (<p class="stock out-of-stock"></p>), статус читається тільки
+      // з CSS-класу; людський текст "Нема в наявності" лежить окремо в
+      // `.outstock-qty`/`.instock-qty`. Якщо текст порожній — пробуємо клас,
+      // а якщо й класу немає — той сусідній блок. В Aveopt текст є одразу,
+      // тож для нього це просто ніколи не спрацьовує (безпечний фолбек).
+      if (!stockText) {
+        const stockClass = $stock.attr("class") || "";
+        if (/out-?of-?stock/i.test(stockClass)) stockText = "немає в наявності";
+        else if (/\bin-?stock\b/i.test(stockClass)) stockText = "в наявності";
+        else stockText = $(".outstock-qty, .instock-qty").first().text().trim();
+      }
       priceText = $(".summary .price, .entry-summary .price").first().text().trim();
     } else if (url.includes("hugo.com.ua")) {
       // Prom.ua

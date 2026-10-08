@@ -101,6 +101,17 @@ import productsData from "@/data/products.json";
 // Якщо SCRAPERAPI_KEY не заданий — тихо повертаємось до прямого fetch
 // (той самий "не знайдено блок наявності" збій, що й раніше, без падіння
 // всього прогону).
+//
+// ДОДАНО 08.10.2026 (новий постачальник від Павла: "залетів новий поставщик
+// достаточно не плохой"): VIBER-SHOP (viber-shop.com.ua, ФОП Субботіна,
+// Одеса) — перевірено вручну, працює на Prom.ua (та сама платформа й
+// верстка, що й HUGO), тож перевикористовує той самий парсер без жодного
+// нового селектора і без проксі (датацентрові IP у Prom.ua ніколи не
+// блокувались — HUGO тому підтвердження). Перший товар — g12 (кемпінгова
+// лампа BL-588, яка раніше майже зірвала замовлення Христини через
+// протермінований "в наявності" і в Фантома, і в Aveopt) — знайдено аналог
+// (JH-5800T, Power Bank + сонячна панель, 183.23₴) і додано як третій
+// варіант постачальника, щоб не лишатись з одним джерелом на товар.
 
 export const maxDuration = 60;
 
@@ -285,8 +296,11 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
         else stockText = $(".outstock-qty, .instock-qty").first().text().trim();
       }
       priceText = $(".summary .price, .entry-summary .price").first().text().trim();
-    } else if (url.includes("hugo.com.ua")) {
-      // Prom.ua
+    } else if (url.includes("hugo.com.ua") || url.includes("viber-shop.com.ua")) {
+      // Prom.ua — VIBER-SHOP (ФОП Субботіна, Одеса, 08.10.2026) працює на тій самій
+      // платформі/темі, що й HUGO: ті самі класи b-product-data__item_type_* і
+      // b-product-cost__price підтверджені вручну на реальній картці товару
+      // (кемпінговий дрон 1 Million Drone) перед додаванням постачальника.
       stockText = $('[class*="b-product-data__item_type_"]').first().text().trim();
       if (!stockText) {
         stockText = $(".cs-sticky-panel__product-status").first().text().trim();

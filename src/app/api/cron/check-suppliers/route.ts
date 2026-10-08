@@ -200,6 +200,32 @@ function buildFetchTarget(url: string): { fetchUrl: string; viaProxy: boolean } 
   return { fetchUrl: url, viaProxy: false };
 }
 
+// ДОДАНО 08.10.2026: простий лічильник-семафор, що обмежує, скільки
+// запитів до ScraperAPI летить ОДНОЧАСНО (незалежно від загальної
+// паралельності 9 у runWithConcurrency нижче, яка ділиться між усіма
+// постачальниками). Причина: коли піднімали загальну паралельність 6→9,
+// зявились збої "HTTP 429" саме від ScraperAPI (пробний тариф не тримає
+// стільки одночасних запитів) — а не від самого Тану Опт. Aveopt/Фантом/
+// HUGO йдуть напряму і цей ліміт на них не діє.
+const PROXY_CONCURRENCY_LIMIT = 3;
+let activeProxyRequests = 0;
+const proxyWaitQueue: Array<() => void> = [];
+
+function acquireProxySlot(): Promise<() => void> {
+  return new Promise((resolve) => {
+    const grant = () => {
+      activeProxyRequests++;
+      resolve(() => {
+        activeProxyRequests--;
+        const next = proxyWaitQueue.shift();
+        if (next) next();
+      });
+    };
+    if (activeProxyRequests < PROXY_CONCURRENCY_LIMIT) grant();
+    else proxyWaitQueue.push(grant);
+  });
+}
+
 // ДОДАНО 08.10.2026 (питання Павла: "что будем делать с теми, что не
 // удалось спарсить?") — ScraperAPI бере IP з пулу, і частина IP вже
 // забанена в Тану Опт, а частина ще ні; тому результат "пливе" від прогону
@@ -212,8 +238,13 @@ function buildFetchTarget(url: string): { fetchUrl: string; viaProxy: boolean } 
 // коли це явно той самий патерн (короткий HTML без слова "наявність") —
 // інші помилки (мережа, таймаут) повторювати сенсу мало.
 async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
+  const { fetchUrl, viaProxy } = buildFetchTarget(url);
+  // ДОДАНО 08.10.2026: усі запити до tanu.ua йдуть через ОДИН і той самий
+  // ScraperAPI-ключ (пробний тариф), тож тримаємо для НИХ окрему, нижчу
+  // паралельність (releaseProxySlot нижче) — незалежно від загальної
+  // паралельності 9 для решти постачальників, яким проксі не потрібен.
+  const releaseProxySlot = viaProxy ? await acquireProxySlot() : null;
   try {
-    const { fetchUrl, viaProxy } = buildFetchTarget(url);
     const res = await fetch(fetchUrl, {
       headers: {
         "User-Agent":
@@ -287,19 +318,28 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
     return { inStock, price };
   } catch (err) {
     return { inStock: false, price: null, error: err instanceof Error ? err.message : String(err) };
+  } finally {
+    releaseProxySlot?.();
   }
 }
 
-function looksLikeBotBlock(error: string | undefined): boolean {
-  return !!error && error.includes("схоже на бот-захист");
+// РОЗШИРЕНО 08.10.2026 (перший реальний прогін із повтором + concurrency
+// 6→9, див. нижче): зʼявився НОВИЙ тип збою — "HTTP 429" від самого
+// ScraperAPI (забагато одночасних запитів на пробному тарифі), а не від
+// Тану Опт. Раніше повтор ловив лише "бот-захист"; тепер ловимо й 429 —
+// це теж тимчасова, а не постійна помилка, і повтор (особливо після того,
+// як інші запити до проксі звільнять слот — див. acquireProxySlot нижче)
+// цілком може пройти.
+function isRetryableProxyError(error: string | undefined): boolean {
+  return !!error && (error.includes("схоже на бот-захист") || error.includes("HTTP 429"));
 }
 
 async function fetchSupplierStatus(url: string): Promise<CheckResult> {
   const first = await fetchSupplierStatusOnce(url);
   const { viaProxy } = buildFetchTarget(url);
-  if (viaProxy && looksLikeBotBlock(first.error)) {
+  if (viaProxy && isRetryableProxyError(first.error)) {
     const retry = await fetchSupplierStatusOnce(url);
-    if (!looksLikeBotBlock(retry.error)) return retry; // другий IP пройшов — беремо його
+    if (!isRetryableProxyError(retry.error)) return retry; // другий IP/спроба пройшла — беремо її
   }
   return first;
 }

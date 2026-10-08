@@ -88,6 +88,19 @@ import productsData from "@/data/products.json";
 // GitHub (Contents API) під автодеплой, без мого втручання. Якщо для
 // товару вже є pending-пропозиція — нову не створюємо (не спамимо, поки
 // стару не вирішили).
+//
+// ДОДАНО 08.10.2026 (друга частина того ж запиту — "Тану Опт... Подключить
+// платний прокси-сервіс", обране Павлом в AskUserQuestion): od.tanu.ua
+// блокує дата-центрові IP (див. нотатку вище, ~885б заглушка замість
+// сторінки). Павло зареєструвався в ScraperAPI (пробний період), ключ
+// додано в Vercel як SCRAPERAPI_KEY. Запити ТІЛЬКИ до tanu.ua тепер ідуть
+// не напряму, а через https://api.scraperapi.com/?api_key=...&url=... —
+// ScraperAPI сам підбирає IP/заголовки, щоб не виглядати ботом; решта
+// постачальників (Aveopt, Фантом, HUGO) як і раніше опитуються напряму,
+// бо в них такої блокування немає і немає сенсу витрачати платні запити.
+// Якщо SCRAPERAPI_KEY не заданий — тихо повертаємось до прямого fetch
+// (той самий "не знайдено блок наявності" збій, що й раніше, без падіння
+// всього прогону).
 
 export const maxDuration = 60;
 
@@ -151,9 +164,24 @@ function extractPrice(text: string): number | null {
   return parseFloat(match[1].replace(",", "."));
 }
 
+// Тану Опт (od.tanu.ua) блокує серверні IP — для цього домену, якщо є
+// SCRAPERAPI_KEY, запит іде через ScraperAPI замість напряму. Решта
+// постачальників такої проблеми не мають, тож проксі їм не потрібен.
+function buildFetchTarget(url: string): { fetchUrl: string; viaProxy: boolean } {
+  const scraperApiKey = process.env.SCRAPERAPI_KEY;
+  if (scraperApiKey && url.includes("tanu.ua")) {
+    return {
+      fetchUrl: `https://api.scraperapi.com/?api_key=${scraperApiKey}&url=${encodeURIComponent(url)}`,
+      viaProxy: true,
+    };
+  }
+  return { fetchUrl: url, viaProxy: false };
+}
+
 async function fetchSupplierStatus(url: string): Promise<CheckResult> {
   try {
-    const res = await fetch(url, {
+    const { fetchUrl, viaProxy } = buildFetchTarget(url);
+    const res = await fetch(fetchUrl, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
@@ -162,7 +190,10 @@ async function fetchSupplierStatus(url: string): Promise<CheckResult> {
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
       },
       cache: "no-store",
-      signal: AbortSignal.timeout(15000),
+      // ScraperAPI сам ходить на цільовий сайт і це займає довше за прямий
+      // fetch (ротація IP, повтори на боці проксі) — для нього даємо більше
+      // часу, ніж для прямих запитів до решти постачальників.
+      signal: AbortSignal.timeout(viaProxy ? 25000 : 15000),
     });
 
     if (!res.ok) return { inStock: false, price: null, error: `HTTP ${res.status}` };

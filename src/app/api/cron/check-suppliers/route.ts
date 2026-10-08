@@ -70,6 +70,24 @@ import productsData from "@/data/products.json";
 //     `.outstock-qty`. Виправлено: якщо текст `.stock` порожній, статус
 //     читається з CSS-класу (in-stock/out-of-stock), з фолбеком на сусідній
 //     блок. Aveopt текст має одразу, тому для нього це просто не спрацьовує.
+//
+// ДОДАНО 08.10.2026 (запит Павла): "нужно что бы при смене цен у поставщика
+// наша цена росла на столько же % на сколько поднял цену поставщик" —
+// Павло обрав режим "пропонувати, я підтверджую" і "тільки при зростанні"
+// (не знижувати при падінні ціни постачальника). Після оновлення
+// product_suppliers цикл нижче читає view `product_cheapest_supplier`
+// (SELECT DISTINCT ON product_id... WHERE in_stock=true ORDER BY price —
+// та сама view, яку /api/order вже використовує для снепшоту постачальника
+// при замовленні, тож тут той самий принцип "дропшипимо найдешевшого в
+// наявності", а не довільного постачальника навмання). Якщо найдешевша
+// ціна в наявності зросла більш ніж на 3% відносно buyPrice в
+// products.json — створюється рядок у price_proposals (Supabase) і в
+// Telegram-звіт додається рядок з посиланням-кнопкою
+// /api/cron/price-proposal?id=...&action=approve|reject — Павло тапає з
+// телефону, і при approve ціна одразу комітиться в products.json на
+// GitHub (Contents API) під автодеплой, без мого втручання. Якщо для
+// товару вже є pending-пропозиція — нову не створюємо (не спамимо, поки
+// стару не вирішили).
 
 export const maxDuration = 60;
 
@@ -100,6 +118,15 @@ interface FailureInfo {
   supplier: string;
   reason: string;
 }
+
+interface CheapestSupplierRow {
+  product_id: string;
+  supplier_name: string;
+  supplier_price: number;
+}
+
+const SITE_URL = "https://www.multi-market.com.ua";
+const PRICE_INCREASE_THRESHOLD = 0.03;
 
 // id -> назва товару (products.json) — щоб у звіті було видно, що саме це
 // за товар, а не тільки внутрішній код типу "bk02".
@@ -226,7 +253,13 @@ function summarizeFailures(failures: FailureInfo[]): string[] {
   );
 }
 
-async function sendTelegramReport(changes: string[], failures: FailureInfo[], checked: number, scoped: number) {
+async function sendTelegramReport(
+  changes: string[],
+  failures: FailureInfo[],
+  proposalLines: string[],
+  checked: number,
+  scoped: number
+) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!botToken || !chatId) return;
@@ -239,6 +272,10 @@ async function sendTelegramReport(changes: string[], failures: FailureInfo[], ch
     lines.push("", "Без змін — усе як учора.");
   }
 
+  if (proposalLines.length > 0) {
+    lines.push("", "💰 *Пропозиції по ціні* (тап по посиланню з телефону):", ...proposalLines);
+  }
+
   if (failures.length > 0) {
     lines.push("", `⚠️ Не вдалось перевірити (${failures.length}):`, ...summarizeFailures(failures));
   }
@@ -248,7 +285,7 @@ async function sendTelegramReport(changes: string[], failures: FailureInfo[], ch
   const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown" }),
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown", disable_web_page_preview: true }),
   });
   if (!tgRes.ok) {
     console.error("[check-suppliers] Telegram send failed:", await tgRes.text());
@@ -341,8 +378,84 @@ export async function GET(req: NextRequest) {
       .eq("id", row.id);
   });
 
-  if (changes.length > 0 || failures.length > 0) {
-    await sendTelegramReport(changes, failures, checked, scoped.length);
+  // ---- Пропозиції підняти ціну на сайті (тільки при зростанні) ----
+  const proposalLines: string[] = [];
+  try {
+    const { data: cheapest } = await supabase
+      .from("product_cheapest_supplier")
+      .select("product_id, supplier_name, supplier_price")
+      .in("product_id", Array.from(activeProductIds));
+
+    const { data: pending } = await supabase
+      .from("price_proposals")
+      .select("product_id")
+      .eq("status", "pending");
+    const pendingIds = new Set((pending ?? []).map((p: { product_id: string }) => p.product_id));
+
+    const productsById = new Map(
+      (productsData as Array<{ id: string; price: number; oldPrice: number | null; buyPrice: number }>).map((p) => [
+        p.id,
+        p,
+      ])
+    );
+
+    const newProposals: Record<string, unknown>[] = [];
+
+    for (const row of (cheapest ?? []) as CheapestSupplierRow[]) {
+      const product = productsById.get(row.product_id);
+      if (!product || !product.buyPrice || product.buyPrice <= 0) continue;
+      if (pendingIds.has(row.product_id)) continue; // вже є невирішена пропозиція — не дублюємо
+
+      const ratio = row.supplier_price / product.buyPrice;
+      if (ratio <= 1 + PRICE_INCREASE_THRESHOLD) continue; // тільки зростання понад поріг
+
+      const newBuyPrice = row.supplier_price;
+      const newSitePrice = Math.round(product.price * ratio);
+      const newOldPrice = product.oldPrice ? Math.round(product.oldPrice * ratio) : null;
+      const pctChange = Math.round((ratio - 1) * 1000) / 10; // одна десята відсотка
+
+      newProposals.push({
+        product_id: row.product_id,
+        product_name: productNameById.get(row.product_id) ?? row.product_id,
+        supplier_name: row.supplier_name,
+        old_buy_price: product.buyPrice,
+        new_buy_price: newBuyPrice,
+        old_site_price: product.price,
+        new_site_price: newSitePrice,
+        old_old_price: product.oldPrice,
+        new_old_price: newOldPrice,
+        pct_change: pctChange,
+      });
+    }
+
+    if (newProposals.length > 0) {
+      const { data: inserted, error: insertError } = await supabase
+        .from("price_proposals")
+        .insert(newProposals)
+        .select("id, product_name, supplier_name, old_site_price, new_site_price, pct_change");
+
+      if (insertError) {
+        console.error("[check-suppliers] price_proposals insert failed:", insertError.message);
+      } else {
+        for (const p of inserted ?? []) {
+          const approveUrl = `${SITE_URL}/api/cron/price-proposal?id=${p.id}&action=approve${
+            expected ? `&secret=${expected}` : ""
+          }`;
+          const rejectUrl = `${SITE_URL}/api/cron/price-proposal?id=${p.id}&action=reject${
+            expected ? `&secret=${expected}` : ""
+          }`;
+          proposalLines.push(
+            `💡 *${p.product_name}* у ${p.supplier_name} подорожчав на ${p.pct_change}% — підняти нашу ціну ${p.old_site_price}₴ → ${p.new_site_price}₴? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
+          );
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[check-suppliers] price proposal logic failed:", err instanceof Error ? err.message : err);
+  }
+
+  if (changes.length > 0 || failures.length > 0 || proposalLines.length > 0) {
+    await sendTelegramReport(changes, failures, proposalLines, checked, scoped.length);
   }
 
   return NextResponse.json({
@@ -350,6 +463,7 @@ export async function GET(req: NextRequest) {
     checked,
     changes: changes.length,
     failures: failures.length,
+    priceProposals: proposalLines.length,
     changeDetails: changes,
     failureDetails: failures,
   });

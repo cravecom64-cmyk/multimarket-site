@@ -113,6 +113,127 @@ import productsData from "@/data/products.json";
 // (JH-5800T, Power Bank + сонячна панель, 183.23₴) і додано як третій
 // варіант постачальника, щоб не лишатись з одним джерелом на товар.
 
+// ==================== 09.10.2026: два виправлення в один день ====================
+// 1) Павло: "мне не пришел сегодня утром отчет". Причина знайдена в Supabase
+//    (checked_at): прогін 09.10 стартував о 04:32 (Vercel Hobby crons мають
+//    "гнучке вікно" ±1 год замість точних 04:00, це нормально й не баг), але
+//    встиг записати лише 18 з 136 товарів за ~54с — тобто вперся у
+//    maxDuration=60 і був вбитий Vercel ще ВСЕРЕДИНІ runWithConcurrency, так
+//    і не дійшовши до sendTelegramReport() в кінці файлу. Звідси тиша.
+//    Причина уповільнення — Тану Опт (єдиний постачальник через ScraperAPI-
+//    проксі, ліміт 3 одночасних запити, до 25с на спробу + повтор) при 136
+//    товарах (було ~125 до VIBER-SHOP) почав іноді не вкладатись у бюджет.
+//    Рішення: CHECK_PHASE_DEADLINE_MS нижче — через Promise.race відсікаємо
+//    фазу опитування постачальників за 45с незалежно від того, скільки
+//    запитів ще в польоті, і ГАРАНТОВАНО доходимо до відправки звіту —
+//    навіть якщо встигли перевірити не всі 136 (це видно в самому звіті як
+//    "X/136 товарів", а не мовчання). Недоперевірені товари підхопить
+//    завтрашній прогін. Порядок товарів також перемішується (shuffle нижче),
+//    щоб при регулярному впиранні в бюджет це не були щодня ОДНІ Й ТІ САМІ
+//    останні за product_id товари — покриття ротується.
+// 2) Питання Павла: "если позиция не в наличии то что происходит?" — чесна
+//    відповідь була "нічого, лише звіт": сайт не знав про Supabase
+//    product_suppliers.in_stock взагалі, товар лишався продаваним навіть
+//    якщо ВСІ постачальники показували "немає в наявності" — та сама дірка,
+//    що мало не зірвала замовлення Христини. Павло: "делай автоматически".
+//    Тепер: якщо для товару всі повʼязані постачальники не в наявності —
+//    товар автоматично ховається з сайту (isHidden: true + hiddenReason:
+//    "out_of_stock" в products.json, той самий механізм GitHub Contents
+//    API, що й price-proposal/route.ts). Щойно хоч один постачальник знову
+//    показує "в наявності" — товар автоматично повертається. Позначка
+//    hiddenReason навмисна: сезонні товари (вентилятори, кондиціонер),
+//    приховані мною раніше вручну БЕЗ цього поля, ця автоматика не чіпає —
+//    інакше вона почала б випадково повертати на сайт зимою кондиціонер.
+//    Через те саме hiddenReason товар, прихований цією автоматикою,
+//    лишається в activeProductIds (нижче) — інакше він перестав би
+//    перевірятись одразу після приховання і ніколи не зміг би повернутись.
+const CHECK_PHASE_DEADLINE_MS = 45_000;
+
+const GITHUB_OWNER = "cravecom64-cmyk";
+const GITHUB_REPO = "multimarket-site";
+const PRODUCTS_PATH = "src/data/products.json";
+
+async function applyVisibilityChangesToGitHub(
+  toHide: string[],
+  toUnhide: string[]
+): Promise<{ ok: boolean; message: string }> {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    return {
+      ok: false,
+      message:
+        "GITHUB_TOKEN не налаштовано на Vercel (те саме, що блокує й підтвердження цін у /api/cron/price-proposal) — потрібен fine-grained PAT з правом Contents: Read and write на репозиторій multimarket-site.",
+    };
+  }
+
+  const ghHeaders = {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+
+  const getRes = await fetch(
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${PRODUCTS_PATH}?ref=main`,
+    { headers: ghHeaders, cache: "no-store" }
+  );
+  if (!getRes.ok) {
+    return { ok: false, message: `Не вдалось прочитати products.json з GitHub (HTTP ${getRes.status}).` };
+  }
+  const file = await getRes.json();
+  const raw = Buffer.from(file.content, "base64").toString("utf-8");
+  const data: Array<Record<string, unknown>> = JSON.parse(raw);
+
+  for (const id of toHide) {
+    const p = data.find((x) => x.id === id);
+    if (p) {
+      p.isHidden = true;
+      p.hiddenReason = "out_of_stock";
+    }
+  }
+  for (const id of toUnhide) {
+    const p = data.find((x) => x.id === id);
+    if (p) {
+      delete p.isHidden;
+      delete p.hiddenReason;
+    }
+  }
+
+  const newRaw = JSON.stringify(data, null, 2) + "\n";
+  const newContent = Buffer.from(newRaw, "utf-8").toString("base64");
+
+  const summary =
+    [toHide.length > 0 ? `приховано ${toHide.length}` : null, toUnhide.length > 0 ? `повернено ${toUnhide.length}` : null]
+      .filter(Boolean)
+      .join(", ") || "без змін";
+
+  const putRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${PRODUCTS_PATH}`, {
+    method: "PUT",
+    headers: { ...ghHeaders, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: `chore: автооновлення видимості товарів (${summary}) — наявність у постачальників`,
+      content: newContent,
+      sha: file.sha,
+      branch: "main",
+    }),
+  });
+
+  if (!putRes.ok) {
+    const errText = await putRes.text();
+    return { ok: false, message: `GitHub відхилив коміт (HTTP ${putRes.status}): ${errText.slice(0, 200)}` };
+  }
+
+  return { ok: true, message: "Закомічено в GitHub, Vercel задеплоїть зміну протягом хвилини." };
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const result = arr.slice();
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export const maxDuration = 60;
 
 function supabaseServer() {
@@ -389,6 +510,7 @@ async function sendTelegramReport(
   changes: string[],
   failures: FailureInfo[],
   proposalLines: string[],
+  visibilityLines: string[],
   checked: number,
   scoped: number
 ) {
@@ -402,6 +524,13 @@ async function sendTelegramReport(
     lines.push("", ...changes.map((c) => `• ${c}`));
   } else {
     lines.push("", "Без змін — усе як учора.");
+  }
+
+  // ДОДАНО 09.10.2026: автоприховання/повернення товарів через повну
+  // відсутність у постачальників — окрема секція, щоб не губилось серед
+  // звичайних змін ціни/наявності (див. коментар на початку файлу).
+  if (visibilityLines.length > 0) {
+    lines.push("", "👁️ *Видимість на сайті:*", ...visibilityLines);
   }
 
   if (proposalLines.length > 0) {
@@ -451,9 +580,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Supabase не налаштовано" }, { status: 500 });
   }
 
+  // ЗМІНЕНО 09.10.2026: товари, приховані САМЕ цією автоматикою
+  // (hiddenReason === "out_of_stock"), лишаються в скоупі — інакше вони
+  // перестали б перевірятись одразу після приховання і ніколи не змогли б
+  // автоматично повернутись на сайт. Сезонні товари (isHidden без
+  // hiddenReason) як і раніше повністю виключені з перевірки.
   const activeProductIds = new Set(
-    (productsData as Array<{ id: string; isHidden?: boolean }>)
-      .filter((p) => !p.isHidden)
+    (productsData as Array<{ id: string; isHidden?: boolean; hiddenReason?: string }>)
+      .filter((p) => !p.isHidden || p.hiddenReason === "out_of_stock")
       .map((p) => p.id)
   );
 
@@ -472,56 +606,116 @@ export async function GET(req: NextRequest) {
   const failures: FailureInfo[] = [];
   let checked = 0;
 
-  // Піднято з 6 до 9 (08.10.2026): після додавання одного повтору для
-  // "бот-захист"-помилок через проксі частина товарів тепер чекає на 2
-  // запити замість 1 — без підняття паралельності це ризикувало впертись у
-  // maxDuration=60с.
-  await runWithConcurrency(scoped, 9, async (row) => {
-    const supplierName = supplierNameOf(row);
-    const result = await fetchSupplierStatus(row.url);
-    checked++;
+  // ДОДАНО 09.10.2026: найкраще відоме знання "в наявності чи ні" по кожному
+  // рядку product_suppliers — стартує зі вчорашнього значення з БД і
+  // оновлюється по ходу прогону для тих рядків, які встигли перевіритись.
+  // Використовується нижче для рішення про авто-приховання/повернення
+  // товару — так воно коректно працює навіть якщо через CHECK_PHASE_DEADLINE_MS
+  // не всі постачальники товару встигли перевіритись цим прогоном.
+  const currentStock = new Map<number, boolean>();
+  for (const r of scoped) currentStock.set(r.id, r.in_stock);
 
-    if (result.error) {
-      failures.push({ productId: row.product_id, supplier: supplierName, reason: result.error });
-      return;
+  // ЗМІНЕНО 09.10.2026: Promise.race із жорстким дедлайном замість простого
+  // await — гарантує, що фаза опитування постачальників ніколи не зʼїсть
+  // увесь maxDuration=60с і ми завжди дійдемо до відправки звіту нижче (див.
+  // коментар на початку файлу — причина сьогоднішньої тиші). Порядок товарів
+  // перемішується, щоб при регулярному впиранні в дедлайн недоперевіреними
+  // щодня лишались РІЗНІ товари, а не завжди одні й ті самі останні за
+  // product_id.
+  await Promise.race([
+    runWithConcurrency(shuffle(scoped), 9, async (row) => {
+      const supplierName = supplierNameOf(row);
+      const result = await fetchSupplierStatus(row.url);
+      checked++;
+
+      if (result.error) {
+        failures.push({ productId: row.product_id, supplier: supplierName, reason: result.error });
+        return;
+      }
+
+      currentStock.set(row.id, result.inStock);
+
+      const prevInStock = row.in_stock;
+      const prevPrice = row.price !== null ? Number(row.price) : null;
+      const stockChanged = result.inStock !== prevInStock;
+      const priceChanged =
+        result.price !== null &&
+        prevPrice !== null &&
+        prevPrice > 0 &&
+        Math.abs(result.price - prevPrice) / prevPrice > 0.03;
+
+      // Якщо і наявність, і ціна змінились одночасно (типово для HUGO — вони
+      // показують останню ціну навіть для товару not in stock) — один рядок
+      // замість двох, щоб було зрозуміло, що це одна подія.
+      if (stockChanged && priceChanged) {
+        const icon = result.inStock ? "✅" : "⛔";
+        const statusWord = result.inStock ? "знову в наявності" : "закінчився";
+        changes.push(
+          `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`
+        );
+      } else if (stockChanged) {
+        changes.push(
+          `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${productLabel(row.product_id)} у ${supplierName}` +
+            (result.price !== null ? ` (${formatUAH(result.price)})` : "")
+        );
+      } else if (priceChanged) {
+        changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
+      }
+
+      await supabase
+        .from("product_suppliers")
+        .update({
+          in_stock: result.inStock,
+          price: result.price !== null ? result.price : row.price,
+          checked_at: new Date().toISOString(),
+        })
+        .eq("id", row.id);
+    }),
+    new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
+  ]);
+
+  // ---- Авто-приховання/повернення товару, якщо ВСІ постачальники не в наявності ----
+  // ДОДАНО 09.10.2026 (питання Павла "что происходит, если позиция не в
+  // наличии", відповідь "делай автоматически") — див. коментар на початку
+  // файлу. Рахуємо по currentStock (найкраще відоме знання, мікс свіжих і
+  // вчорашніх даних), а не тільки по тому, що встигли перевірити ЦИМ
+  // прогоном — інакше кожен недоперевірений товар хибно виглядав би "немає
+  // в наявності всюди".
+  const productAnyInStock = new Map<string, boolean>();
+  for (const row of scoped) {
+    const inStock = currentStock.get(row.id) ?? row.in_stock;
+    productAnyInStock.set(row.product_id, (productAnyInStock.get(row.product_id) ?? false) || inStock);
+  }
+
+  const productsMetaById = new Map(
+    (productsData as Array<{ id: string; isHidden?: boolean; hiddenReason?: string }>).map((p) => [p.id, p])
+  );
+
+  const toHide: string[] = [];
+  const toUnhide: string[] = [];
+  for (const [productId, anyInStock] of productAnyInStock) {
+    const meta = productsMetaById.get(productId);
+    if (!meta) continue;
+    if (!anyInStock && !meta.isHidden) {
+      toHide.push(productId);
+    } else if (anyInStock && meta.isHidden && meta.hiddenReason === "out_of_stock") {
+      toUnhide.push(productId);
     }
+  }
 
-    const prevInStock = row.in_stock;
-    const prevPrice = row.price !== null ? Number(row.price) : null;
-    const stockChanged = result.inStock !== prevInStock;
-    const priceChanged =
-      result.price !== null &&
-      prevPrice !== null &&
-      prevPrice > 0 &&
-      Math.abs(result.price - prevPrice) / prevPrice > 0.03;
-
-    // Якщо і наявність, і ціна змінились одночасно (типово для HUGO — вони
-    // показують останню ціну навіть для товару not in stock) — один рядок
-    // замість двох, щоб було зрозуміло, що це одна подія.
-    if (stockChanged && priceChanged) {
-      const icon = result.inStock ? "✅" : "⛔";
-      const statusWord = result.inStock ? "знову в наявності" : "закінчився";
-      changes.push(
-        `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`
-      );
-    } else if (stockChanged) {
-      changes.push(
-        `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${productLabel(row.product_id)} у ${supplierName}` +
-          (result.price !== null ? ` (${formatUAH(result.price)})` : "")
-      );
-    } else if (priceChanged) {
-      changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
+  const visibilityLines: string[] = [];
+  if (toHide.length > 0 || toUnhide.length > 0) {
+    const result = await applyVisibilityChangesToGitHub(toHide, toUnhide);
+    for (const id of toHide) {
+      visibilityLines.push(`🙈 Приховано з сайту (немає в наявності в жодного постачальника): ${productLabel(id)}`);
     }
-
-    await supabase
-      .from("product_suppliers")
-      .update({
-        in_stock: result.inStock,
-        price: result.price !== null ? result.price : row.price,
-        checked_at: new Date().toISOString(),
-      })
-      .eq("id", row.id);
-  });
+    for (const id of toUnhide) {
+      visibilityLines.push(`👁️ Повернено на сайт (знову є в наявності): ${productLabel(id)}`);
+    }
+    if (!result.ok) {
+      visibilityLines.push(`⚠️ Зміни видимості НЕ застосовано: ${result.message}`);
+    }
+  }
 
   // ---- Пропозиції підняти ціну на сайті (тільки при зростанні) ----
   const proposalLines: string[] = [];
@@ -606,7 +800,7 @@ export async function GET(req: NextRequest) {
   // змін — усе як учора" у sendTelegramReport вже була готова до цього),
   // крім ручних тестових викликів з ?notify=false.
   if (notify) {
-    await sendTelegramReport(changes, failures, proposalLines, checked, scoped.length);
+    await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length);
   }
 
   return NextResponse.json({
@@ -615,6 +809,8 @@ export async function GET(req: NextRequest) {
     changes: changes.length,
     failures: failures.length,
     priceProposals: proposalLines.length,
+    hidden: toHide,
+    unhidden: toUnhide,
     changeDetails: changes,
     failureDetails: failures,
   });

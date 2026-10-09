@@ -2280,6 +2280,8 @@
   },
   {
     "id": "bk01",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "powerbank-10000-usams-pb7",
     "name": "Повербанк 10000mAh компактний USAMS PB7 CD63",
     "category": "blackout",
@@ -2592,10 +2594,12 @@
       "/products/bk04/specs-card.jpg"
     ],
     "isHidden": true,
-    "hiddenReason": "out_of_stock"
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk05",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "zaryadna-stantsiya-300w-yobolife-lm9300",
     "name": "Портативна зарядна станція 300W YOBOlife LM-9300",
     "category": "blackout",
@@ -2947,6 +2951,8 @@
   },
   {
     "id": "bk10",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "nalobnyy-lihtar-potuzhnyy-509-3555",
     "name": "Потужний налобний LED-ліхтар з zoom Head Lamp 509",
     "category": "blackout",
@@ -3377,6 +3383,8 @@
   },
   {
     "id": "bk16",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "gazovyy-palnyk-flame-gun-920",
     "name": "Портативний газовий пальник Flame Gun 920",
     "category": "blackout",
@@ -3447,6 +3455,8 @@
   },
   {
     "id": "bk17",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "gazova-plytka-nurgaz-ng156",
     "name": "Портативний газовий пальник Nurgaz NG-156",
     "category": "blackout",
@@ -3519,6 +3529,8 @@
   },
   {
     "id": "bk18",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "avtoinvertor-300w-s-link-sl300w",
     "name": "Автомобільний інвертор 12V-220V 300W S-Link SL-300W",
     "category": "blackout",
@@ -3727,6 +3739,8 @@
   },
   {
     "id": "bk21",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "category": "blackout",
     "categoryName": "Блекаут",
     "name": "Сонячна станція для дому Solar Power Light System AT-9078A",
@@ -3796,6 +3810,8 @@
   },
   {
     "id": "bk22",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "category": "blackout",
     "categoryName": "Блекаут",
     "name": "Портативна сонячна станція Solar Power Light System AT-9022",
@@ -3866,6 +3882,8 @@
   },
   {
     "id": "h14",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "nichnyk-proektor-zoryane-nebo-astronavt",
     "name": "Нічник-проектор зоряного неба \"Астронавт\" з пультом",
     "category": "home",
@@ -3937,6 +3955,8 @@
   },
   {
     "id": "h15",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "nichnyk-silikonovyi-krolyk-yednorog",
     "name": "Силіконовий нічник \"Кролик\"/\"Єдиноріг\" з пультом, 16 кольорів",
     "category": "home",
@@ -4071,10 +4091,12 @@
     "oldPrice": 1209,
     "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260819_112304_32d27854-7097-49ef-8e75-a6ae7fe35b1b.png",
     "isHidden": true,
-    "hiddenReason": "out_of_stock"
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "h17",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "sushrka-dlya-vzuttya-shoes-dryer",
     "name": "Електрична сушарка для взуття Shoes Dryer",
     "category": "home",
@@ -4212,10 +4234,12 @@
       "/products/h18/lifestyle.jpg"
     ],
     "isHidden": true,
-    "hiddenReason": "out_of_stock"
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "h19",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "masazhna-podushka-rolikova-infrachervona",
     "name": "Роликова масажна подушка з інфрачервоним прогріванням",
     "category": "home",
@@ -5129,6 +5153,8 @@
   },
   {
     "id": "p13",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "furminator-vychisuvannya-shersti",
     "name": "Фурмінатор для вичісування шерсті (лезо 4,5 см)",
     "category": "pets",
@@ -5196,6 +5222,8 @@
   },
   {
     "id": "p14",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "dyspenser-paketiv-dlya-vygulu-sobak",
     "name": "Диспенсер-контейнер з пакетами для вигулу собак",
     "category": "pets",
@@ -5261,6 +5289,8 @@
   },
   {
     "id": "p15",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "ryukzak-perenoska-illyuminator",
     "name": "Прозорий рюкзак-переноска для тварин з ілюмінатором (4 кольори)",
     "category": "pets",
@@ -5328,6 +5358,8 @@
   },
   {
     "id": "p16",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "budynochok-pet-hut-leopard",
     "name": "М'який флісовий будиночок Pet Hut, леопардовий принт",
     "category": "pets",
@@ -5392,6 +5424,8 @@
   },
   {
     "id": "p17",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "trymer-strygky-sobak-sportsman-sm600a",
     "name": "Акумуляторний тример для стрижки собак Sportsman SM-600A",
     "category": "pets",
@@ -5459,6 +5493,8 @@
   },
   {
     "id": "p18",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "igrashka-wobble-wag-giggle",
     "name": "Іграшка-м'яч Wobble Wag Giggle (звук сміху)",
     "category": "pets",
@@ -5593,6 +5629,8 @@
   },
   {
     "id": "p20",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "shchitka-dush-dlya-sobak-pet-bathing-tool",
     "name": "Щітка-душ для собак Pet Bathing Tool",
     "category": "pets",
@@ -5661,6 +5699,8 @@
   },
   {
     "id": "p21",
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued",
     "slug": "rukavychky-aquapaw-dlya-myttya-tvaryn",
     "name": "Рукавички для миття тварин Aquapaw",
     "category": "pets",

@@ -720,7 +720,7 @@
         "label": "7.5 м",
         "price": 410,
         "oldPrice": 570,
-        "buyPrice": 250.0
+        "buyPrice": 250
       },
       {
         "slug": "15m",
@@ -922,7 +922,9 @@
     ],
     "similarWith": [
       "g05"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "g05",
@@ -1081,7 +1083,9 @@
       "g09",
       "g10",
       "g11"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "g08",
@@ -1656,7 +1660,9 @@
     ],
     "similarWith": [
       "p01"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "p07",
@@ -1861,7 +1867,9 @@
     ],
     "similarWith": [
       "p07"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "tt01",
@@ -2424,7 +2432,9 @@
       "/products/bk02/hero.jpg",
       "/products/bk02/front-back.jpg",
       "/products/bk02/in-hand.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk03",
@@ -2580,7 +2590,9 @@
       "/products/bk04/lifestyle-camping.jpg",
       "/products/bk04/functions-collage.jpg",
       "/products/bk04/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk05",
@@ -3728,7 +3740,7 @@
     ],
     "price": 3799,
     "oldPrice": 4749,
-    "buyPrice": 2730.0,
+    "buyPrice": 2730,
     "badges": [
       "sale"
     ],
@@ -4057,7 +4069,9 @@
       "h14"
     ],
     "oldPrice": 1209,
-    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260819_112304_32d27854-7097-49ef-8e75-a6ae7fe35b1b.png"
+    "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260819_112304_32d27854-7097-49ef-8e75-a6ae7fe35b1b.png",
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "h17",
@@ -4196,7 +4210,9 @@
     "image": "/products/h18/hero.jpg",
     "images": [
       "/products/h18/lifestyle.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "h19",
@@ -6121,7 +6137,9 @@
       "bk09",
       "bk01"
     ],
-    "oldPrice": 969
+    "oldPrice": 969,
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk25",
@@ -6330,7 +6348,9 @@
     ],
     "images": [
       "/products/h25/hero.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "h26",

@@ -2737,7 +2737,7 @@
         "text": "Зручна штука, три функції в одній. Повербанк не дуже потужний, але для екстреного випадку вистачає."
       }
     ],
-    "image": "/products/bk06/hero.jpg"
+    "image": "/products/bk06/hero.jpg","images":["/products/bk06/hero.jpg","/products/bk06/front.jpg","/products/bk06/angle-with-cable.jpg","/products/bk06/with-box.jpg"]
   },
   {
     "id": "bk07",

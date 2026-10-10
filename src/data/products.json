@@ -1385,7 +1385,7 @@
     "categoryName": "Блекаут",
     "price": 349,
     "oldPrice": 699,
-    "buyPrice": 269.80,
+    "buyPrice": 269.8,
     "emoji": "🔦",
     "rating": 4.7,
     "reviewCount": 38,
@@ -2745,7 +2745,13 @@
         "text": "Зручна штука, три функції в одній. Повербанк не дуже потужний, але для екстреного випадку вистачає."
       }
     ],
-    "image": "/products/bk06/hero.jpg","images":["/products/bk06/hero.jpg","/products/bk06/front.jpg","/products/bk06/angle-with-cable.jpg","/products/bk06/with-box.jpg"]
+    "image": "/products/bk06/hero.jpg",
+    "images": [
+      "/products/bk06/hero.jpg",
+      "/products/bk06/front.jpg",
+      "/products/bk06/angle-with-cable.jpg",
+      "/products/bk06/with-box.jpg"
+    ]
   },
   {
     "id": "bk07",
@@ -3248,7 +3254,9 @@
       "/products/bk13/lifestyle-office.jpg",
       "/products/bk13/functions-collage.jpg",
       "/products/bk13/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk14",

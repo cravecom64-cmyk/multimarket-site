@@ -1127,7 +1127,8 @@
       "g01",
       "g03"
     ],
-    "image": "/products/g08/hero-v2.jpg",
+    "image": "/products/g08/hero.jpg",
+    "images": ["/products/g08/hero.jpg", "/products/g08/action.jpg"],
     "reviews": [
       {
         "name": "Оксана",

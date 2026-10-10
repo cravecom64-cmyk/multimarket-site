@@ -26,12 +26,15 @@ export function ProductPageClient() {
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(() => {
     const idx = product?.sizes?.findIndex((s) => s.default);
     return idx && idx >= 0 ? idx : 0;
   });
   const galleryScrollRef = useRef<HTMLDivElement>(null);
   const gallerySlideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const lightboxScrollRef = useRef<HTMLDivElement>(null);
+  const lightboxSlideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // ViewContent для будь-якого варіанту сторінки товару (включно з
   // externalLanding — трекаємо ПЕРЕД редіректом, нижче).
@@ -94,6 +97,10 @@ export function ProductPageClient() {
           new Set([product.image, ...product.images].filter((img): img is string => Boolean(img)))
         )
       : undefined;
+  // Фото, доступні для повноекранного перегляду (лайтбокс) — та сама
+  // галерея, або єдине activeImage, якщо карточка без images[] (напр.
+  // товари з вибором кольору).
+  const lightboxImages = galleryImages ?? (activeImage ? [activeImage] : []);
 
   const scrollToImage = (i: number) => {
     setSelectedImage(i);
@@ -112,6 +119,44 @@ export function ProductPageClient() {
     if (!el || el.clientWidth === 0) return;
     setSelectedImage(Math.round(el.scrollLeft / el.clientWidth));
   };
+
+  // Лайтбокс — тап по фото в галереї відкриває повноекранний перегляд з
+  // можливістю гортати (свайпом) усі фото цієї картки.
+  const openLightbox = (i: number) => {
+    if (lightboxImages.length === 0) return;
+    setSelectedImage(i);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => setLightboxOpen(false);
+
+  const handleLightboxScroll = () => {
+    const el = lightboxScrollRef.current;
+    if (!el || el.clientWidth === 0) return;
+    setSelectedImage(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  // При відкритті лайтбоксу — миттєво (без анімації) прокрутити до фото,
+  // яке було обране в основній галереї, і заблокувати скрол сторінки.
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    lightboxSlideRefs.current[selectedImage]?.scrollIntoView({
+      behavior: "auto",
+      inline: "center",
+      block: "nearest",
+    });
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxOpen]);
   const orderName = hasColors
     ? `${product.name} (${product.colors![selectedColor].name})`
     : activeSize
@@ -239,7 +284,8 @@ export function ProductPageClient() {
                 ref={(el) => {
                   gallerySlideRefs.current[i] = el;
                 }}
-                className="relative w-full h-full flex-shrink-0 snap-center"
+                onClick={() => openLightbox(i)}
+                className="relative w-full h-full flex-shrink-0 snap-center cursor-zoom-in"
               >
                 <Image
                   src={img}
@@ -254,9 +300,10 @@ export function ProductPageClient() {
           </div>
         ) : (
           <div
+            onClick={() => activeImage && openLightbox(0)}
             className={`aspect-square flex items-center justify-center relative overflow-hidden ${
-              galleryBgStyle ? "" : "bg-gradient-to-br from-gray-800 to-gray-900"
-            }`}
+              activeImage ? "cursor-zoom-in" : ""
+            } ${galleryBgStyle ? "" : "bg-gradient-to-br from-gray-800 to-gray-900"}`}
             style={galleryBgStyle}
           >
             {activeImage ? (
@@ -794,6 +841,78 @@ export function ProductPageClient() {
           ♡
         </button>
       </div>
+
+      {/* Лайтбокс — повноекранний перегляд фото з гортанням (свайпом) */}
+      {lightboxOpen && lightboxImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={closeLightbox}
+            aria-label="Закрити"
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center text-xl"
+          >
+            ✕
+          </button>
+
+          {lightboxImages.length > 1 && (
+            <div className="absolute top-4 left-4 z-10 text-white/90 text-xs font-semibold bg-black/40 px-2.5 py-1 rounded-full">
+              {selectedImage + 1} / {lightboxImages.length}
+            </div>
+          )}
+
+          <div
+            ref={lightboxScrollRef}
+            onScroll={handleLightboxScroll}
+            onClick={(e) => e.stopPropagation()}
+            className="flex-1 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+          >
+            {lightboxImages.map((img, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  lightboxSlideRefs.current[i] = el;
+                }}
+                className="relative w-full h-full flex-shrink-0 snap-center flex items-center justify-center"
+              >
+                <Image
+                  src={img}
+                  alt={`${product.name} — фото ${i + 1}`}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
+
+          {lightboxImages.length > 1 && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex justify-center gap-1.5 pt-2 pb-6"
+            >
+              {lightboxImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setSelectedImage(i);
+                    lightboxSlideRefs.current[i]?.scrollIntoView({
+                      behavior: "smooth",
+                      inline: "center",
+                      block: "nearest",
+                    });
+                  }}
+                  aria-label={`Фото ${i + 1}`}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    i === selectedImage ? "bg-white" : "bg-white/40"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }

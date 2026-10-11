@@ -4957,6 +4957,8 @@
   },
   {
     "id": "g21",
+        "isHidden": true,
+        "hiddenReason": "not_needed",
     "slug": "myika-vysokogo-tysku-water-gun-48v",
     "name": "Мийка високого тиску 48V Water Gun (акумуляторна)",
     "category": "garden",

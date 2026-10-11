@@ -1193,7 +1193,7 @@
       "g07",
       "g10"
     ],
-    "image": "/products/g09/hero.jpg",
+    "image": "/products/g09/hero2.jpg",
     "reviews": [
       {
         "name": "Ірина",
@@ -1223,8 +1223,8 @@
       "g11"
     ],
     "images": [
-      "/products/g09/hero.jpg",
-      "/products/g09/action.jpg",
+      "/products/g09/hero2.jpg",
+      "/products/g09/action2.jpg",
       "/products/g09/pack12.jpg",
       "/products/g09/dimensions.jpg"
     ]

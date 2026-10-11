@@ -1128,7 +1128,7 @@
       "g03"
     ],
     "image": "/products/g08/hero.jpg",
-    "images": ["/products/g08/hero.jpg", "/products/g08/action.jpg"],
+    "images": ["/products/g08/hero.jpg", "/products/g08/action.jpg", "/products/g08/lifestyle2.jpg", "/products/g08/lifestyle3.jpg"],
     "reviews": [
       {
         "name": "Оксана",
@@ -1224,7 +1224,9 @@
     ],
     "images": [
       "/products/g09/hero.jpg",
-      "/products/g09/action.jpg"
+      "/products/g09/action.jpg",
+      "/products/g09/pack12.jpg",
+      "/products/g09/dimensions.jpg"
     ]
   },
   {

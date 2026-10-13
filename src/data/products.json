@@ -1128,7 +1128,12 @@
       "g03"
     ],
     "image": "/products/g08/hero.jpg",
-    "images": ["/products/g08/hero.jpg", "/products/g08/action.jpg", "/products/g08/lifestyle2.jpg", "/products/g08/lifestyle3.jpg"],
+    "images": [
+      "/products/g08/hero.jpg",
+      "/products/g08/action.jpg",
+      "/products/g08/lifestyle2.jpg",
+      "/products/g08/lifestyle3.jpg"
+    ],
     "reviews": [
       {
         "name": "Оксана",
@@ -2148,9 +2153,9 @@
     "name": "Сенсорний дозатор рідкого мила автоматичний 380 мл",
     "category": "tiktok",
     "categoryName": "ТОП TikTok",
-    "price": 599,
-    "oldPrice": 799,
-    "buyPrice": 238.99,
+    "price": 950,
+    "oldPrice": 1267,
+    "buyPrice": 379,
     "emoji": "🧴",
     "rating": 4.6,
     "reviewCount": 88,
@@ -2889,7 +2894,13 @@
       }
     ],
     "image": "/products/bk08/hero.jpg",
-  "images": ["/products/bk08/hero.jpg", "/products/bk08/angle2.jpg", "/products/bk08/detail.jpg", "/products/bk08/box2.jpg", "/products/bk08/dimensions2.jpg"],
+    "images": [
+      "/products/bk08/hero.jpg",
+      "/products/bk08/angle2.jpg",
+      "/products/bk08/detail.jpg",
+      "/products/bk08/box2.jpg",
+      "/products/bk08/dimensions2.jpg"
+    ],
     "usageTips": [
       "Магнітна підвіска тримається на будь-якій металевій поверхні (холодильник, духовка, кузов авто), кліпса дозволяє закріпити на ремені чи кишені"
     ]
@@ -4957,8 +4968,8 @@
   },
   {
     "id": "g21",
-        "isHidden": true,
-        "hiddenReason": "not_needed",
+    "isHidden": true,
+    "hiddenReason": "not_needed",
     "slug": "myika-vysokogo-tysku-water-gun-48v",
     "name": "Мийка високого тиску 48V Water Gun (акумуляторна)",
     "category": "garden",
@@ -6279,7 +6290,10 @@
     ],
     "oldPrice": 339,
     "image": "/products/bk25/hero.jpg",
-    "images": ["/products/bk25/hero.jpg", "/products/bk25/outdoor.jpg"]
+    "images": [
+      "/products/bk25/hero.jpg",
+      "/products/bk25/outdoor.jpg"
+    ]
   },
   {
     "id": "bk26",

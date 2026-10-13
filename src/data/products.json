@@ -5107,11 +5107,15 @@
       "g20"
     ],
     "oldPrice": 979,
-    "image": "/products/g22/hero.jpg",
+    "image": "/products/g22/garden-set-hero.jpg",
     "images": [
-      "/products/g22/hero.jpg",
-      "/products/g22/box.jpg",
-      "/products/g22/detail.jpg"
+      "/products/g22/garden-set-hero.jpg",
+      "/products/g22/garden-set-greenery.jpg",
+      "/products/g22/garden-set-box.jpg",
+      "/products/g22/garden-set-sizes.jpg",
+      "/products/g22/garden-set-handle.jpg",
+      "/products/g22/garden-set-blade.jpg",
+      "/products/g22/garden-set-pruner.jpg"
     ]
   },
   {

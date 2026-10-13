@@ -13,7 +13,7 @@ function searchProducts(query: string): Product[] {
   const q = query.toLowerCase().trim();
   if (!q) return [];
   return allProducts.filter((p) => {
-    const haystack = `${p.name} ${p.shortDesc} ${p.categoryName}`.toLowerCase();
+        const haystack = `${p.name} ${p.shortDesc} ${p.categoryName} ${p.searchKeywords ?? ""}`.toLowerCase();
     return haystack.includes(q);
   });
 }

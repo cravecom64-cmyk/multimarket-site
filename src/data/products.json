@@ -551,6 +551,9 @@
       "tt01"
     ],
     "image": "/products/h12/hero.jpg",
+    "images": [
+      "/products/h12/lifestyle-wind.jpg"
+    ],
     "reviews": [
       {
         "name": "Олена",

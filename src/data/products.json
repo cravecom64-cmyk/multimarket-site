@@ -443,9 +443,9 @@
     "name": "Вентилятор-зволожувач Mini Fan FS-03 LED Type-C",
     "category": "home",
     "categoryName": "Дім і затишок",
-    "price": 399,
-    "oldPrice": 549,
-    "buyPrice": 150,
+    "price": 579,
+    "oldPrice": 799,
+    "buyPrice": 215,
     "emoji": "💨",
     "rating": 4.6,
     "reviewCount": 61,
@@ -478,6 +478,9 @@
       "h11"
     ],
     "image": "/products/h10/hero.jpg",
+    "images": [
+      "/products/h10/controls-detail.jpg"
+    ],
     "reviews": [
       {
         "name": "Дарина",

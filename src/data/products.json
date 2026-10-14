@@ -374,7 +374,7 @@
     "categoryName": "Дім і затишок",
     "price": 299,
     "oldPrice": 449,
-    "buyPrice": 149,
+    "buyPrice": 140,
     "emoji": "🧶",
     "rating": 4.8,
     "reviewCount": 143,
@@ -405,6 +405,10 @@
       "p04"
     ],
     "image": "/products/h09/hero.jpg",
+    "images": [
+      "/products/h09/studio-clean.jpg",
+      "/products/h09/in-use-collage.jpg"
+    ],
     "reviews": [
       {
         "name": "Марина",

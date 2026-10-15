@@ -336,11 +336,11 @@
     "bundleWith": [
       "p11"
     ],
-    "image": "/products/h08/hero-navy.jpg",
+    "image": "/products/h08/hero-navy-v2.jpg",
     "images": [
-      "/products/h08/lifestyle-suitcase.jpg",
-      "/products/h08/interior-fold.jpg",
-      "/products/h08/angle-navy.jpg"
+      "/products/h08/lifestyle-suitcase-v2.jpg",
+      "/products/h08/interior-fold-v2.jpg",
+      "/products/h08/angle-navy-v2.jpg"
     ],
     "reviews": [
       {

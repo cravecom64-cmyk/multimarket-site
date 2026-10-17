@@ -16,6 +16,9 @@ interface OrderModalProps {
 
 type PaymentMethod = "card_mono" | "card_wfp" | "cod";
 
+// Тимчасово вимкнено онлайн-оплату (mono, WayForPay) — лишаємо тільки оплату при отриманні, поки не внесені всі правки.
+const ONLINE_PAYMENTS_ENABLED = false;
+
 export function OrderModal({ onClose }: OrderModalProps) {
   const { items, totalPrice, clearCart } = useCart();
   const [form, setForm] = useState({
@@ -58,7 +61,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // за досвідом). Назви без логотипів — за брендбуком monobank для сайтів
   // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const formLoadedAt = useRef(Date.now());
@@ -390,6 +393,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
             Спосіб оплати
           </label>
           <div className="space-y-2">
+            {ONLINE_PAYMENTS_ENABLED && (
             <button
               type="button"
               onClick={() => setPaymentMethod("card_mono")}
@@ -419,6 +423,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 }`}
               />
             </button>
+            )}
+            {ONLINE_PAYMENTS_ENABLED && (
             <button
               type="button"
               onClick={() => setPaymentMethod("card_wfp")}
@@ -443,6 +449,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 }`}
               />
             </button>
+            )}
             <button
               type="button"
               onClick={() => setPaymentMethod("cod")}

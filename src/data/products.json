@@ -2002,6 +2002,11 @@
       "h10",
       "h11",
       "h12"
+    ],
+    "images": [
+      "/products/tt01/hero.jpg",
+      "/products/tt01/angle-view.jpg",
+      "/products/tt01/cool-mist.jpg"
     ]
   },
   {

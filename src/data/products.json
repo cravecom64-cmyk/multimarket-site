@@ -1448,11 +1448,11 @@
       "bk02",
       "bk09"
     ],
-    "image": "/products/g12/hero2.jpg",
+    "image": "/products/g12/hero3.jpg",
     "images": [
-      "/products/g12/hero2.jpg",
-      "/products/g12/lit.jpg",
-      "/products/g12/functions-collage.jpg"
+      "/products/g12/hero3.jpg",
+      "/products/g12/lit2.jpg",
+      "/products/g12/flashlight-mode.jpg"
     ],
     "reviews": [
       {
@@ -1763,7 +1763,7 @@
     ],
     "images": [
       "/products/p07/lifestyle-walk.jpg",
-      "/products/p07/functions-collage.jpg",
+      "/products/p07/black-lab-portrait.jpg",
       "/products/p07/dog-portrait.jpg"
     ]
   },
@@ -4498,9 +4498,9 @@
       "h22"
     ],
     "oldPrice": 159,
-    "image": "/products/h21/hero2.jpg",
+    "image": "/products/h21/hero3.jpg",
     "images": [
-      "/products/h21/hero2.jpg",
+      "/products/h21/hero3.jpg",
       "/products/h21/in-use.jpg",
       "/products/h21/dishwashing.jpg"
     ]
@@ -5716,7 +5716,9 @@
     "images": [
       "/products/p19/hero.jpg",
       "/products/p19/tray-levels.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "needs_review"
   },
   {
     "id": "p20",
@@ -6138,7 +6140,11 @@
       "tt09"
     ],
     "oldPrice": 429,
-    "image": "/products/tt11/hero.jpg"
+    "image": "/products/tt11/hero2.jpg",
+    "images": [
+      "/products/tt11/hero2.jpg",
+      "/products/tt11/in-use.jpg"
+    ]
   },
   {
     "id": "bk23",

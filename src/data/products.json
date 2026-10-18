@@ -2313,6 +2313,10 @@
     "image": "/products/tt08/hero.jpg",
     "similarWith": [
       "tt07"
+    ],
+    "images": [
+      "/products/tt08/hero.jpg",
+      "/products/tt08/star-effect.jpg"
     ]
   },
   {
@@ -6095,9 +6099,7 @@
     ],
     "specs": {
       "Тип": "механічна, важільна",
-      "Матеріал": "алюмінієвий сплав",
-      "Розмір": "22×10.8×10 см",
-      "Резервуар для соку": "є",
+      "Матеріал": "метал + пластик",
       "Догляд": "легке миття",
       "Гарантія": "14 днів"
     },
@@ -6136,11 +6138,7 @@
       "tt09"
     ],
     "oldPrice": 429,
-    "image": "/products/tt11/hero2.jpg",
-    "images": [
-      "/products/tt11/hero2.jpg",
-      "/products/tt11/in-use.jpg"
-    ]
+    "image": "/products/tt11/hero.jpg"
   },
   {
     "id": "bk23",

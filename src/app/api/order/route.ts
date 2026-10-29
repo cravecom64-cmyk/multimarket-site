@@ -30,6 +30,7 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number): Pr
         payment_status: "not_paid",
         total_amount: calculatedTotal,
         status: "new",
+        confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
       })
       .select("id")
       .single();
@@ -183,6 +184,9 @@ interface OrderBody {
   // reference в інвойсі), і в webhook — так продавець може зіставити
   // заявку з підтвердженням оплати за одним номером.
   orderId?: string;
+  // Чекбокс "зв'язатися для підтвердження замовлення" на формі оформлення.
+  // Відсутнє поле (старі клієнти/кеш) трактуємо як true — дефолтна поведінка.
+  confirmCall?: boolean;
   // Honeypot field — must be empty
   website?: string;
   // Timing check — timestamp when form was loaded
@@ -307,6 +311,10 @@ export async function POST(req: NextRequest) {
         ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через WayForPay — очікуємо підтвердження оплати*"
         : "💰 *Оплата: при отриманні \\(накладений платіж\\)*";
     const orderIdLine = body.orderId ? `🔖 *№ ${escapeMarkdown(body.orderId)}*\n` : "";
+    const confirmCallLine =
+      body.confirmCall === false
+        ? "⚠️ *Клієнт просив НЕ дзвонити для підтвердження*"
+        : "☎️ Погодився на підтвердження дзвінком";
 
     const message = `🛒 *НОВЕ ЗАМОВЛЕННЯ!*
 ${orderIdLine}
@@ -315,6 +323,7 @@ ${orderIdLine}
 🏙 *Місто:* ${escapeMarkdown(city)}
 📦 *Відділення НП:* ${escapeMarkdown(branch)}
 ${comment ? `💬 *Коментар:* ${escapeMarkdown(comment)}` : ""}
+${confirmCallLine}
 
 📋 *Товари:*
 ${itemsText}

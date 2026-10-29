@@ -113,23 +113,31 @@ export default function HomePage() {
       {/* Hero Banner */}
       <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] px-6 py-7 relative overflow-hidden">
         <h1 className="text-xl font-extrabold text-white leading-tight">
-          Знайшли в TikTok.
+          Перевіряємо товар.
           <br />
-          Перевірили.
+          Оплата при отриманні.
           <br />
           Відправляємо сьогодні.
         </h1>
         <p className="text-[11px] text-blue-200 mt-2 leading-relaxed">
-          Штуки для дому, саду і улюбленців —
+          Товари для дому, саду й тварин — і все необхідне
           <br />
-          тільки те, що реально працює.
+          на випадок відключень світла. Готуйся заздалегідь.
         </p>
-        <Link
-          href="/category/home"
-          className="inline-block mt-3.5 bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold"
-        >
-          Дивитись каталог
-        </Link>
+        <div className="flex items-center gap-2 mt-3.5 flex-wrap">
+          <Link
+            href="/category/home"
+            className="inline-block bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold"
+          >
+            Дивитись каталог
+          </Link>
+          <Link
+            href="/category/blackout"
+            className="inline-block bg-white/15 text-white px-4 py-2.5 rounded-lg text-xs font-bold border border-white/30"
+          >
+            🔦 На випадок блекауту
+          </Link>
+        </div>
       </div>
 
       {/* 🔥 Зараз у тренді */}
@@ -141,7 +149,7 @@ export default function HomePage() {
           </Link>
         </div>
         <p className="text-[11px] text-gray-400 mt-0.5">
-          Товари які зараз вибухають у TikTok
+          Топ-8 за кількістю замовлень — переважно блекаут-набір
         </p>
         <InfiniteScrollRow
           items={trendingProducts}

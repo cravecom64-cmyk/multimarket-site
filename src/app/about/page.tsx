@@ -51,7 +51,7 @@ export default function AboutPage() {
           </div>
           <div className="flex items-start gap-2">
             <span>📦</span>
-            <span>Відправляємо в день замовлення до 15:00</span>
+            <span>Відправка 1-3 дні Новою Поштою</span>
           </div>
           <div className="flex items-start gap-2">
             <span>↩️</span>

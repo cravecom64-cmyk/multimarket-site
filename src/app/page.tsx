@@ -59,8 +59,8 @@ const reviews = [
 const trustItems = [
   {
     emoji: "📦",
-    title: "Відправка сьогодні",
-    desc: "Замовив до 15:00 — ввечері трекінг",
+    title: "Відправка 1-3 дні",
+    desc: "Новою Поштою по всій Україні",
   },
   {
     emoji: "💰",
@@ -117,7 +117,7 @@ export default function HomePage() {
           <br />
           Оплата при отриманні.
           <br />
-          Відправляємо сьогодні.
+          Відправка 1-3 дні.
         </h1>
         <p className="text-[11px] text-blue-200 mt-2 leading-relaxed">
           Товари для дому, саду й тварин — і все необхідне

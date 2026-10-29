@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${product.name} купити за ${product.price}₴ в Україні`;
   const description =
     product.shortDesc ||
-    `${product.name} з доставкою по Україні. Оплата при отриманні, відправка сьогодні. ${product.price}₴.`;
+    `${product.name} з доставкою по Україні. Оплата при отриманні, відправка 1-3 дні. ${product.price}₴.`;
   const url = `https://multi-market.com.ua/product/${product.slug}`;
 
   return {

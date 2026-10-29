@@ -419,7 +419,7 @@ export function ProductPageClient() {
         </h1>
         <div className="text-[11px] text-gray-400 mt-1">
           Арт. MM-{product.id.toUpperCase()} · ⭐ {product.rating} (
-          {product.reviewCount} відгуків) · {product.orderCount} замовлень
+          {product.reviewCount} оцінок) · {product.orderCount} замовлень
         </div>
         <div className="flex items-center gap-2.5 mt-2">
           <span

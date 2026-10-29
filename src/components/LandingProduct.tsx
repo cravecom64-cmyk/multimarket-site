@@ -178,7 +178,7 @@ export function LandingProduct({ product }: LandingProductProps) {
           <div className="flex items-center gap-2 mb-3">
             <span className="text-yellow-500 text-sm">{"★".repeat(5)}</span>
             <span className="text-sm font-bold text-gray-700">{product.rating}</span>
-            <span className="text-xs text-gray-400">({product.reviewCount} відгуків)</span>
+            <span className="text-xs text-gray-400">({product.reviewCount} оцінок)</span>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed">{landing.socialProof}</p>
           <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">

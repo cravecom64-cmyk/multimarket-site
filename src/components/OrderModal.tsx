@@ -27,6 +27,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
     city: "",
     branch: "",
     comment: "",
+    confirmCall: true, // чекбокс "зв'язатись для підтвердження" — за замовчуванням увімкнено
     website: "", // honeypot — hidden from users, bots fill it
   });
 
@@ -113,6 +114,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           city: form.city,
           branch: form.branch,
           comment: form.comment,
+          confirmCall: form.confirmCall,
           website: form.website,
           _t: formLoadedAt.current,
           paymentMethod,
@@ -298,7 +300,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="text-5xl mb-4">✅</div>
           <div className="text-lg font-extrabold mb-2">Замовлення прийнято!</div>
           <div className="text-sm text-gray-500 mb-1">
-            Ми зв&apos;яжемося з тобою протягом 30 хвилин для підтвердження.
+            {form.confirmCall
+              ? "Ми зв'яжемося з тобою протягом 30 хвилин для підтвердження."
+              : "Обробимо без дзвінка — якщо щось потрібно уточнити, напишемо в SMS/Telegram."}
           </div>
           <div className="text-xs text-gray-400 mb-6">
             Відправка Новою Поштою · Оплата при отриманні
@@ -553,6 +557,18 @@ export function OrderModal({ onClose }: OrderModalProps) {
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none"
             />
           </div>
+
+          <label className="flex items-start gap-2.5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={form.confirmCall}
+              onChange={(e) => setForm({ ...form, confirmCall: e.target.checked })}
+              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500 flex-shrink-0"
+            />
+            <span className="text-xs text-gray-600">
+              Зв&apos;язатися зі мною для підтвердження замовлення
+            </span>
+          </label>
 
           {status === "error" && (
             <div className="text-xs text-red-500 text-center">

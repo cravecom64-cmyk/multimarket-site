@@ -131,6 +131,62 @@ async function applyPriceToGitHub(proposal: ProposalRow): Promise<{ ok: boolean;
   return { ok: true, message: "Закомічено в GitHub, Vercel задеплоїть зміну протягом хвилини." };
 }
 
+// Спільна логіка для обох входів: GET (тап з Telegram, віддає HTML) і POST
+// (кнопки в командному центрі, віддає JSON).
+type ProposalResult = { ok: boolean; title: string; message: string };
+
+async function handleProposal(id: string, action: "approve" | "reject"): Promise<ProposalResult> {
+  const supabase = supabaseServer();
+  if (!supabase) {
+    return { ok: false, title: "Помилка", message: "Supabase не налаштовано." };
+  }
+
+  const { data: proposal, error } = await supabase
+    .from("price_proposals")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !proposal) {
+    return { ok: false, title: "Не знайдено", message: "Цю пропозицію не знайдено — можливо, посилання застаріло." };
+  }
+  if (proposal.status !== "pending") {
+    return {
+      ok: false,
+      title: "Вже оброблено",
+      message: `Ця пропозиція вже має статус "${proposal.status}" — повторно нічого не роблю.`,
+    };
+  }
+
+  if (action === "reject") {
+    await supabase
+      .from("price_proposals")
+      .update({ status: "rejected", resolved_at: new Date().toISOString() })
+      .eq("id", id);
+    return {
+      ok: true,
+      title: "Пропозицію відхилено",
+      message: `Ціна ${proposal.product_name} лишається ${proposal.old_site_price}₴. Завтрашня перевірка зможе запропонувати її знову.`,
+    };
+  }
+
+  const result = await applyPriceToGitHub(proposal as ProposalRow);
+  await supabase
+    .from("price_proposals")
+    .update({ status: result.ok ? "approved" : "failed", resolved_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (!result.ok) {
+    return { ok: false, title: "Не вдалось оновити ціну", message: result.message };
+  }
+
+  return {
+    ok: true,
+    title: "Ціну оновлено",
+    message: `${proposal.product_name}: ${proposal.old_site_price}₴ → ${proposal.new_site_price}₴. ${result.message}`,
+  };
+}
+
 export async function GET(req: NextRequest) {
   const expected = process.env.CRON_SECRET;
   const secret = req.nextUrl.searchParams.get("secret");
@@ -144,53 +200,33 @@ export async function GET(req: NextRequest) {
     return page("Невірне посилання", "Відсутній id або action=approve|reject.", false);
   }
 
-  const supabase = supabaseServer();
-  if (!supabase) {
-    return page("Помилка", "Supabase не налаштовано.", false);
+  const r = await handleProposal(id, action);
+  return page(r.title, r.message, r.ok);
+}
+
+// Вхід для командного центру (multimarket-command-center). Авторизація —
+// Bearer з тим самим SUPABASE_SECRET_KEY, що вже налаштований в обох
+// проектах: сервер-сервер, нового секрету заводити не треба, а хто має цей
+// ключ, і так має повний доступ до бази. Fail-closed: без ключа — 401.
+export async function POST(req: NextRequest) {
+  const key = process.env.SUPABASE_SECRET_KEY;
+  const auth = req.headers.get("authorization");
+  if (!key || auth !== `Bearer ${key}`) {
+    return NextResponse.json({ ok: false, title: "Немає доступу", message: "Unauthorized" }, { status: 401 });
   }
 
-  const { data: proposal, error } = await supabase
-    .from("price_proposals")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-
-  if (error || !proposal) {
-    return page("Не знайдено", "Цю пропозицію не знайдено — можливо, посилання застаріло.", false);
+  let body: { id?: unknown; action?: unknown } = {};
+  try {
+    body = await req.json();
+  } catch {
+    // порожнє тіло — впаде на перевірці нижче
   }
-  if (proposal.status !== "pending") {
-    return page(
-      "Вже оброблено",
-      `Ця пропозиція вже має статус "${proposal.status}" — повторно нічого не роблю.`,
-      false
-    );
+  const id = typeof body.id === "string" ? body.id : null;
+  const action = body.action === "approve" || body.action === "reject" ? body.action : null;
+  if (!id || !action) {
+    return NextResponse.json({ ok: false, title: "Невірний запит", message: "Потрібні id та action=approve|reject." }, { status: 400 });
   }
 
-  if (action === "reject") {
-    await supabase
-      .from("price_proposals")
-      .update({ status: "rejected", resolved_at: new Date().toISOString() })
-      .eq("id", id);
-    return page(
-      "Пропозицію відхилено",
-      `Ціна ${proposal.product_name} лишається ${proposal.old_site_price}₴. Завтрашня перевірка зможе запропонувати її знову.`,
-      true
-    );
-  }
-
-  const result = await applyPriceToGitHub(proposal as ProposalRow);
-  await supabase
-    .from("price_proposals")
-    .update({ status: result.ok ? "approved" : "failed", resolved_at: new Date().toISOString() })
-    .eq("id", id);
-
-  if (!result.ok) {
-    return page("Не вдалось оновити ціну", result.message, false);
-  }
-
-  return page(
-    "Ціну оновлено",
-    `${proposal.product_name}: ${proposal.old_site_price}₴ → ${proposal.new_site_price}₴. ${result.message}`,
-    true
-  );
+  const r = await handleProposal(id, action);
+  return NextResponse.json(r, { status: r.ok ? 200 : 409 });
 }

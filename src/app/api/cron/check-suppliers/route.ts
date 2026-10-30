@@ -252,6 +252,7 @@ function supabaseServer() {
 interface SupplierRow {
   id: number;
   product_id: string;
+  supplier_id?: number;
   url: string;
   price: string | number | null;
   in_stock: boolean;
@@ -599,7 +600,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, url, price, in_stock, suppliers(name)")
+    .select("id, product_id, supplier_id, url, price, in_stock, suppliers(name)")
     .order("product_id");
 
   if (error || !rows) {
@@ -620,6 +621,23 @@ export async function GET(req: NextRequest) {
 
   const changes: string[] = [];
   const failures: FailureInfo[] = [];
+  // ДОДАНО 30.10.2026: журнал змін для оцінки надійності постачальників у
+  // командному центрі (supplier_stock_events). Пишемо одним insert-ом після
+  // фази перевірки.
+  type StockEvent = {
+    product_supplier_id: number;
+    product_id: string;
+    supplier_id: number | null;
+    event: "out_of_stock" | "back_in_stock" | "price_up" | "price_down" | "check_failed";
+    old_price?: number | null;
+    new_price?: number | null;
+  };
+  const stockEvents: StockEvent[] = [];
+  const evBase = (r: SupplierRow) => ({
+    product_supplier_id: r.id,
+    product_id: r.product_id,
+    supplier_id: r.supplier_id ?? null,
+  });
   let checked = 0;
 
   // ДОДАНО 09.10.2026: найкраще відоме знання "в наявності чи ні" по кожному
@@ -646,6 +664,7 @@ export async function GET(req: NextRequest) {
 
       if (result.error) {
         failures.push({ productId: row.product_id, supplier: supplierName, reason: result.error });
+        stockEvents.push({ ...evBase(row), event: "check_failed" });
         return;
       }
 
@@ -659,6 +678,18 @@ export async function GET(req: NextRequest) {
         prevPrice !== null &&
         prevPrice > 0 &&
         Math.abs(result.price - prevPrice) / prevPrice > 0.03;
+
+      if (stockChanged) {
+        stockEvents.push({ ...evBase(row), event: result.inStock ? "back_in_stock" : "out_of_stock" });
+      }
+      if (priceChanged) {
+        stockEvents.push({
+          ...evBase(row),
+          event: result.price! > prevPrice! ? "price_up" : "price_down",
+          old_price: prevPrice,
+          new_price: result.price,
+        });
+      }
 
       // Якщо і наявність, і ціна змінились одночасно (типово для HUGO — вони
       // показують останню ціну навіть для товару not in stock) — один рядок
@@ -689,6 +720,11 @@ export async function GET(req: NextRequest) {
     }),
     new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
   ]);
+
+  if (stockEvents.length > 0) {
+    const { error: evError } = await supabase.from("supplier_stock_events").insert(stockEvents);
+    if (evError) console.error("[check-suppliers] supplier_stock_events insert failed:", evError);
+  }
 
   // ---- Авто-приховання/повернення товару, якщо ВСІ постачальники не в наявності ----
   // ДОДАНО 09.10.2026 (питання Павла "что происходит, если позиция не в

@@ -63,7 +63,7 @@ interface TrackBody {
   };
 }
 
-const ALLOWED_EVENTS = new Set(["page_view", "add_to_cart"]);
+const ALLOWED_EVENTS = new Set(["page_view", "add_to_cart", "begin_checkout", "checkout_error", "order_submitted"]);
 
 // ДОДАНО 30.10.2026: боти, краулери, прев'ю посилань і headless-браузери не
 // пишуться в аналітику — вони виконують JS сайту й раніше потрапляли у

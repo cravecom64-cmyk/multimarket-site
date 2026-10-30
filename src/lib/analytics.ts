@@ -41,7 +41,7 @@ function getSessionId(): string {
 // автоматизовані браузери (navigator.webdriver) не рахуються ніколи.
 const INTERNAL_KEY = "mm_internal";
 
-function isInternalVisit(): boolean {
+export function isInternalVisit(): boolean {
   if (typeof window === "undefined") return true;
   try {
     const flag = new URLSearchParams(window.location.search).get("internal");
@@ -96,6 +96,23 @@ export function trackAddToCartEvent(productId: string) {
   send({
     eventType: "add_to_cart",
     productId,
+    sessionId: getSessionId(),
+    utm: getUtm(),
+  });
+}
+
+// ДОДАНО 30.10.2026: кроки оформлення заказу — щоб у командному центрі було
+// видно, де люди відпадають між кошиком і заказом.
+//   begin_checkout  — відкрили форму оформлення
+//   checkout_error  — заказ не пройшов (detail: код помилки валідації / network)
+//   order_submitted — заказ прийнято сервером
+export function trackCheckoutEvent(
+  eventType: "begin_checkout" | "checkout_error" | "order_submitted",
+  detail?: string
+) {
+  send({
+    eventType,
+    path: detail ? `checkout:${detail}` : "checkout",
     sessionId: getSessionId(),
     utm: getUtm(),
   });

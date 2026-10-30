@@ -9,6 +9,7 @@ import {
   trackPurchase as trackPurchaseGA4,
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
+import { trackCheckoutEvent } from "@/lib/analytics";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -36,6 +37,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // викликалась — Meta не бачила цей крок воронки взагалі.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    trackCheckoutEvent("begin_checkout");
     trackInitiateCheckout(
       items.map((i) => ({
         id: i.id,
@@ -83,6 +85,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
     try {
       const data = await res.json();
+      trackCheckoutEvent("checkout_error", String(data?.error ?? `http_${res.status}`).slice(0, 60));
       if (data?.error && VALIDATION_MESSAGES[data.error]) {
         return VALIDATION_MESSAGES[data.error];
       }
@@ -133,6 +136,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         setStatus("error");
         return;
       }
+      trackCheckoutEvent("order_submitted");
 
       if (paymentMethod === "card_mono") {
         // Онлайн-оплата Monobank — створюємо інвойс і редіректимо на
@@ -288,6 +292,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
       setStatus("success");
       clearCart();
     } catch {
+      trackCheckoutEvent("checkout_error", "network");
       setErrorMessage("Не вдалося з'єднатися з сервером. Перевір інтернет і спробуй ще раз.");
       setStatus("error");
     }

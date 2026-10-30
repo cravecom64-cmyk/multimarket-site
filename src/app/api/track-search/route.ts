@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 // ==================== RATE LIMITING ====================
 // Той самий патерн, що в /api/order — окрема мапа, бо ліміт тут м'якший:
@@ -41,6 +42,18 @@ function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
 }
 
+// ДОДАНО 30.10.2026: запити зберігаються в Supabase (search_queries) — у
+// командному центрі видно, що шукають найчастіше і що шукають, але не
+// знаходять. Раніше вони лише летіли в Telegram і губились.
+function supabaseServer() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+const BOT_UA = /bot|crawl|spider|slurp|headless|lighthouse|preview|python|curl|wget/i;
+
 interface TrackSearchBody {
   query: string;
   resultsCount?: number;
@@ -71,6 +84,21 @@ export async function POST(req: NextRequest) {
 
     const resultsCount =
       typeof body.resultsCount === "number" ? body.resultsCount : null;
+
+    const ua = req.headers.get("user-agent") || "";
+    if (!ua || BOT_UA.test(ua)) {
+      return NextResponse.json({ success: true, notified: false });
+    }
+
+    const supabase = supabaseServer();
+    if (supabase) {
+      const { error: dbError } = await supabase.from("search_queries").insert({
+        query,
+        query_norm: query.toLowerCase().replace(/\s+/g, " ").trim(),
+        results_count: resultsCount,
+      });
+      if (dbError) console.error("[track-search] Supabase insert failed:", dbError);
+    }
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;

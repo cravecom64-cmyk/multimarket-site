@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { isInternalVisit } from "@/lib/analytics";
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { getAllProducts, getTopProducts, type Product } from "@/lib/products";
@@ -46,6 +47,8 @@ export function SearchPageClient() {
       const count = searchProducts(q).length;
       trackSearch(q, count);
       trackSearchGA4(q, count);
+      // Внутрішні пошуки (Павел, перевірки) не пишемо в базу й не шлемо в Telegram
+      if (isInternalVisit()) return;
       fetch("/api/track-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

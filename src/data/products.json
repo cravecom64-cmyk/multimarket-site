@@ -5927,11 +5927,13 @@
       "p17"
     ],
     "oldPrice": 539,
-    "image": "/products/p22/hero.jpg",
+    "image": "/products/p22/lifestyle-grooming.jpg",
     "images": [
-      "/products/p22/hero.jpg",
-      "/products/p22/texture-closeup.jpg",
-      "/products/p22/cat-demo.jpg"
+      "/products/p22/lifestyle-grooming.jpg",
+      "/products/p22/features-grid.jpg",
+      "/products/p22/both-sides.jpg",
+      "/products/p22/closeup-grey-side.jpg",
+      "/products/p22/before-after-fabric.jpg"
     ]
   },
   {

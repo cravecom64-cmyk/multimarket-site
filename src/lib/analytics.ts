@@ -7,18 +7,51 @@
 // "Аналітика" в командному центрі, а не GA4/Meta API (щоб не було
 // розбіжностей між джерелами).
 
+// ЗМІНЕНО 30.10.2026: сесія живе в localStorage з 30-хвилинним тайм-аутом
+// неактивності (стандарт GA), а не в sessionStorage. Раніше кожна нова
+// вкладка рахувалась окремим відвідувачем: людина, що відкрила 5 карток у
+// нових вкладках, давала 5 "сесій" по одному перегляду, і воронка в
+// командному центрі виходила заниженою в рази.
+const SESSION_KEY = "mm_sid";
+const SESSION_TS_KEY = "mm_sid_ts";
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
   try {
-    let id = sessionStorage.getItem("mm_sid");
-    if (!id) {
-      id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-      sessionStorage.setItem("mm_sid", id);
+    const now = Date.now();
+    let id = localStorage.getItem(SESSION_KEY);
+    const last = Number(localStorage.getItem(SESSION_TS_KEY) || 0);
+    if (!id || now - last > SESSION_TIMEOUT_MS) {
+      id = `${now.toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      localStorage.setItem(SESSION_KEY, id);
     }
+    localStorage.setItem(SESSION_TS_KEY, String(now));
     return id;
   } catch {
     return "";
   }
+}
+
+// ДОДАНО 30.10.2026: внутрішні візити (Павел, перевірки сайту після правок,
+// зокрема автоматичні з браузера) більше не пишуться в аналітику — раніше
+// вони становили більшість "сесій" і перетворювали воронку на шум.
+// Позначка ставиться один раз на пристрій відкриттям сайту з ?internal=1
+// (знімається ?internal=0) і живе в localStorage цього браузера. Плюс
+// автоматизовані браузери (navigator.webdriver) не рахуються ніколи.
+const INTERNAL_KEY = "mm_internal";
+
+function isInternalVisit(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const flag = new URLSearchParams(window.location.search).get("internal");
+    if (flag === "1") localStorage.setItem(INTERNAL_KEY, "1");
+    if (flag === "0") localStorage.removeItem(INTERNAL_KEY);
+    if (localStorage.getItem(INTERNAL_KEY) === "1") return true;
+  } catch {
+    // localStorage недоступний — вважаємо звичайним відвідувачем
+  }
+  return navigator.webdriver === true;
 }
 
 function getUtm() {
@@ -39,6 +72,7 @@ function getUtm() {
 
 function send(payload: Record<string, unknown>) {
   if (typeof window === "undefined") return;
+  if (isInternalVisit()) return;
   // fire-and-forget — трекінг ніколи не повинен блокувати чи ламати UX.
   fetch("/api/track", {
     method: "POST",

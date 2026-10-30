@@ -65,6 +65,12 @@ interface TrackBody {
 
 const ALLOWED_EVENTS = new Set(["page_view", "add_to_cart"]);
 
+// ДОДАНО 30.10.2026: боти, краулери, прев'ю посилань і headless-браузери не
+// пишуться в аналітику — вони виконують JS сайту й раніше потрапляли у
+// воронку як "сесії з одним переглядом за 0 секунд".
+const BOT_UA =
+  /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|meta-externalagent|telegram|whatsapp|viber|vercel|python|curl|wget|node-fetch|axios/i;
+
 export async function POST(req: NextRequest) {
   try {
     const ip =
@@ -79,6 +85,11 @@ export async function POST(req: NextRequest) {
     const contentType = req.headers.get("content-type");
     if (!contentType?.includes("application/json")) {
       return NextResponse.json({ error: "Invalid content type" }, { status: 415 });
+    }
+
+    const ua = req.headers.get("user-agent") || "";
+    if (!ua || BOT_UA.test(ua)) {
+      return NextResponse.json({ success: true, tracked: false });
     }
 
     const body: TrackBody = await req.json();

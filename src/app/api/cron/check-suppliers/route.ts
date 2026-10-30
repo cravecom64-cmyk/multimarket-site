@@ -606,7 +606,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Supabase query failed", details: error?.message }, { status: 500 });
   }
 
-  const scoped = (rows as unknown as SupplierRow[]).filter((r) => activeProductIds.has(r.product_id));
+  // ДОДАНО 30.10.2026: постачальників, з якими більше не працюємо (у назві
+  // позначка "ПРИПИНЕНО", напр. "Тану Опт (ПРИПИНЕНО 09.10.2026)"), не
+  // перевіряємо. Їхні посилання вже мертві: щодня давали лише помилки в звіті
+  // й з'їдали час із жорсткого дедлайну CHECK_PHASE_DEADLINE_MS, через що
+  // живі постачальники встигали перевіритись не всі. Усі такі рядки вже
+  // стоять in_stock=false, тож на авто-приховання й вибір найдешевшого
+  // постачальника це не впливає.
+  const isStoppedSupplier = (r: SupplierRow) => /ПРИПИНЕНО/i.test(supplierNameOf(r));
+  const scoped = (rows as unknown as SupplierRow[]).filter(
+    (r) => activeProductIds.has(r.product_id) && !isStoppedSupplier(r)
+  );
 
   const changes: string[] = [];
   const failures: FailureInfo[] = [];

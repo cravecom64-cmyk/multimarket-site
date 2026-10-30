@@ -378,7 +378,7 @@
     "categoryName": "Дім і затишок",
     "price": 318,
     "oldPrice": 478,
-    "buyPrice": 149,
+    "buyPrice": 160.0,
     "emoji": "🧶",
     "rating": 4.8,
     "reviewCount": 143,
@@ -670,7 +670,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 499,
     "oldPrice": 699,
-    "buyPrice": 215.18,
+    "buyPrice": 175.0,
     "emoji": "💧",
     "rating": 4.5,
     "reviewCount": 92,
@@ -809,7 +809,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 180,
     "oldPrice": 279,
-    "buyPrice": 120,
+    "buyPrice": 85.0,
     "emoji": "🔫",
     "rating": 4.6,
     "reviewCount": 88,
@@ -947,7 +947,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 849,
     "oldPrice": 1199,
-    "buyPrice": 344,
+    "buyPrice": 485.0,
     "emoji": "🪵",
     "rating": 4.8,
     "reviewCount": 41,
@@ -1108,7 +1108,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 182,
     "oldPrice": 259,
-    "buyPrice": 121.43,
+    "buyPrice": 45.0,
     "emoji": "🧤",
     "rating": 4.5,
     "reviewCount": 73,
@@ -1179,7 +1179,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 199,
     "oldPrice": 299,
-    "buyPrice": 89,
+    "buyPrice": 70.0,
     "emoji": "🌟",
     "rating": 4.6,
     "reviewCount": 48,
@@ -1255,7 +1255,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 599,
     "oldPrice": 849,
-    "buyPrice": 294,
+    "buyPrice": 360.0,
     "emoji": "🏮",
     "rating": 4.7,
     "reviewCount": 34,
@@ -1329,7 +1329,7 @@
     "categoryName": "Сад і подвір'я",
     "price": 249,
     "oldPrice": 349,
-    "buyPrice": 95.4,
+    "buyPrice": 120.0,
     "emoji": "🔥",
     "rating": 4.8,
     "reviewCount": 61,
@@ -2239,7 +2239,9 @@
       "/products/tt07/lifestyle-sink.jpg",
       "/products/tt07/functions-collage.jpg",
       "/products/tt07/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "tt08",
@@ -2549,7 +2551,9 @@
     ],
     "safetyNotes": [
       "Вбудований захист від перепадів напруги та перегріву"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk04",
@@ -2779,7 +2783,7 @@
       "/products/bk06/with-box.jpg"
     ]
   },
-    {
+  {
     "id": "bk08",
     "slug": "kempingoviy-lihtar-magnit-bl821",
     "name": "Кемпінговий LED-ліхтар з магнітним кріпленням BL-821",
@@ -2929,7 +2933,9 @@
     "usageTips": [
       "Заряджається від звичайної розетки 220V (~10 годин до повного заряду); сонячна панель — додаткове/резервне джерело",
       "USB-порт лампи можна використати, щоб зарядити телефон — ліхтар працює як повербанк"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk10",
@@ -3074,7 +3080,9 @@
       "/products/bk11/lifestyle-jogging.jpg",
       "/products/bk11/functions-collage.jpg",
       "/products/bk11/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk12",
@@ -3151,7 +3159,9 @@
     ],
     "images": [
       "/products/bk12/detail-frontback.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk13",
@@ -3222,7 +3232,9 @@
       "/products/bk13/lifestyle-office.jpg",
       "/products/bk13/functions-collage.jpg",
       "/products/bk13/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk14",
@@ -3291,7 +3303,9 @@
       "/products/bk14/lifestyle-hiking.jpg",
       "/products/bk14/functions-collage.jpg",
       "/products/bk14/specs-card.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk15",
@@ -3361,7 +3375,9 @@
     "images": [
       "/products/bk15/lifestyle-dinner.jpg",
       "/products/bk15/packaging.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk16",
@@ -3719,7 +3735,9 @@
         "rating": 5,
         "text": "Вдома під час відключень рятує. Люмінесцентний режим прям приємне мʼяке світло, не різке."
       }
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "bk21",
@@ -4648,7 +4666,9 @@
       "/products/g14/hose-kit.jpg",
       "/products/g14/nozzle-detail.jpg",
       "/products/g14/misting-flowers.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "g15",
@@ -4721,7 +4741,9 @@
       "/products/g15/gravel-side.jpg",
       "/products/g15/angled-white.jpg",
       "/products/g15/nozzle-disc.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   },
   {
     "id": "g17",
@@ -4798,7 +4820,7 @@
     "category": "garden",
     "categoryName": "Сад і подвір'я",
     "price": 349,
-    "buyPrice": 199,
+    "buyPrice": 160.0,
     "emoji": "🦉",
     "rating": 4.6,
     "reviewCount": 27,
@@ -4866,7 +4888,7 @@
     "category": "garden",
     "categoryName": "Сад і подвір'я",
     "price": 2099,
-    "buyPrice": 919,
+    "buyPrice": 950.0,
     "emoji": "🌱",
     "rating": 4.6,
     "reviewCount": 27,
@@ -5019,7 +5041,7 @@
     "category": "garden",
     "categoryName": "Сад і подвір'я",
     "price": 729,
-    "buyPrice": 329,
+    "buyPrice": 330.0,
     "emoji": "✂️",
     "rating": 4.6,
     "reviewCount": 27,
@@ -5096,7 +5118,7 @@
     "category": "garden",
     "categoryName": "Сад і подвір'я",
     "price": 319,
-    "buyPrice": 179,
+    "buyPrice": 145.0,
     "emoji": "⛲",
     "rating": 4.6,
     "reviewCount": 27,
@@ -5795,7 +5817,7 @@
     "category": "pets",
     "categoryName": "Улюбленцям",
     "price": 399,
-    "buyPrice": 95,
+    "buyPrice": 55.0,
     "emoji": "🐩",
     "rating": 4.6,
     "reviewCount": 27,
@@ -5866,14 +5888,14 @@
       "/products/p22/before-after-fabric.jpg"
     ]
   },
-      {
+  {
     "id": "tt11",
     "slug": "sokovyzhymalka-hand-juicer",
     "name": "Ручна соковижималка для фруктів Hand Juicer",
     "category": "tiktok",
     "categoryName": "ТОП TikTok",
     "price": 319,
-    "buyPrice": 195,
+    "buyPrice": 145.0,
     "emoji": "🍊",
     "rating": 4.6,
     "reviewCount": 27,
@@ -6747,6 +6769,8 @@
     ],
     "images": [
       "/products/h26/hero.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "supplier_discontinued"
   }
 ]

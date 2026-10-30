@@ -211,24 +211,33 @@ export async function GET(req: NextRequest) {
 // таблицю price_proposals. Публічний/anon ключ цього не може (доступ для
 // anon/authenticated відкликано), а хто має секретний ключ, і так має повний
 // доступ до бази. Fail-closed: будь-яка помилка перевірки — 401.
-async function isAuthorizedServiceKey(req: NextRequest): Promise<boolean> {
+async function checkServiceKey(req: NextRequest): Promise<{ ok: boolean; reason: string }> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const auth = req.headers.get("authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
-  if (!url || !token) return false;
-  if (token === process.env.SUPABASE_SECRET_KEY) return true;
+  if (!url) return { ok: false, reason: "site has no NEXT_PUBLIC_SUPABASE_URL" };
+  if (!token) return { ok: false, reason: "no bearer token" };
+  if (token === process.env.SUPABASE_SECRET_KEY) return { ok: true, reason: "" };
   try {
     const probe = createClient(url, token, { auth: { persistSession: false } });
     const { error } = await probe.from("price_proposals").select("id").limit(1);
-    return !error;
-  } catch {
-    return false;
+    // Причина відмови (без самого ключа) — щоб діагностувати зв'язку
+    // центр→сайт, не заглядаючи в логи Vercel.
+    return error
+      ? { ok: false, reason: `key probe failed: ${error.message} (key kind: ${token.slice(0, 10)}…, len ${token.length})` }
+      : { ok: true, reason: "" };
+  } catch (e) {
+    return { ok: false, reason: `key probe threw: ${(e as Error)?.message ?? e}` };
   }
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthorizedServiceKey(req))) {
-    return NextResponse.json({ ok: false, title: "Немає доступу", message: "Unauthorized" }, { status: 401 });
+  const authz = await checkServiceKey(req);
+  if (!authz.ok) {
+    return NextResponse.json(
+      { ok: false, title: "Немає доступу", message: `Unauthorized: ${authz.reason}` },
+      { status: 401 }
+    );
   }
 
   let body: { id?: unknown; action?: unknown } = {};

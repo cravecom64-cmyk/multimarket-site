@@ -205,13 +205,29 @@ export async function GET(req: NextRequest) {
 }
 
 // Вхід для командного центру (multimarket-command-center). Авторизація —
-// Bearer з тим самим SUPABASE_SECRET_KEY, що вже налаштований в обох
-// проектах: сервер-сервер, нового секрету заводити не треба, а хто має цей
-// ключ, і так має повний доступ до бази. Fail-closed: без ключа — 401.
+// Bearer із секретним ключем Supabase цього ж проекту. У сайту й центру
+// ключі різні (обидва валідні секретні ключі однієї бази), тому не
+// порівнюємо рядки, а перевіряємо сам ключ: чи може він прочитати закриту
+// таблицю price_proposals. Публічний/anon ключ цього не може (доступ для
+// anon/authenticated відкликано), а хто має секретний ключ, і так має повний
+// доступ до бази. Fail-closed: будь-яка помилка перевірки — 401.
+async function isAuthorizedServiceKey(req: NextRequest): Promise<boolean> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const auth = req.headers.get("authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  if (!url || !token) return false;
+  if (token === process.env.SUPABASE_SECRET_KEY) return true;
+  try {
+    const probe = createClient(url, token, { auth: { persistSession: false } });
+    const { error } = await probe.from("price_proposals").select("id").limit(1);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
-  const key = process.env.SUPABASE_SECRET_KEY;
-  const auth = req.headers.get("authorization");
-  if (!key || auth !== `Bearer ${key}`) {
+  if (!(await isAuthorizedServiceKey(req))) {
     return NextResponse.json({ ok: false, title: "Немає доступу", message: "Unauthorized" }, { status: 401 });
   }
 

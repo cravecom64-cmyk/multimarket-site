@@ -1597,8 +1597,7 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "p04",
-      "p07"
+      "p04"
     ],
     "image": "/products/p01/hero-v2.jpg",
     "reviews": [
@@ -1699,77 +1698,6 @@
     ],
     "isHidden": true,
     "hiddenReason": "out_of_stock"
-  },
-  {
-    "id": "p07",
-    "slug": "nashaynyk-led-sobaky",
-    "name": "LED нашийник для собак що світиться",
-    "category": "pets",
-    "categoryName": "Улюбленцям",
-    "price": 186,
-    "oldPrice": 279,
-    "buyPrice": 95,
-    "emoji": "✨",
-    "rating": 4.6,
-    "reviewCount": 67,
-    "orderCount": 245,
-    "season": "Весь рік",
-    "tiktokHook": "Собака вночі видна здалека — дивись",
-    "hasTiktok": true,
-    "shortDesc": "LED нашийник для собак. Світиться вночі, 3 режими, USB, водостійкий IP67.",
-    "description": "**Знайомо?** Вийшов з собакою ввечері — і не видно де він у темряві.\n\nLED нашийник світиться — собака видна здалека. 3 режими: постійний, повільний і швидкий мигіт. USB зарядка, IP67.\n\n**Видно в темряві** · 3 режими · USB зарядка · IP67 водостійкий",
-    "features": [
-      "Видно в темряві",
-      "3 режими світіння",
-      "USB зарядка",
-      "IP67 водостійкий"
-    ],
-    "specs": {
-      "Захист": "IP67",
-      "Режими": "3",
-      "Зарядка": "USB",
-      "Розміри": "S / M / L",
-      "Гарантія": "14 днів"
-    },
-    "badges": [
-      "sale"
-    ],
-    "isTrending": false,
-    "bundleWith": [
-      "p01"
-    ],
-    "image": "/products/p07/hero-v2.jpg",
-    "reviews": [
-      {
-        "name": "Іван",
-        "city": "Київ",
-        "rating": 5,
-        "text": "Гуляємо ввечері біля дороги — тепер собаку видно здалека, водії помічають.",
-        "daysAgo": 9
-      },
-      {
-        "name": "Christina",
-        "city": "Львів",
-        "rating": 5,
-        "text": "Заряду вистачає на кілька прогулянок, світло яскраве навіть у повній темряві.",
-        "daysAgo": 15
-      },
-      {
-        "name": "Павло",
-        "city": "Одеса",
-        "rating": 4,
-        "text": "Зручний, регулюється під розмір шиї. IP67 не перевіряв спеціально, але під дощем працював без проблем.",
-        "daysAgo": 19
-      }
-    ],
-    "similarWith": [
-      "p12"
-    ],
-    "images": [
-      "/products/p07/lifestyle-walk.jpg",
-      "/products/p07/black-lab-portrait.jpg",
-      "/products/p07/dog-portrait.jpg"
-    ]
   },
   {
     "id": "p11",
@@ -1901,9 +1829,7 @@
         "daysAgo": 18
       }
     ],
-    "similarWith": [
-      "p07"
-    ],
+    "similarWith": [],
     "isHidden": true,
     "hiddenReason": "out_of_stock"
   },
@@ -5294,9 +5220,7 @@
       "hit"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "p07"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Вікторія",
@@ -5320,9 +5244,7 @@
         "text": "Купила відразу дві — для себе і для чоловіка, обидва вигулюємо собаку."
       }
     ],
-    "similarWith": [
-      "p07"
-    ],
+    "similarWith": [],
     "oldPrice": 89,
     "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3F22jcKGpzsCsxHXxeQdZzcAnzm/hf_20260817_151551_faa1071a-f04c-489c-9707-2dd79ed6b675.png"
   },

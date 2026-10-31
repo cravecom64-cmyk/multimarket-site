@@ -332,7 +332,7 @@
       "Гарантія": "14 днів"
     },
     "badges": [],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "p11"
     ],
@@ -1442,7 +1442,7 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk02",
       "bk09"
@@ -2285,7 +2285,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk08",
       "bk10"
@@ -2362,7 +2362,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk09",
       "bk12"
@@ -2444,7 +2444,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk08",
       "bk09"
@@ -2907,7 +2907,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk08"
     ],
@@ -3051,7 +3051,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk13"
@@ -3273,7 +3273,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [
       "bk08"
     ],
@@ -3346,7 +3346,7 @@
     "badges": [
       "sale"
     ],
-    "isTrending": true,
+    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk17"
@@ -6006,7 +6006,7 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk19"
     ],
@@ -6238,7 +6238,7 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
+    "isTrending": true,
     "bundleWith": [
       "bk27"
     ],

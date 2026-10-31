@@ -664,6 +664,8 @@
   },
   {
     "id": "g01",
+    "isHidden": true,
+    "hiddenReason": "needs_review",
     "slug": "shlang-x-hose-30m",
     "name": "Шланг для поливу X-Hose 30м з розпилювачем",
     "category": "garden",
@@ -838,9 +840,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "g01"
-    ],
+    "bundleWith": [],
     "image": "/products/g03/hero.jpg",
     "reviews": [
       {
@@ -1137,7 +1137,6 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "g01",
       "g03"
     ],
     "image": "/products/g08/hero.jpg",
@@ -4561,9 +4560,7 @@
       "hit"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "g01"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Владислав",
@@ -4636,9 +4633,7 @@
       "hit"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "g01"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Олександр",
@@ -5078,7 +5073,6 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "g01",
       "g15"
     ],
     "reviews": [

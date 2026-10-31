@@ -1287,7 +1287,7 @@
     "bundleWith": [
       "g09"
     ],
-    "image": "/products/g10/hero.jpg",
+    "image": "/products/g10/lifestyle-wall-pattern.jpg",
     "reviews": [
       {
         "name": "Валентина",
@@ -1317,8 +1317,10 @@
       "g11"
     ],
     "images": [
-      "/products/g10/lifestyle-lit-table.jpg",
-      "/products/g10/lifestyle-lit-dark.jpg"
+      "/products/g10/lifestyle-two-dark.jpg",
+      "/products/g10/lifestyle-single-dusk.jpg",
+      "/products/g10/lifestyle-closeup-flowers.jpg",
+      "/products/g10/lifestyle-two-path.jpg"
     ]
   },
   {

@@ -5965,10 +5965,13 @@
     "id": "bk23",
     "slug": "puskozaryadnyi-prystriy-avto-chohol",
     "name": "Автомобільний пускозарядний пристрій + чохол (jump starter/повербанк)",
-    "image": "/products/bk23/hero.jpg",
+    "image": "/products/bk23/kit-case.jpg",
     "images": [
-      "/products/bk23/case.jpg",
-      "/products/bk23/detail.jpg"
+      "/products/bk23/box-collage.jpg",
+      "/products/bk23/branded-closeup.jpg",
+      "/products/bk23/ports-closeup.jpg",
+      "/products/bk23/specs-label.jpg",
+      "/products/bk23/manual-case.jpg"
     ],
     "category": "blackout",
     "categoryName": "Блекаут",
@@ -5992,7 +5995,13 @@
     ],
     "specs": {
       "Призначення": "запуск авто, заряджання гаджетів",
-      "Комплектація": "пристрій + чохол + затискачі",
+      "Ємність батареї": "99800 мАг",
+      "Пусковий струм": "300А (пік 600А)",
+      "Вихідна напруга": "12В / USB 5В-2А",
+      "Вага": "500 г",
+      "Розмір": "160×80×30 мм",
+      "Робоча температура": "-20°C...+60°C",
+      "Комплектація": "пристрій + чохол + затискачі + мережевий адаптер + інструкція",
       "Захист": "від переполюсовки",
       "Гарантія": "14 днів"
     },

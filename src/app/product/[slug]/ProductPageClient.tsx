@@ -876,13 +876,22 @@ export function ProductPageClient() {
                 }}
                 className="relative w-full h-full flex-shrink-0 snap-center flex items-center justify-center"
               >
-                <Image
-                  src={img}
-                  alt={`${product.name} — фото ${i + 1}`}
-                  fill
-                  sizes="100vw"
-                  className="object-contain"
-                />
+                {/* Картинку обмежуємо тією ж шириною, що й весь сайт
+                    (max-w-820 в layout.tsx), а не на весь viewport: лайтбокс
+                    — position: fixed, тому раніше розтягував вихідні фото
+                    (часто 1024×1024 чи менше) на весь широкий монітор без
+                    обмежень — звідси й "розмито на компʼютері", хоч на
+                    телефоні (вузький viewport) та сама картинка виглядала
+                    нормально. */}
+                <div className="relative w-full h-full max-w-[820px] mx-auto">
+                  <Image
+                    src={img}
+                    alt={`${product.name} — фото ${i + 1}`}
+                    fill
+                    sizes="(max-width: 820px) 100vw, 820px"
+                    className="object-contain"
+                  />
+                </div>
               </div>
             ))}
           </div>

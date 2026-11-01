@@ -159,9 +159,15 @@ const GITHUB_OWNER = "cravecom64-cmyk";
 const GITHUB_REPO = "multimarket-site";
 const PRODUCTS_PATH = "src/data/products.json";
 
+// ЗМІНЕНО 01.11.2026: окрім видимості, той самий коміт оновлює закупку
+// (buyPrice) до найдешевшого постачальника в наявності — правило Павла
+// "пріоритет завжди найнижча закупка". Див. блок buyUpdates у GET.
+type BuyPriceUpdate = { id: string; from: number; to: number; supplier: string };
+
 async function applyVisibilityChangesToGitHub(
   toHide: string[],
-  toUnhide: string[]
+  toUnhide: string[],
+  buyUpdates: BuyPriceUpdate[] = []
 ): Promise<{ ok: boolean; message: string }> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
@@ -203,12 +209,22 @@ async function applyVisibilityChangesToGitHub(
       delete p.hiddenReason;
     }
   }
+  for (const u of buyUpdates) {
+    const p = data.find((x) => x.id === u.id);
+    // Захист від гонки: міняємо, тільки якщо закупку ніхто не змінив з
+    // моменту збірки (інакше вручну виставлене значення перетерлось би).
+    if (p && Number(p.buyPrice) === u.from) p.buyPrice = u.to;
+  }
 
   const newRaw = JSON.stringify(data, null, 2) + "\n";
   const newContent = Buffer.from(newRaw, "utf-8").toString("base64");
 
   const summary =
-    [toHide.length > 0 ? `приховано ${toHide.length}` : null, toUnhide.length > 0 ? `повернено ${toUnhide.length}` : null]
+    [
+      toHide.length > 0 ? `приховано ${toHide.length}` : null,
+      toUnhide.length > 0 ? `повернено ${toUnhide.length}` : null,
+      buyUpdates.length > 0 ? `закупка ${buyUpdates.length}` : null,
+    ]
       .filter(Boolean)
       .join(", ") || "без змін";
 
@@ -216,7 +232,7 @@ async function applyVisibilityChangesToGitHub(
     method: "PUT",
     headers: { ...ghHeaders, "Content-Type": "application/json" },
     body: JSON.stringify({
-      message: `chore: автооновлення видимості товарів (${summary}) — наявність у постачальників`,
+      message: `chore: автооновлення каталогу (${summary}) — наявність і ціни постачальників`,
       content: newContent,
       sha: file.sha,
       branch: "main",
@@ -306,11 +322,23 @@ function supplierNameOf(row: SupplierRow): string {
 // (11375₴ → записалось як 11₴ і т.п. для товарів дорожчих за 1000₴).
 // Тепер прибираємо ВСІ пробіли (і звичайні, і нерозривні) перед пошуком
 // числа, а не тільки замінюємо один вид на інший.
+// ВИПРАВЛЕНО 01.11.2026: WooCommerce-теми (Aveopt, Фантом) пишуть тисячі
+// через КРАПКУ ("1.060 ₴"), і старий парсер читав це як 1,06 ₴ (знайдено на
+// bk23 Aveopt: 1 060 ₴ записалось як 1.06). Тепер група з рівно трьох цифр
+// після роздільника вважається тисячами, а копійки — це 1-2 цифри в кінці.
 function extractPrice(text: string): number | null {
-  const cleaned = text.replace(/[\s ]+/g, "");
-  const match = cleaned.match(/(\d+(?:[.,]\d+)?)/);
+  const cleaned = text.replace(/[\s\u00a0]+/g, "");
+  const match = cleaned.match(/\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?(?!\d)|\d+(?:[.,]\d{1,2})?/);
   if (!match) return null;
-  return parseFloat(match[1].replace(",", "."));
+  let num = match[0];
+  const thousands = num.match(/^(\d{1,3}(?:[.,]\d{3})+)([.,]\d{1,2})?$/);
+  if (thousands) {
+    num = thousands[1].replace(/[.,]/g, "") + (thousands[2] ? "." + thousands[2].slice(1) : "");
+  } else {
+    num = num.replace(",", ".");
+  }
+  const value = parseFloat(num);
+  return Number.isFinite(value) ? value : null;
 }
 
 // ДОДАНО 08.10.2026 (відгук Павла: "мне ну понятны коды бк... тисячі треба
@@ -423,7 +451,11 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
         else if (/\bin-?stock\b/i.test(stockClass)) stockText = "в наявності";
         else stockText = $(".outstock-qty, .instock-qty").first().text().trim();
       }
-      priceText = $(".summary .price, .entry-summary .price").first().text().trim();
+      // Якщо товар зі знижкою, у .price дві суми (стара в <del>, актуальна в
+      // <ins>) — беремо актуальну, а не першу-ліпшу.
+      priceText =
+        $(".summary .price ins, .entry-summary .price ins").first().text().trim() ||
+        $(".summary .price, .entry-summary .price").first().text().trim();
     } else if (url.includes("hugo.com.ua") || url.includes("viber-shop.com.ua")) {
       // Prom.ua — VIBER-SHOP (ФОП Субботіна, Одеса, 08.10.2026) працює на тій самій
       // платформі/темі, що й HUGO: ті самі класи b-product-data__item_type_* і
@@ -519,7 +551,8 @@ async function sendTelegramReport(
   proposalLines: string[],
   visibilityLines: string[],
   checked: number,
-  scoped: number
+  scoped: number,
+  buyLines: string[] = []
 ) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -538,6 +571,10 @@ async function sendTelegramReport(
   // звичайних змін ціни/наявності (див. коментар на початку файлу).
   if (visibilityLines.length > 0) {
     lines.push("", "👁️ *Видимість на сайті:*", ...visibilityLines);
+  }
+
+  if (buyLines.length > 0) {
+    lines.push("", "🧾 *Закупка в каталозі → найдешевший постачальник:*", ...buyLines);
   }
 
   if (proposalLines.length > 0) {
@@ -668,6 +705,26 @@ export async function GET(req: NextRequest) {
         return;
       }
 
+      // ДОДАНО 01.11.2026: запобіжник від кривого парсингу. Ціна, що змінилась
+      // більш ніж утричі за добу, майже напевно прочитана неправильно (як
+      // 1 060 ₴ → 1,06 ₴) — не записуємо її, щоб вона не стала "найдешевшим
+      // постачальником" і не потрапила в закупку каталогу.
+      const prevForGuard = row.price !== null ? Number(row.price) : null;
+      if (
+        result.price !== null &&
+        prevForGuard !== null &&
+        prevForGuard > 0 &&
+        (result.price < prevForGuard / 3 || result.price > prevForGuard * 3)
+      ) {
+        failures.push({
+          productId: row.product_id,
+          supplier: supplierName,
+          reason: `підозріла ціна ${result.price} (була ${prevForGuard}) — не записано, перевірте вручну`,
+        });
+        stockEvents.push({ ...evBase(row), event: "check_failed" });
+        return;
+      }
+
       currentStock.set(row.id, result.inStock);
 
       const prevInStock = row.in_stock;
@@ -755,9 +812,59 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // ---- Закупка = найдешевший постачальник у наявності ----
+  // ДОДАНО 01.11.2026 (правило Павла: "приоритетом всегда остается самая
+  // низкая цена закупки"). Заказ і так іде найдешевшому (view
+  // product_cheapest_supplier), а тут вирівнюємо під нього buyPrice у
+  // каталозі, щоб маржа в центрі й на сайті була правдивою:
+  //  - знайшовся дешевший постачальник / ціна впала → оновлюємо одразу;
+  //  - ціна зросла в межах PRICE_INCREASE_THRESHOLD → теж оновлюємо (на
+  //    таке пропозицію підняти ціну на сайті не створюємо);
+  //  - зросла більше → не чіпаємо: це вирішує Павло через пропозицію ціни
+  //    (вона оновить і закупку, і ціну на сайті).
+  // Товари з розмірними варіантами (власні buyPrice у варіантах) не чіпаємо.
+  const buyUpdates: BuyPriceUpdate[] = [];
+  try {
+    const { data: cheapestNow } = await supabase
+      .from("product_cheapest_supplier")
+      .select("product_id, supplier_name, supplier_price");
+    const cheapestById = new Map(
+      ((cheapestNow ?? []) as CheapestSupplierRow[]).map((r) => [r.product_id, r])
+    );
+    const hideSet = new Set(toHide);
+    const unhideSet = new Set(toUnhide);
+    for (const p of productsData as Array<Record<string, unknown>>) {
+      const id = String(p.id);
+      const visibleAfter = unhideSet.has(id) || (!p.isHidden && !hideSet.has(id));
+      if (!visibleAfter) continue;
+      if (JSON.stringify(Object.entries(p).filter(([k]) => k !== "buyPrice")).includes('"buyPrice"')) continue;
+      const buy = Number(p.buyPrice);
+      const c = cheapestById.get(id);
+      if (!c || !buy || buy <= 0) continue;
+      const cheapest = Number(c.supplier_price);
+      if (!Number.isFinite(cheapest) || cheapest <= 0) continue;
+      if (Math.abs(cheapest - buy) < 0.5) continue;
+      if (cheapest < buy * 0.3) continue; // підозріло дешево — краще перевірити руками
+      if (cheapest < buy || cheapest / buy <= 1 + PRICE_INCREASE_THRESHOLD) {
+        buyUpdates.push({ id, from: buy, to: cheapest, supplier: c.supplier_name });
+      }
+    }
+  } catch (err) {
+    console.error("[check-suppliers] buyPrice sync failed:", err instanceof Error ? err.message : err);
+  }
+
   const visibilityLines: string[] = [];
-  if (toHide.length > 0 || toUnhide.length > 0) {
-    const result = await applyVisibilityChangesToGitHub(toHide, toUnhide);
+  const buyLines: string[] = [];
+  if (toHide.length > 0 || toUnhide.length > 0 || buyUpdates.length > 0) {
+    const result = await applyVisibilityChangesToGitHub(toHide, toUnhide, buyUpdates);
+    for (const u of buyUpdates) {
+      buyLines.push(
+        `${u.to < u.from ? "⬇️" : "↗️"} ${productLabel(u.id)}: ${formatUAH(u.from)} → ${formatUAH(u.to)} (${u.supplier})`
+      );
+    }
+    if (!result.ok && buyUpdates.length > 0 && toHide.length === 0 && toUnhide.length === 0) {
+      buyLines.push(`⚠️ Закупку НЕ оновлено: ${result.message}`);
+    }
     for (const id of toHide) {
       visibilityLines.push(`🙈 Приховано з сайту (немає в наявності в жодного постачальника): ${productLabel(id)}`);
     }
@@ -852,7 +959,7 @@ export async function GET(req: NextRequest) {
   // змін — усе як учора" у sendTelegramReport вже була готова до цього),
   // крім ручних тестових викликів з ?notify=false.
   if (notify) {
-    await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length);
+    await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length, buyLines);
   }
 
   return NextResponse.json({

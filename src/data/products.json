@@ -405,9 +405,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "p04"
-    ],
+    "bundleWith": [],
     "image": "/products/h09/hero.jpg",
     "images": [
       "/products/h09/studio-clean.jpg",
@@ -1207,7 +1205,6 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "g07",
       "g10"
     ],
     "image": "/products/g09/hero2.jpg",
@@ -1362,7 +1359,6 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "g07",
       "g09"
     ],
     "image": "/products/g11/hero-v2.jpg",
@@ -1443,10 +1439,7 @@
       "sale"
     ],
     "isTrending": true,
-    "bundleWith": [
-      "bk02",
-      "bk09"
-    ],
+    "bundleWith": [],
     "image": "/products/g12/hero3.jpg",
     "images": [
       "/products/g12/hero3.jpg",
@@ -1594,9 +1587,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "p04"
-    ],
+    "bundleWith": [],
     "image": "/products/p01/hero-v2.jpg",
     "reviews": [
       {
@@ -2208,9 +2199,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "tt01"
-    ],
+    "bundleWith": [],
     "landing": {
       "gradient": "from-[#4F46E5] to-[#6366F1]",
       "accentColor": "#4F46E5",
@@ -2685,8 +2674,7 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "bk08",
-      "bk09"
+      "bk08"
     ],
     "similarWith": [],
     "reviews": [
@@ -2751,10 +2739,7 @@
       "sale"
     ],
     "isTrending": true,
-    "bundleWith": [
-      "bk01",
-      "bk02"
-    ],
+    "bundleWith": [],
     "similarWith": [
       "bk09"
     ],
@@ -4486,9 +4471,7 @@
       "hit"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "h22"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Олена",
@@ -4845,8 +4828,7 @@
     ],
     "isTrending": false,
     "bundleWith": [
-      "g08",
-      "g15"
+      "g08"
     ],
     "reviews": [
       {
@@ -5697,9 +5679,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "p13"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Олена",
@@ -6007,9 +5987,7 @@
       "sale"
     ],
     "isTrending": true,
-    "bundleWith": [
-      "bk19"
-    ],
+    "bundleWith": [],
     "reviews": [
       {
         "name": "Тарас",
@@ -6314,9 +6292,7 @@
       "sale"
     ],
     "isTrending": false,
-    "bundleWith": [
-      "bk09"
-    ],
+    "bundleWith": [],
     "similarWith": [
       "bk01",
       "bk02",

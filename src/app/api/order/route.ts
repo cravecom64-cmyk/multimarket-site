@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import productsData from "@/data/products.json";
+
+// Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
+// на прихований/видалений товар (пряме посилання на стару/прибрану картку).
+const PRODUCTS_BY_ID = new Map(
+  (productsData as Array<{ id: string; isHidden?: boolean }>).map((p) => [p.id, p])
+);
 
 // ==================== КОМАНДНИЙ ЦЕНТР (Supabase) ====================
 // Незалежна база — джерело істини по замовленнях. Пишеться ПЕРШОЮ, до
@@ -279,6 +286,25 @@ export async function POST(req: NextRequest) {
           typeof item.quantity !== "number" || item.quantity <= 0 || item.quantity > 99) {
         return NextResponse.json(
           { error: "Invalid cart item" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // --- Guard: приховані/невідомі товари не можуть пройти оформлення ---
+    // Карточка ховається саме тому, що товару реально нема (постачальник
+    // зліг, немає в наявності, лінк на постачальника не знайдено) — пряме
+    // посилання на таку сторінку НЕ повинно давати оформити замовлення,
+    // навіть якщо хтось зберіг стару сторінку чи прийшов зі старого кешу
+    // пошуковика. (Інцидент 03.11.2026: замовлення на bk26, у якого взагалі
+    // не було постачальника — картку видалено, і додано цю перевірку.)
+    for (const item of body.items) {
+      if (!item.id) continue; // товари без id (напр. бонусні позиції) — як і раніше, не перевіряємо
+      const catalogProduct = PRODUCTS_BY_ID.get(item.id);
+      if (!catalogProduct || catalogProduct.isHidden) {
+        console.error(`[order] Rejected checkout for hidden/unknown product id: ${item.id}`);
+        return NextResponse.json(
+          { error: "Один із товарів у замовленні зараз недоступний. Оновіть сторінку і спробуйте ще раз." },
           { status: 400 }
         );
       }

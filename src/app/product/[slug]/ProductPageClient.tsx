@@ -62,6 +62,29 @@ export function ProductPageClient() {
     );
   }
 
+  // Товар існує, але прихований (нема в наявності / постачальник зліг / на
+  // перевірці) — пряме посилання на стару картку не повинно давати оформити
+  // замовлення. Показуємо "недоступний" замість повної сторінки з кнопкою
+  // купівлі. (Інцидент 03.11.2026, див. order/route.ts — там те саме
+  // перевіряється ще раз на сервері, це лише для UX.)
+  if (product.isHidden) {
+    return (
+      <div className="px-4 py-20 text-center">
+        <div className="text-4xl mb-4">😕</div>
+        <div className="text-lg font-bold">Цей товар тимчасово недоступний</div>
+        <div className="text-sm text-gray-500 mt-2">
+          Можливо, він закінчився у постачальника або ми його оновлюємо.
+        </div>
+        <Link
+          href="/"
+          className="inline-block mt-4 text-emerald-500 font-semibold text-sm"
+        >
+          ← Переглянути інші товари
+        </Link>
+      </div>
+    );
+  }
+
   // Готовий бренд-лендинг (окрема сторінка) — редірект виконує useEffect
   // вище (після трекінгу ViewContent), тут просто нічого не рендеримо.
   if (product.externalLanding) {

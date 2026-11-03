@@ -3986,12 +3986,13 @@
     "images": [
       "/products/bk32/hero.jpg",
       "/products/bk32/angle.jpg",
-      "/products/bk32/cooking.jpg",
       "/products/bk32/flame.jpg",
       "/products/bk32/case.jpg",
       "/products/bk32/kit.jpg",
       "/products/bk32/mechanism.jpg",
-      "/products/bk32/detail.jpg"
+      "/products/bk32/detail.jpg",
+      "/products/bk32/cooking.jpg",
+      "/products/bk32/banner2.jpg"
     ]
   },
   {
@@ -4074,7 +4075,9 @@
       "/products/bk33/angle.jpg",
       "/products/bk33/side.jpg",
       "/products/bk33/detail.jpg",
-      "/products/bk33/battery.jpg"
+      "/products/bk33/battery.jpg",
+      "/products/bk33/banner1.jpg",
+      "/products/bk33/banner2.jpg"
     ]
   },
   {

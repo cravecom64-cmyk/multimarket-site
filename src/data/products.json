@@ -46,7 +46,7 @@
   },
   {
     "id": "h03",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "ventilyator-crownberg-sv413",
     "name": "Вентилятор настільний подвійний Crownberg SV-413 LED",
     "category": "home",
@@ -94,14 +94,14 @@
   },
   {
     "id": "h05",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "shtora-antymoskytnaya-magic-mesh",
     "name": "Антимоскітна магнітна штора Magic Mesh 210×100",
     "category": "home",
     "categoryName": "Дім і затишок",
     "price": 199,
     "oldPrice": 299,
-    "buyPrice": 75.0,
+    "buyPrice": 89.22,
     "emoji": "🚪",
     "rating": 4.4,
     "reviewCount": 119,
@@ -162,14 +162,14 @@
   },
   {
     "id": "h06",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "znyschuval-komariv-mosquito-killer",
     "name": "Знищувач комарів Mosquito Killer 360 USB лампа-пастка",
     "category": "home",
     "categoryName": "Дім і затишок",
     "price": 349,
     "oldPrice": 499,
-    "buyPrice": 130.0,
+    "buyPrice": 135,
     "emoji": "🦟",
     "rating": 4.6,
     "reviewCount": 78,
@@ -440,7 +440,7 @@
   },
   {
     "id": "h10",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "ventilyator-zvolozhuval-fs03",
     "name": "Вентилятор-зволожувач Mini Fan FS-03 LED Type-C",
     "category": "home",
@@ -514,7 +514,7 @@
   },
   {
     "id": "h12",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "kuler-pidlohovyy-germatic-am030jr",
     "name": "Підлоговий кулер-вентилятор Germatic AM-030JR 1200W",
     "category": "home",
@@ -662,7 +662,7 @@
   },
   {
     "id": "g01",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "shlang-x-hose-30m",
     "name": "Шланг для поливу X-Hose 30м з розпилювачем",
     "category": "garden",
@@ -798,7 +798,8 @@
         "oldPrice": 2470,
         "buyPrice": 1085.14
       }
-    ]
+    ],
+    "hiddenReason": "needs_review"
   },
   {
     "id": "g03",
@@ -1821,7 +1822,7 @@
   },
   {
     "id": "tt01",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "kondytsioner-arctic-storm",
     "name": "Міні Кондиціонер Охолоджувач Arctic Storm Ultra",
     "category": "tiktok",
@@ -1928,14 +1929,14 @@
   },
   {
     "id": "tt02",
-    "isHidden": false,
+    "isHidden": true,
     "slug": "blender-fresh-juice-portatyvnyy",
     "name": "Портативний фітнес-блендер Fresh Juice смузі",
     "category": "tiktok",
     "categoryName": "ТОП TikTok",
     "price": 349,
     "oldPrice": 499,
-    "buyPrice": 130.0,
+    "buyPrice": 136,
     "emoji": "🥤",
     "rating": 4.7,
     "reviewCount": 89,

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Доставка Новою Поштою по всій Україні 1-3 дні, безкоштовно від 2000₴. Оплата при отриманні або карткою онлайн.",
   alternates: {
-    canonical: "https://multi-market.com.ua/delivery",
+    canonical: "https://www.multi-market.com.ua/delivery",
   },
 };
 

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Multimarket — команда, яка тестує трендові товари з TikTok перед тим, як показати їх тобі. Дізнайся як ми працюємо.",
   alternates: {
-    canonical: "https://multi-market.com.ua/about",
+    canonical: "https://www.multi-market.com.ua/about",
   },
 };
 

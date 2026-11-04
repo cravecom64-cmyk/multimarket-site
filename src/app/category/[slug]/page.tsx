@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     categoryDescriptions[slug] ||
     `${category.name}: ${products.length} товарів з доставкою по Україні.`;
-  const url = `https://multi-market.com.ua/category/${slug}`;
+  const url = `https://www.multi-market.com.ua/category/${slug}`;
 
   return {
     title,

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Повернення та обмін товарів належної якості протягом 14 днів згідно Закону «Про захист прав споживачів». Умови, порядок дій, контакти.",
   alternates: {
-    canonical: "https://multi-market.com.ua/returns",
+    canonical: "https://www.multi-market.com.ua/returns",
   },
 };
 

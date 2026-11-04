@@ -221,13 +221,13 @@ export function ProductPageClient() {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    image: product.image ? `https://multi-market.com.ua${product.image}` : undefined,
+    image: product.image ? `https://www.multi-market.com.ua${product.image}` : undefined,
     description: product.shortDesc,
     sku: `MM-${product.id.toUpperCase()}`,
     brand: { "@type": "Brand", name: "Multimarket" },
     offers: {
       "@type": "Offer",
-      url: `https://multi-market.com.ua/product/${product.slug}`,
+      url: `https://www.multi-market.com.ua/product/${product.slug}`,
       priceCurrency: "UAH",
       price: effectivePrice,
       availability:
@@ -248,19 +248,19 @@ export function ProductPageClient() {
         "@type": "ListItem",
         position: 1,
         name: "Головна",
-        item: "https://multi-market.com.ua",
+        item: "https://www.multi-market.com.ua",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: product.categoryName,
-        item: `https://multi-market.com.ua/category/${product.category}`,
+        item: `https://www.multi-market.com.ua/category/${product.category}`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: product.name,
-        item: `https://multi-market.com.ua/product/${product.slug}`,
+        item: `https://www.multi-market.com.ua/product/${product.slug}`,
       },
     ],
   };

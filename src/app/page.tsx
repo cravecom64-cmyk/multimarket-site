@@ -98,13 +98,13 @@ export default function HomePage() {
               {
                 "@type": "Organization",
                 name: "Multimarket",
-                url: "https://multi-market.com.ua",
+                url: "https://www.multi-market.com.ua",
                 sameAs: ["https://t.me/multimarket_ua"],
               },
               {
                 "@type": "WebSite",
                 name: "Multimarket",
-                url: "https://multi-market.com.ua",
+                url: "https://www.multi-market.com.ua",
               },
             ],
           }),

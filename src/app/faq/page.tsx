@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Доставка, оплата, повернення — відповіді на найчастіші питання про замовлення в Multimarket.",
   alternates: {
-    canonical: "https://multi-market.com.ua/faq",
+    canonical: "https://www.multi-market.com.ua/faq",
   },
 };
 

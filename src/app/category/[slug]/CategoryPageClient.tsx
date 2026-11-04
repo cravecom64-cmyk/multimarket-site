@@ -104,13 +104,13 @@ export function CategoryPageClient() {
         "@type": "ListItem",
         position: 1,
         name: "Головна",
-        item: "https://multi-market.com.ua",
+        item: "https://www.multi-market.com.ua",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: category.name,
-        item: `https://multi-market.com.ua/category/${category.slug}`,
+        item: `https://www.multi-market.com.ua/category/${category.slug}`,
       },
     ],
   };

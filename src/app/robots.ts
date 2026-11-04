@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://multi-market.com.ua/sitemap.xml",
-    host: "https://multi-market.com.ua",
+    sitemap: "https://www.multi-market.com.ua/sitemap.xml",
+    host: "https://www.multi-market.com.ua",
   };
 }

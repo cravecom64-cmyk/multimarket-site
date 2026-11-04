@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Як Multimarket збирає, використовує і захищає персональні дані покупців.",
   alternates: {
-    canonical: "https://multi-market.com.ua/privacy",
+    canonical: "https://www.multi-market.com.ua/privacy",
   },
 };
 

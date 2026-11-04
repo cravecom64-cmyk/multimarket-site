@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllProducts, categories } from "@/lib/products";
 
-const BASE_URL = "https://multi-market.com.ua";
+const BASE_URL = "https://www.multi-market.com.ua";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const products = getAllProducts();

@@ -11,7 +11,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SiteAnalytics } from "@/components/SiteAnalytics";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://multi-market.com.ua"),
+  metadataBase: new URL("https://www.multi-market.com.ua"),
   title: {
     default:
       "Multimarket — товари для дому, саду і тварин з TikTok | Купити в Україні",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "доставка Новою Поштою",
   ],
   alternates: {
-    canonical: "https://multi-market.com.ua",
+    canonical: "https://www.multi-market.com.ua",
   },
   openGraph: {
     title: "Multimarket — товари для дому, саду і тварин з TikTok",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
       "Знайшли в TikTok. Перевірили. Відправка 1-3 дні. Оплата при отриманні, доставка по всій Україні.",
     type: "website",
     locale: "uk_UA",
-    url: "https://multi-market.com.ua",
+    url: "https://www.multi-market.com.ua",
     siteName: "Multimarket",
   },
   robots: {

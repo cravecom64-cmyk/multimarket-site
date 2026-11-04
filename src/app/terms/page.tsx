@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Умови продажу товарів в інтернет-магазині Multimarket — публічна оферта (договір роздрібної купівлі-продажу).",
   alternates: {
-    canonical: "https://multi-market.com.ua/terms",
+    canonical: "https://www.multi-market.com.ua/terms",
   },
 };
 

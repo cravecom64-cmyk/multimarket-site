@@ -117,6 +117,70 @@ async function pushOrderToKeyCRM(body: OrderBody, orderId: number | null) {
   }
 }
 
+// ==================== SalesDrive (колл-центр SalesWave) ====================
+// Окремий, незалежний від KeyCRM пуш — SalesWave дзвонить клієнту й підтверджує
+// замовлення перед відправкою. Мінімальний набір полів (без email — його й
+// нема в формі, без UTM/gaClientId — це наша внутрішня аналітика, їм зайве).
+async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
+  const apiKey = process.env.SALESDRIVE_API_KEY;
+  if (!apiKey) return; // ключа ще нема — просто виходимо
+
+  // Форма сайту збирає одне поле "ім'я" — ділимо на ім'я/прізвище для SalesDrive
+  const nameParts = body.name.trim().split(/\s+/);
+  const fName = nameParts[0] ?? body.name;
+  const lName = nameParts.slice(1).join(" ") || undefined;
+
+  const paymentLabel =
+    body.paymentMethod === "cod" || !body.paymentMethod
+      ? "Накладений платіж"
+      : "Оплата карткою онлайн";
+
+  try {
+    const res = await fetch("https://saleswave.salesdrive.me/handler/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Api-Key": apiKey },
+      body: JSON.stringify({
+        getResultData: "1",
+        phone: body.phone,
+        fName,
+        lName,
+        novaposhta: {
+          ServiceType: "Warehouse",
+          payer: "recipient",
+          city: body.city,
+          WarehouseNumber: body.branch,
+        },
+        products: body.items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          costPerItem: i.price,
+          amount: i.quantity,
+          sku: i.id,
+        })),
+        payment_method: paymentLabel,
+        shipping_method: "Нова Пошта",
+        comment: body.comment || undefined,
+        sajt: "multi-market.com.ua",
+        externalId: orderId ? String(orderId) : body.orderId,
+      }),
+    });
+    if (!res.ok) {
+      console.error("[order] SalesDrive push failed:", res.status, await res.text());
+      return;
+    }
+    const data = await res.json();
+    if (orderId && data?.data?.id) {
+      const supabase = supabaseServer();
+      await supabase
+        ?.from("orders")
+        .update({ salesdrive_order_id: String(data.data.id), salesdrive_synced_at: new Date().toISOString() })
+        .eq("id", orderId);
+    }
+  } catch (err) {
+    console.error("[order] SalesDrive push error:", err);
+  }
+}
+
 // ==================== RATE LIMITING ====================
 // In-memory store: IP → timestamps of recent requests
 const rateLimitMap = new Map<string, number[]>();
@@ -389,6 +453,9 @@ ${paymentLine}
 
     // --- KeyCRM: no-op, поки немає ключа (див. функцію вище) ---
     await pushOrderToKeyCRM(body, commandCenterOrderId);
+
+    // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
+    await pushOrderToSalesDrive(body, commandCenterOrderId);
 
     return NextResponse.json({ success: true, notified: tgRes.ok });
   } catch (error) {

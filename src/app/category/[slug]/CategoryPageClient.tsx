@@ -176,7 +176,6 @@ export function CategoryPageClient() {
             badges={product.badges}
             rank={sort === "popular" ? i + 1 : undefined}
             inStock={product.inStock}
-            hasTiktok={product.hasTiktok}
             externalLanding={product.externalLanding}
           />
         ))}
@@ -208,7 +207,6 @@ export function CategoryPageClient() {
                   reviewCount={p.reviewCount}
                   orderCount={p.orderCount}
                   badges={p.badges}
-                  hasTiktok={p.hasTiktok}
                   externalLanding={p.externalLanding}
                   inStock={p.inStock}
                 />

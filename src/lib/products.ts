@@ -53,8 +53,6 @@ export interface Product {
   reviewCount: number;
   orderCount: number;
   season: string;
-  tiktokHook: string;
-  hasTiktok: boolean;
   shortDesc: string;
   description: string;
   features: string[];

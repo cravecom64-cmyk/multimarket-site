@@ -116,7 +116,6 @@ export function SearchPageClient() {
                 orderCount={p.orderCount}
                 badges={p.badges}
                 rank={i + 1}
-                hasTiktok={p.hasTiktok}
                 externalLanding={p.externalLanding}
                 inStock={p.inStock}
               />
@@ -148,7 +147,6 @@ export function SearchPageClient() {
                 reviewCount={p.reviewCount}
                 orderCount={p.orderCount}
                 badges={p.badges}
-                hasTiktok={p.hasTiktok}
                 externalLanding={p.externalLanding}
                 inStock={p.inStock}
               />

@@ -183,9 +183,6 @@ export function LandingProduct({ product }: LandingProductProps) {
             </div>
           )}
           <p className="text-sm text-gray-700 leading-relaxed">{landing.socialProof}</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
-            <span>🔥 Тренд TikTok</span>
-          </div>
         </div>
       </section>
 

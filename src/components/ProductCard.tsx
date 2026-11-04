@@ -17,7 +17,6 @@ interface ProductCardProps {
   orderCount: number;
   badges: string[];
   rank?: number;
-  hasTiktok?: boolean;
   externalLanding?: string;
   inStock?: boolean;
   category?: string;
@@ -37,7 +36,6 @@ export function ProductCard({
   orderCount,
   badges,
   rank,
-  hasTiktok,
   externalLanding,
   inStock = true,
   category,
@@ -89,13 +87,6 @@ export function ProductCard({
           {discount > 0 && (
             <span className="absolute top-1.5 right-1.5 bg-red-500 text-white text-[8px] px-1.5 py-0.5 rounded font-bold badge-pulse">
               -{discount}%
-            </span>
-          )}
-
-          {/* TikTok badge */}
-          {hasTiktok && (
-            <span className="absolute bottom-1.5 right-1.5 bg-black/60 text-white text-[7px] px-1.5 py-0.5 rounded">
-              ♪ є в TikTok
             </span>
           )}
         </div>

@@ -201,7 +201,6 @@ export default function HomePage() {
                 reviewCount={product.reviewCount}
                 orderCount={product.orderCount}
                 badges={product.badges}
-                hasTiktok={product.hasTiktok}
                 externalLanding={product.externalLanding}
                 inStock={product.inStock}
               />
@@ -236,7 +235,6 @@ export default function HomePage() {
               orderCount={product.orderCount}
               badges={product.badges}
               rank={i + 1}
-              hasTiktok={product.hasTiktok}
               externalLanding={product.externalLanding}
               inStock={product.inStock}
             />

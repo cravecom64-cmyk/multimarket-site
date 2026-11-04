@@ -358,12 +358,6 @@ export function ProductPageClient() {
           </span>
         )}
 
-        {product.hasTiktok && (
-          <div className="absolute bottom-3 left-3 bg-black/50 text-white text-[9px] px-2 py-1 rounded">
-            ♪ Є в TikTok
-          </div>
-        )}
-
         {!inStock && (
           <span className="absolute top-3 right-3 bg-gray-900/85 text-white text-[10px] px-2.5 py-1 rounded-full font-bold">
             Немає в наявності
@@ -792,7 +786,6 @@ export function ProductPageClient() {
                   reviewCount={p.reviewCount}
                   orderCount={p.orderCount}
                   badges={p.badges}
-                  hasTiktok={p.hasTiktok}
                   externalLanding={p.externalLanding}
                   inStock={p.inStock}
                 />
@@ -821,7 +814,6 @@ export function ProductPageClient() {
                 reviewCount={p.reviewCount}
                 orderCount={p.orderCount}
                 badges={p.badges}
-                hasTiktok={p.hasTiktok}
                 externalLanding={p.externalLanding}
                 inStock={p.inStock}
               />

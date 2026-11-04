@@ -44,7 +44,6 @@ export default function TrendingPage() {
             badges={product.badges}
             rank={i + 1}
             inStock={product.inStock}
-            hasTiktok={product.hasTiktok}
             externalLanding={product.externalLanding}
           />
         ))}

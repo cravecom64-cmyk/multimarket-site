@@ -11,15 +11,44 @@ import { getAllProducts } from "@/lib/products";
 // він автоматично з'явиться у фіді без правок цього файлу.
 
 const SITE_URL = "https://www.multi-market.com.ua";
-const BRAND = "Multimarket";
 
-// Приблизний мапінг наших категорій на категорії Google/Meta.
-// Можна уточнити пізніше в Commerce Manager вручну по конкретних товарах.
-const CATEGORY_MAP: Record<string, string> = {
+// Google Product Taxonomy IDs (перевірено по taxonomy-with-ids.en-US.txt, 04.11.2026).
+// Спершу точний мапінг по id товару, інакше — по нашій категорії.
+const GPC_BY_CATEGORY: Record<string, number> = {
+  home: 536, // Home & Garden
+  garden: 689, // Home & Garden > Lawn & Garden
+  pets: 2, // Animals & Pet Supplies > Pet Supplies
+  tiktok: 536, // Home & Garden
+  blackout: 1436, // Home & Garden > Lighting > Emergency Lighting
+};
+const GPC_BY_ID: Record<string, number> = {
+  h02: 4636, // Lighting > Lamps
+  h07: 505826, // Lighting > Night Lights & Ambient Lighting
+  h13: 338, // Hardware > Tools > Flashlights & Headlamps
+  g03: 4201, // Watering & Irrigation > Garden Hose Spray Nozzles
+  g05: 717, // Outdoor Living > Hammocks
+  g09: 7400, // Lighting > Landscape Pathway Lighting
+  g10: 7400,
+  g11: 7400,
+  g17: 7400,
+  g18: 7400,
+  g13: 1017, // Food & Beverage Carriers > Coolers
+  p01: 6383, // Pet Grooming Supplies
+  p22: 6385, // Pet Grooming Supplies > Pet Combs & Brushes
+  tt06: 594, // Home & Garden > Lighting
+  tt07: 4971, // Bathroom Accessories > Soap & Lotion Dispensers
+  bk06: 338, // Flashlights & Headlamps
+  bk08: 338,
+  bk29: 505295, // Electronics > ... > Power > Power Adapters & Chargers
+};
+
+// Текстові категорії для Meta Commerce Manager (як було).
+const FB_CATEGORY_MAP: Record<string, string> = {
   home: "Home & Garden",
-  garden: "Home & Garden > Yard, Garden & Outdoor Living",
+  garden: "Home & Garden > Lawn & Garden",
   pets: "Animals & Pet Supplies",
   tiktok: "Home & Garden",
+  blackout: "Home & Garden > Lighting > Emergency Lighting",
 };
 
 function escapeXml(value: string): string {
@@ -40,11 +69,12 @@ export async function GET() {
         ? `${SITE_URL}${p.externalLanding}`
         : `${SITE_URL}/product/${p.slug}`;
       const image = `${SITE_URL}${p.image}`;
-      const category = CATEGORY_MAP[p.category] || "Home & Garden";
-      const regularPrice = p.oldPrice ?? p.price;
-      const saleBlock = p.oldPrice
-        ? `\n      <g:sale_price>${p.price} UAH</g:sale_price>`
-        : "";
+      const gpc = GPC_BY_ID[p.id] ?? GPC_BY_CATEGORY[p.category] ?? 536;
+      const fbCategory = FB_CATEGORY_MAP[p.category] || "Home & Garden";
+      // Ціна = реальна ціна продажу (як у JSON-LD на сторінці). oldPrice не
+      // передаємо як sale: «стара» ціна фактично не діяла, а Merchant Center
+      // вимагає, щоб звичайна ціна була реальною (misrepresentation).
+      const availability = p.inStock === false ? "out of stock" : "in stock";
 
       return `
     <item>
@@ -53,13 +83,13 @@ export async function GET() {
       <description>${escapeXml(p.shortDesc || p.description)}</description>
       <link>${link}</link>
       <g:image_link>${image}</g:image_link>
-      <g:availability>in stock</g:availability>
-      <g:price>${regularPrice} UAH</g:price>${saleBlock}
-      <g:brand>${BRAND}</g:brand>
+      <g:availability>${availability}</g:availability>
+      <g:price>${p.price} UAH</g:price>
       <g:condition>new</g:condition>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:google_product_category>${escapeXml(category)}</g:google_product_category>
-      <g:fb_product_category>${escapeXml(category)}</g:fb_product_category>
+      <g:google_product_category>${gpc}</g:google_product_category>
+      <g:product_type>${escapeXml(p.categoryName)}</g:product_type>
+      <g:fb_product_category>${escapeXml(fbCategory)}</g:fb_product_category>
     </item>`;
     })
     .join("");

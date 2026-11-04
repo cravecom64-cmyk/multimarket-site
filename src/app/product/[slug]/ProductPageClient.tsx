@@ -224,7 +224,9 @@ export function ProductPageClient() {
     image: product.image ? `https://www.multi-market.com.ua${product.image}` : undefined,
     description: product.shortDesc,
     sku: `MM-${product.id.toUpperCase()}`,
-    brand: { "@type": "Brand", name: "Multimarket" },
+    // No brand: "Multimarket" is the store, not the manufacturer (Google
+    // misrepresentation policy). Add a real brand only when known.
+    category: product.categoryName,
     offers: {
       "@type": "Offer",
       url: `https://www.multi-market.com.ua/product/${product.slug}`,

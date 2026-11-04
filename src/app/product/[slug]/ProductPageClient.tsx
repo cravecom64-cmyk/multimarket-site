@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import { trackViewContent } from "@/lib/pixel";
 import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
+import { PROMO, isPromoActive } from "@/lib/promo";
 import {
   getProductBySlug,
   getRelatedProducts,
@@ -232,6 +233,9 @@ export function ProductPageClient() {
       url: `https://www.multi-market.com.ua/product/${product.slug}`,
       priceCurrency: "UAH",
       price: effectivePrice,
+      ...(effectiveOldPrice && isPromoActive()
+        ? { priceValidUntil: PROMO.endsAtDate }
+        : {}),
       availability:
         product.inStock === false
           ? "https://schema.org/OutOfStock"
@@ -456,6 +460,11 @@ export function ProductPageClient() {
               <span className="bg-amber-50 text-amber-600 text-[10px] px-2 py-0.5 rounded font-bold">
                 Економія {savings}₴
               </span>
+              {isPromoActive() && (
+                <span className="text-[10px] text-gray-500 font-semibold">
+                  акція до {PROMO.endsAtLabel}
+                </span>
+              )}
             </>
           )}
         </div>

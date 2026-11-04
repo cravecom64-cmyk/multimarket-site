@@ -2092,7 +2092,7 @@
     "categoryName": "ТОП TikTok",
     "price": 950,
     "oldPrice": 1267,
-    "buyPrice": 379,
+    "buyPrice": 340,
     "emoji": "🧴",
     "rating": 4.6,
     "reviewCount": 88,
@@ -2158,9 +2158,7 @@
       "/products/tt07/lifestyle-sink.jpg",
       "/products/tt07/functions-collage.jpg",
       "/products/tt07/specs-card.jpg"
-    ],
-    "isHidden": true,
-    "hiddenReason": "out_of_stock"
+    ]
   },
   {
     "id": "tt08",

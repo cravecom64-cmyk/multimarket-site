@@ -14,7 +14,6 @@ import {
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
 const saleProducts = getSaleProducts();
-const tiktokProducts = getAllProducts().filter((p) => p.hasTiktok);
 const trendingProducts = getTrendingProducts();
 
 // Реальні відгуки, скопійовані з products.json (той самий текст, що й на
@@ -267,49 +266,6 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
-      </section>
-
-      {/* TikTok */}
-      <section className="mt-6 px-4">
-        <h2 className="text-base font-extrabold">
-          📱 Бачив у TikTok? Купуй тут
-        </h2>
-        <p className="text-[11px] text-gray-400 mt-0.5">
-          Ці товари зараз крутяться у наших відео
-        </p>
-        <InfiniteScrollRow
-          items={tiktokProducts.slice(0, 5)}
-          keyFn={(product) => product.id}
-          className="flex gap-2 mt-2.5 overflow-x-auto pb-2 scrollbar-hide"
-          renderItem={(product) => (
-            <Link
-              href={`/product/${product.slug}`}
-              className="w-[130px] aspect-square bg-black rounded-xl relative flex-shrink-0 overflow-hidden"
-            >
-              {product.image ? (
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  sizes="130px"
-                  className="object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-3xl">{product.emoji}</span>
-                </div>
-              )}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-8 pb-1.5 px-1.5">
-                <div className="text-[9px] text-white text-center leading-tight font-semibold">
-                  {product.name.split(" ").slice(0, 2).join(" ")}
-                </div>
-              </div>
-              <div className="absolute top-1.5 left-1.5 text-[8px] text-white bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded">
-                ♪ TikTok
-              </div>
-            </Link>
-          )}
-        />
       </section>
 
       {/* Trust Bar */}

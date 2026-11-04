@@ -18,7 +18,6 @@ const GPC_BY_CATEGORY: Record<string, number> = {
   home: 536, // Home & Garden
   garden: 689, // Home & Garden > Lawn & Garden
   pets: 2, // Animals & Pet Supplies > Pet Supplies
-  tiktok: 536, // Home & Garden
   blackout: 1436, // Home & Garden > Lighting > Emergency Lighting
 };
 const GPC_BY_ID: Record<string, number> = {
@@ -55,7 +54,6 @@ const FB_CATEGORY_MAP: Record<string, string> = {
   home: "Home & Garden",
   garden: "Home & Garden > Lawn & Garden",
   pets: "Animals & Pet Supplies",
-  tiktok: "Home & Garden",
   blackout: "Home & Garden > Lighting > Emergency Lighting",
 };
 

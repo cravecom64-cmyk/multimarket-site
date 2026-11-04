@@ -174,8 +174,8 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
   if (curated.length >= limit) return curated.slice(0, limit);
 
   // Якщо є хоча б один кураторський збіг — довіряємо йому і НЕ розбавляємо
-  // випадковим топ-продажем з категорії: категорія "tiktok" (та й інші)
-  // містить товари абсолютно різних типів (кондиціонер, блендер, лампа...),
+  // випадковим топ-продажем з категорії: деякі категорії (напр. "home")
+  // містять товари абсолютно різних типів (кондиціонер, блендер, лампа...),
   // тож "топ по замовленнях у категорії" може підсунути зовсім не схожий
   // товар (напр. блендер під кондиціонером). Добираємо філлером лише коли
   // куратор взагалі нічого не задав для цього товару.
@@ -251,13 +251,6 @@ export const categories = [
     emoji: "🐾",
     gradient: "from-[#4A1D6A] to-[#7C3AED]",
     productCount: visibleProducts().filter((p) => p.category === "pets").length,
-  },
-  {
-    slug: "tiktok",
-    name: "ТОП TikTok 🔥",
-    emoji: "🔥",
-    gradient: "from-[#7F1D1D] to-[#DC2626]",
-    productCount: visibleProducts().filter((p) => p.category === "tiktok").length,
   },
   {
     slug: "blackout",

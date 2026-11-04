@@ -149,7 +149,7 @@ export default function HomePage() {
           </Link>
         </div>
         <p className="text-[11px] text-gray-400 mt-0.5">
-          Топ-8 за кількістю замовлень — переважно блекаут-набір
+          Топ-8 популярних — переважно блекаут-набір
         </p>
         <InfiniteScrollRow
           items={trendingProducts}
@@ -200,9 +200,6 @@ export default function HomePage() {
                     <span className="text-white/50 text-[10px] line-through">{product.oldPrice}₴</span>
                   )}
                 </div>
-                <div className="text-white/60 text-[9px] mt-1 relative">
-                  {product.orderCount} замовлень
-                </div>
               </Link>
             );
           }}
@@ -252,7 +249,7 @@ export default function HomePage() {
       {/* Топ продажів */}
       <section className="mt-5 px-4">
         <h2 className="text-base font-extrabold">
-          🏆 Їх замовляють найчастіше
+          🏆 Найпопулярніше
         </h2>
         <p className="text-[11px] text-gray-400 mt-0.5">
           Перевірено сотнями покупців. Ці товари не повертають.

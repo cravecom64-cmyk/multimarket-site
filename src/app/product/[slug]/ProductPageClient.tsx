@@ -241,9 +241,17 @@ export function ProductPageClient() {
           ? "https://schema.org/OutOfStock"
           : "https://schema.org/InStock",
     },
-    // aggregateRating intentionally omitted: on-page reviews are not verified
-    // customer reviews, and Google's review snippet guidelines (2026-07-24)
-    // forbid marking up fake/undisclosed reviews. Re-add only for real reviews.
+    // aggregateRating only from real customer reviews shown on the page
+    // (rating/reviewCount are computed from product.reviews in lib/products).
+    ...(product.reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.rating,
+            reviewCount: product.reviewCount,
+          },
+        }
+      : {}),
   };
 
   const breadcrumbJsonLd = {
@@ -441,8 +449,10 @@ export function ProductPageClient() {
           {product.name}
         </h1>
         <div className="text-[11px] text-gray-400 mt-1">
-          Арт. MM-{product.id.toUpperCase()} · ⭐ {product.rating} (
-          {product.reviewCount} оцінок) · {product.orderCount} замовлень
+          Арт. MM-{product.id.toUpperCase()}
+          {product.reviewCount > 0 && (
+            <> · ⭐ {product.rating} ({product.reviewCount} відгуків)</>
+          )}
         </div>
         <div className="flex items-center gap-2.5 mt-2">
           <span

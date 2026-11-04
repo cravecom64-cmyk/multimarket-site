@@ -121,7 +121,17 @@ export interface Product {
   isHidden?: boolean;
 }
 
-const products: Product[] = productsData as unknown as Product[];
+// Рейтинг і кількість оцінок рахуються ТІЛЬКИ з реальних відгуків (reviews[]).
+// Статичні rating/reviewCount у products.json ігноруються (були вигадані).
+// Немає відгуків → reviewCount = 0, і вітрина не показує зірки взагалі.
+const products: Product[] = (productsData as unknown as Product[]).map((p) => {
+  const real = p.reviews ?? [];
+  const count = real.length;
+  const avg = count
+    ? Math.round((real.reduce((s, r) => s + r.rating, 0) / count) * 10) / 10
+    : 0;
+  return { ...p, rating: avg, reviewCount: count };
+});
 
 // Товари, видимі на вітрині (каталог/категорії/головна/sitemap/фід) —
 // isHidden-товари виключені звідусіль, КРІМ прямого доступу за slug

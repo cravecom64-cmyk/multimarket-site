@@ -107,9 +107,11 @@ export function ProductCard({
             {name}
           </div>
         </Link>
-        <div className="text-[8px] text-gray-400 mt-1">
-          ⭐ {rating} ({reviewCount}) · {orderCount} замовл.
-        </div>
+        {reviewCount > 0 && (
+          <div className="text-[8px] text-gray-400 mt-1">
+            ⭐ {rating} ({reviewCount})
+          </div>
+        )}
         <div className="mt-1 flex items-baseline gap-1.5">
           {oldPrice && (
             <span className="text-[9px] text-gray-400 line-through">

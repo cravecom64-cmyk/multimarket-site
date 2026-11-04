@@ -69,11 +69,6 @@ export function CategoryPageClient() {
   // Cross-sell: products from OTHER categories
   const crossSell = products[0] ? getCrossSellProducts(products[0], 4) : [];
 
-  const totalOrders = products.reduce((s, p) => s + p.orderCount, 0);
-  const avgRating =
-    products.length > 0
-      ? (products.reduce((s, p) => s + p.rating, 0) / products.length).toFixed(1)
-      : "0";
 
   if (!category) {
     return (
@@ -131,12 +126,6 @@ export function CategoryPageClient() {
         </h1>
         <div className="text-[11px] text-white/60 mt-1.5">
           {products.length} товарів · {meta?.subtitle}
-        </div>
-        <div className="flex items-center gap-1.5 mt-2">
-          <span className="text-[10px] text-amber-400">★★★★★</span>
-          <span className="text-[10px] text-white/50">
-            {avgRating} · {totalOrders} замовлень
-          </span>
         </div>
       </div>
 

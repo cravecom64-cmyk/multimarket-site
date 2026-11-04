@@ -20,6 +20,13 @@ type PaymentMethod = "card_mono" | "card_wfp" | "cod";
 // Тимчасово вимкнено онлайн-оплату (mono, WayForPay) — лишаємо тільки оплату при отриманні, поки не внесені всі правки.
 const ONLINE_PAYMENTS_ENABLED = false;
 
+// Той самий формат, що й на сервері (src/app/api/order/route.ts) — приймає
+// +380XXXXXXXXX, 380XXXXXXXXX, 0XXXXXXXXX (пробіли/дужки/дефіси прибираються).
+const UA_PHONE_REGEX = /^(?:\+?38)?0\d{9}$/;
+function isValidPhone(phone: string): boolean {
+  return UA_PHONE_REGEX.test(phone.replace(/[\s()-]/g, ""));
+}
+
 export function OrderModal({ onClose }: OrderModalProps) {
   const { items, totalPrice, clearCart } = useCart();
   const [form, setForm] = useState({
@@ -67,6 +74,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Чи покупець вже вийшов з поля телефону хоч раз — щоб не показувати
+  // помилку одразу при відкритті форми, коли поле ще порожнє.
+  const [phoneTouched, setPhoneTouched] = useState(false);
   const formLoadedAt = useRef(Date.now());
 
   // Серверні коди валідації → людське повідомлення українською. Раніше при
@@ -97,6 +107,11 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPhoneTouched(true);
+    if (!isValidPhone(form.phone)) {
+      setErrorMessage("Перевір номер телефону — формат +380XXXXXXXXX.");
+      return;
+    }
     setStatus("sending");
     setErrorMessage(null);
 
@@ -517,12 +532,28 @@ export function OrderModal({ onClose }: OrderModalProps) {
             </label>
             <input
               type="tel"
+              inputMode="tel"
               required
               value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              onChange={(e) => {
+                // Лишаємо тільки цифри, пробіли, +, дужки й дефіс — решту (літери
+                // й усе інше) відкидаємо одразу, щоб у полі фізично не можна
+                // було набрати щось не схоже на номер телефону.
+                const filtered = e.target.value.replace(/[^\d\s()+-]/g, "").slice(0, 20);
+                setForm({ ...form, phone: filtered });
+              }}
+              onBlur={() => setPhoneTouched(true)}
               placeholder="+380 __ ___ __ __"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              aria-invalid={phoneTouched && form.phone.length > 0 && !isValidPhone(form.phone)}
+              className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-1 ${
+                phoneTouched && form.phone.length > 0 && !isValidPhone(form.phone)
+                  ? "border-red-400 focus:border-red-500 focus:ring-red-400"
+                  : "border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+              }`}
             />
+            {phoneTouched && form.phone.length > 0 && !isValidPhone(form.phone) && (
+              <p className="text-[11px] text-red-500 mt-1">Формат: +380XXXXXXXXX або 0XXXXXXXXX</p>
+            )}
           </div>
           <div>
             <label className="text-xs font-semibold text-gray-600 mb-1 block">
@@ -595,8 +626,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
           <div className="text-[10px] text-gray-400 text-center">
             {paymentMethod === "cod"
-              ? "💰 Оплата при отриманні на Новій Пошті · ↩️ Повернення 14 днів"
-              : "💳 Перейдеш на захищену сторінку оплати · ↩️ Повернення 14 днів"}
+              ? "💰 Оплата при отриманні на Новій Пошті"
+              : "💳 Перейдеш на захищену сторінку оплати"}
           </div>
         </form>
       </div>

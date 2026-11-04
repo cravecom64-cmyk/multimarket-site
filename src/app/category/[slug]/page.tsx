@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { categories, getProductsByCategory } from "@/lib/products";
 import { CategoryPageClient } from "./CategoryPageClient";
 
@@ -47,6 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CategoryPage() {
+export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params;
+  if (!categories.find((c) => c.slug === slug)) notFound();
   return <CategoryPageClient />;
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -38,6 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ProductPage() {
+export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
+  // Removed products must return a real 404 (not a soft 404 with status 200).
+  // Hidden products still resolve via getProductBySlug and keep their page.
+  if (!getProductBySlug(slug)) notFound();
   return <ProductPageClient />;
 }

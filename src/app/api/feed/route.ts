@@ -42,6 +42,14 @@ const GPC_BY_ID: Record<string, number> = {
   bk29: 505295, // Electronics > ... > Power > Power Adapters & Chargers
 };
 
+// Важкі товари (> 2 кг): доставка НП по Україні до 10 кг — 135₴ (тарифи з 13.04.2026).
+// Решта бере тариф з налаштувань Merchant Center: 90₴, безкоштовно від 2000₴.
+// Item-level shipping перекриває налаштування акаунта, тому для товарів
+// від 2000₴ нічого не задаємо — спрацює безкоштовна доставка з акаунта.
+const HEAVY_IDS = new Set(["g20", "h24", "bk32", "p11"]);
+const HEAVY_SHIPPING_UAH = 135;
+const FREE_SHIPPING_FROM = 2000;
+
 // Текстові категорії для Meta Commerce Manager (як було).
 const FB_CATEGORY_MAP: Record<string, string> = {
   home: "Home & Garden",
@@ -74,6 +82,14 @@ export async function GET() {
       // Ціна = реальна ціна продажу (як у JSON-LD на сторінці). oldPrice не
       // передаємо як sale: «стара» ціна фактично не діяла, а Merchant Center
       // вимагає, щоб звичайна ціна була реальною (misrepresentation).
+      const shippingBlock =
+        HEAVY_IDS.has(p.id) && p.price < FREE_SHIPPING_FROM
+          ? `      <g:shipping>
+        <g:country>UA</g:country>
+        <g:service>Нова Пошта</g:service>
+        <g:price>${HEAVY_SHIPPING_UAH} UAH</g:price>
+      </g:shipping>\n`
+          : "";
       const availability = p.inStock === false ? "out of stock" : "in stock";
 
       return `
@@ -90,7 +106,7 @@ export async function GET() {
       <g:google_product_category>${gpc}</g:google_product_category>
       <g:product_type>${escapeXml(p.categoryName)}</g:product_type>
       <g:fb_product_category>${escapeXml(fbCategory)}</g:fb_product_category>
-    </item>`;
+${shippingBlock}    </item>`;
     })
     .join("");
 

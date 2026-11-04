@@ -407,7 +407,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="text-[10px] text-gray-400 mt-1">
             {totalPrice >= 2000
               ? "✅ Безкоштовна доставка"
-              : `📦 Доставка НП ~60-80₴`}
+              : `📦 Доставка НП від 90₴`}
           </div>
         </div>
 

@@ -272,6 +272,10 @@ interface SupplierRow {
   url: string;
   price: string | number | null;
   in_stock: boolean;
+  // ДОДАНО 04.11.2026: "manual" — закупка домовлена окремо (напр. доларовий
+  // прайс VIBER-SHOP нижчий за ціну на їхньому сайті). Для таких рядків
+  // перевіряємо лише наявність, ціну з сайту постачальника не записуємо.
+  price_source?: string | null;
   suppliers: { name: string } | { name: string }[] | null;
 }
 
@@ -637,7 +641,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, suppliers(name)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, suppliers(name)")
     .order("product_id");
 
   if (error || !rows) {
@@ -704,6 +708,10 @@ export async function GET(req: NextRequest) {
         stockEvents.push({ ...evBase(row), event: "check_failed" });
         return;
       }
+
+      // Домовлена ціна: ціну з сайту постачальника ігноруємо повністю (ні
+      // запису, ні подій, ні пропозицій), лишаємо тільки наявність.
+      if (row.price_source === "manual") result.price = null;
 
       // ДОДАНО 01.11.2026: запобіжник від кривого парсингу. Ціна, що змінилась
       // більш ніж утричі за добу, майже напевно прочитана неправильно (як

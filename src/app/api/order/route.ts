@@ -135,6 +135,16 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
       ? "Накладений платіж"
       : "Оплата карткою онлайн";
 
+  // Чекбокс "Зв'язатися зі мною для підтвердження замовлення" з форми —
+  // передаємо менеджеру SalesDrive, щоб він знав дзвонити чи просто писати.
+  // За замовчуванням (поле відсутнє) вважаємо true, як і на сайті.
+  const callPrefTag =
+    body.confirmCall === false
+      ? "\ud83d\udce9 Клієнт просить НЕ дзвонити — писати повідомленням/SMS"
+      : "\u260e\ufe0f Клієнт очікує дзвінок для підтвердження";
+
+  const fullComment = [callPrefTag, body.comment].filter(Boolean).join(" | ");
+
   try {
     const res = await fetch("https://saleswave.salesdrive.me/handler/", {
       method: "POST",
@@ -159,7 +169,7 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
         })),
         payment_method: paymentLabel,
         shipping_method: "Нова Пошта",
-        comment: body.comment || undefined,
+        comment: fullComment,
         sajt: "multi-market.com.ua",
         externalId: orderId ? String(orderId) : body.orderId,
       }),

@@ -235,15 +235,9 @@ export function ProductPageClient() {
           ? "https://schema.org/OutOfStock"
           : "https://schema.org/InStock",
     },
-    ...(product.reviewCount > 0
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: product.rating,
-            reviewCount: product.reviewCount,
-          },
-        }
-      : {}),
+    // aggregateRating intentionally omitted: on-page reviews are not verified
+    // customer reviews, and Google's review snippet guidelines (2026-07-24)
+    // forbid marking up fake/undisclosed reviews. Re-add only for real reviews.
   };
 
   const breadcrumbJsonLd = {

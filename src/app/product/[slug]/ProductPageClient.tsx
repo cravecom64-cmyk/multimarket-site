@@ -739,29 +739,6 @@ export function ProductPageClient() {
         );
       })()}
 
-      {/* TikTok Videos — тільки реальні відео, без фейкових ▶-плашок */}
-      {product.tiktokVideos && product.tiktokVideos.length > 0 && (
-        <div className="px-4 mt-5">
-          <h3 className="text-[13px] font-extrabold">📱 Цей товар у TikTok</h3>
-          <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
-            {product.tiktokVideos.map((v, i) => (
-              <a
-                key={i}
-                href={v.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-w-[100px] h-[140px] bg-black rounded-xl flex flex-col items-center justify-center relative flex-shrink-0"
-              >
-                <span className="text-xl opacity-90">▶</span>
-                <div className="absolute bottom-2 text-[8px] text-gray-300 text-center">
-                  {v.label}
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Cross-sell */}
       {crossSell.length > 0 && (
         <div className="px-4 mt-5">

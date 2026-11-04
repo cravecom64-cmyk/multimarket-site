@@ -11,6 +11,28 @@ import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import { trackViewContent } from "@/lib/pixel";
 import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
 import { PROMO, isPromoActive } from "@/lib/promo";
+
+// Міні-markdown для розділів details: екранування HTML, **жирний**,
+// [текст](/внутрішній-шлях) — тільки внутрішні посилання, "• " = список.
+function renderDetailBody(src: string): string {
+  const esc = (t: string) =>
+    t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const inline = (t: string) =>
+    esc(t)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\[([^\]]+)\]\((\/[^)\s]*)\)/g, '<a href="$2">$1</a>');
+  return src
+    .trim()
+    .split(/\n\s*\n/)
+    .map((block) => {
+      const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+      if (lines.every((l) => l.startsWith("• "))) {
+        return `<ul>${lines.map((l) => `<li>• ${inline(l.slice(2))}</li>`).join("")}</ul>`;
+      }
+      return `<p>${lines.map(inline).join("<br>")}</p>`;
+    })
+    .join("");
+}
 import {
   getProductBySlug,
   getRelatedProducts,
@@ -23,8 +45,6 @@ export function ProductPageClient() {
   const slug = params.slug as string;
   const product = getProductBySlug(slug);
   const { addItem, setIsCartOpen } = useCart();
-  const [specsOpen, setSpecsOpen] = useState(false);
-  const [reviewsOpen, setReviewsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -580,86 +600,80 @@ export function ProductPageClient() {
         </div>
       )}
 
-      {/* Характеристики + Відгуки — одна під одною, обидві згорнуті за замовчуванням */}
+      {/* Розгорнуті розділи + Характеристики + Відгуки. Нативні <details>:
+          згорнуті за замовчуванням, але текст завжди в HTML (індексує Google). */}
       <div className="mx-4 mt-4 space-y-2">
-        {/* Specs Accordion */}
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
-          <button
-            onClick={() => setSpecsOpen(!specsOpen)}
-            className="w-full px-3.5 py-3 flex justify-between items-center"
-          >
-            <span className="text-[12px] font-bold">📋 Характеристики</span>
-            <span className="text-sm text-gray-400">
-              {specsOpen ? "▴" : "▾"}
-            </span>
-          </button>
-          {specsOpen && (
-            <div className="px-3.5 pb-3 text-[11px] text-gray-600 space-y-1.5">
-              {Object.entries(product.specs).map(([key, val]) => (
-                <div key={key} className="flex justify-between">
-                  <span className="text-gray-400">{key}</span>
-                  <span className="font-semibold text-gray-700">{val}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {product.details?.map((d, i) => (
+          <details key={i} className="group border border-gray-200 rounded-xl overflow-hidden">
+            <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-3.5 py-3 flex justify-between items-center">
+              <h3 className="text-[12px] font-bold">{d.title}</h3>
+              <span className="text-sm text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+            </summary>
+            <div
+              className="px-3.5 pb-3 text-[11px] text-gray-700 leading-relaxed [&_strong]:font-bold [&_p]:mt-1.5 [&_ul]:mt-1.5 [&_li]:mt-1 [&_a]:text-emerald-600 [&_a]:font-semibold"
+              dangerouslySetInnerHTML={{ __html: renderDetailBody(d.body) }}
+            />
+          </details>
+        ))}
 
-        {/* Reviews Accordion — реальні написані відгуки; згорнуті за
-            замовчуванням, розкриваються по кнопці, щоб не перевантажувати сторінку */}
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
-          <button
-            onClick={() => setReviewsOpen(!reviewsOpen)}
-            className="w-full px-3.5 py-3 flex justify-between items-center"
-          >
+        <details className="group border border-gray-200 rounded-xl overflow-hidden">
+          <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-3.5 py-3 flex justify-between items-center">
+            <span className="text-[12px] font-bold">📋 Характеристики</span>
+            <span className="text-sm text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+          </summary>
+          <div className="px-3.5 pb-3 text-[11px] text-gray-600 space-y-1.5">
+            {Object.entries(product.specs).map(([key, val]) => (
+              <div key={key} className="flex justify-between gap-3">
+                <span className="text-gray-400">{key}</span>
+                <span className="font-semibold text-gray-700 text-right">{val}</span>
+              </div>
+            ))}
+          </div>
+        </details>
+
+        <details className="group border border-gray-200 rounded-xl overflow-hidden">
+          <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-3.5 py-3 flex justify-between items-center">
             <span className="text-[12px] font-bold">
               💬 Відгуки ({product.reviews?.length ?? 0})
             </span>
-            <span className="text-sm text-gray-400">
-              {reviewsOpen ? "▴" : "▾"}
-            </span>
-          </button>
-          {reviewsOpen && (
-            product.reviews && product.reviews.length > 0 ? (
-              <div className="px-3.5 pb-3 space-y-2">
-                {product.reviews.map((r, i) => (
-                  <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
-                          {r.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="text-[10px] font-bold">{r.name}</div>
-                          <div className="text-[8px] text-gray-400">
-                            {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
-                          </div>
+            <span className="text-sm text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+          </summary>
+          {product.reviews && product.reviews.length > 0 ? (
+            <div className="px-3.5 pb-3 space-y-2">
+              {product.reviews.map((r, i) => (
+                <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[11px] font-bold">
+                        {r.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-bold">{r.name}</div>
+                        <div className="text-[8px] text-gray-400">
+                          {r.city} · {r.daysAgo === 0 ? "сьогодні" : `${r.daysAgo} дні тому`}
                         </div>
                       </div>
-                      <span className="text-[10px] text-amber-500">
-                        {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
-                      </span>
                     </div>
-                    <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
-                      {r.text}
-                    </div>
-                    <div className="text-[9px] text-emerald-500 font-semibold mt-1.5">
-                      ✓ Підтверджена покупка
-                    </div>
+                    <span className="text-[10px] text-amber-500">
+                      {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                    </span>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="px-3.5 pb-3">
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
-                  <div className="text-[11px] text-gray-500">
-                    Поки без відгуків — будьте першим, хто розповість про цей товар!
+                  <div className="text-[10px] text-gray-700 mt-1.5 leading-relaxed">
+                    {r.text}
                   </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="px-3.5 pb-3">
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
+                <div className="text-[11px] text-gray-500">
+                  Поки без відгуків — будьте першим, хто розповість про цей товар!
+                </div>
               </div>
-            )
+            </div>
           )}
-        </div>
+        </details>
       </div>
 
       {/* Bundle / Upsell */}

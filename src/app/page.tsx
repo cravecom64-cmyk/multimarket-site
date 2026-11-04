@@ -20,41 +20,6 @@ const trendingProducts = getTrendingProducts();
 // Реальні відгуки, скопійовані з products.json (той самий текст, що й на
 // сторінках товарів) — щоб на головній не було фейкових відгуків під
 // товари, яких у каталозі взагалі нема.
-const reviews = [
-  {
-    name: "Тетяна",
-    initial: "Т",
-    color: "bg-emerald-500",
-    city: "Київ",
-    date: "9 днів тому",
-    stars: 5,
-    product: "Ігровий комплекс для котів з кігтеточкою MT05-2",
-    text: "Диван нарешті цілий! Кіт переключився на комплекс за перший же день.",
-    likes: 14,
-  },
-  {
-    name: "Роман",
-    initial: "Р",
-    color: "bg-indigo-500",
-    city: "Кропивницький",
-    date: "4 дні тому",
-    stars: 5,
-    product: "Ліхтар з ефектом полум'я Solar Flame LED",
-    text: "Ефект вогню дуже реалістичний, гості думали що це справжні факели. Вітром не гасне, перевіряли.",
-    likes: 11,
-  },
-  {
-    name: "Катерина",
-    initial: "К",
-    color: "bg-pink-500",
-    city: "Київ",
-    date: "4 дні тому",
-    stars: 5,
-    product: "Міні Кондиціонер Охолоджувач Arctic Storm Ultra",
-    text: "Стоїть на столі, дме прохолодою прямо в обличчя. У спеку рятує на робочому місці.",
-    likes: 17,
-  },
-];
 
 const trustItems = [
   {
@@ -345,68 +310,6 @@ export default function HomePage() {
             </Link>
           )}
         />
-      </section>
-
-      {/* Відгуки */}
-      <section className="mt-6 px-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-base font-extrabold">💬 Відгуки покупців</h2>
-          <span className="text-[11px] text-amber-500 font-semibold">
-            Всі відгуки →
-          </span>
-        </div>
-        <div className="flex items-center gap-2 mt-1.5">
-          <span className="text-lg font-extrabold text-amber-500">4.8</span>
-          <span className="text-sm text-amber-500">★★★★★</span>
-          <span className="text-[11px] text-gray-400">
-            на основі 124 відгуків
-          </span>
-        </div>
-
-        <div className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-          {reviews.map((r, i) => (
-            <div
-              key={i}
-              className="bg-gray-50 rounded-xl p-3.5 border border-gray-100 min-w-[260px] max-w-[260px] shrink-0 snap-start"
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-8 h-8 rounded-full ${r.color} flex items-center justify-center text-white text-[13px] font-bold`}
-                  >
-                    {r.initial}
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-bold">{r.name}</div>
-                    <div className="text-[9px] text-gray-400">
-                      {r.city} · {r.date}
-                    </div>
-                  </div>
-                </div>
-                <span className="text-[11px] text-amber-500">
-                  {"★".repeat(r.stars)}
-                  {r.stars < 5 && (
-                    <span className="text-gray-300">
-                      {"★".repeat(5 - r.stars)}
-                    </span>
-                  )}
-                </span>
-              </div>
-              <div className="text-[10px] font-semibold text-emerald-500 mt-2">
-                {r.product}
-              </div>
-              <div className="text-[11px] text-gray-700 mt-1 leading-relaxed">
-                {r.text}
-              </div>
-              <div className="flex items-center gap-1 mt-2 text-[10px] text-gray-400">
-                <span>👍 {r.likes}</span>
-                <span className="ml-2 text-emerald-500 font-semibold">
-                  ✓ Підтверджена покупка
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* Trust Bar */}

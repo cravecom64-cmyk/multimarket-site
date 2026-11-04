@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getSiteSummary, getTopProducts, kyivToday, addDays, fmtDay, formatUAH as fmtUAHStat, pctDelta, CLEAN_DATA_FROM } from "@/lib/siteStats";
 import * as cheerio from "cheerio";
 import productsData from "@/data/products.json";
 
@@ -549,6 +550,40 @@ function summarizeFailures(failures: FailureInfo[]): string[] {
   );
 }
 
+// ---- Підсумок сайту за вчора (для ранкового звіту) ----
+// Markdown у Telegram ламається на * _ ` [ у назвах товарів — прибираємо їх.
+const mdSafe = (s: string) => s.replace(/[*_`\[\]]/g, "");
+
+async function buildDailySiteLines(supabase: NonNullable<ReturnType<typeof supabaseServer>>): Promise<string[]> {
+  const yesterday = addDays(kyivToday(), -1);
+  const dayBefore = addDays(yesterday, -1);
+  const [y, p, top] = await Promise.all([
+    getSiteSummary(supabase, yesterday, yesterday),
+    getSiteSummary(supabase, dayBefore, dayBefore),
+    getTopProducts(supabase, yesterday, yesterday, 3),
+  ]);
+  const cmp = dayBefore >= CLEAN_DATA_FROM;
+  const d = (cur: number, prev: number) => (cmp ? ` (${pctDelta(cur, prev) || "без змін"}, позавчора ${prev})` : "");
+
+  const lines = [
+    `☀️ *Сайт учора, ${fmtDay(yesterday)}*`,
+    `👀 Відвідувачів: *${y.sessions}*${d(y.sessions, p.sessions)}`,
+    `🛒 Додали в кошик: *${y.addedToCart}*${d(y.addedToCart, p.addedToCart)} · почали оформлення: ${y.beganCheckout}`,
+    `✅ Замовлень: *${y.orders}*${y.orders ? ` на ${fmtUAHStat(y.revenue)}` : ""}${d(y.orders, p.orders)}`,
+  ];
+  if (y.checkoutErrors > 0) lines.push(`⚠️ Помилок при оформленні: ${y.checkoutErrors}`);
+  if (top.length > 0) {
+    lines.push("🔝 Найпопулярніші:");
+    for (const t of top) {
+      const parts = [`${t.views} перегл.`];
+      if (t.carts) parts.push(`${t.carts} у кошик`);
+      if (t.orders) parts.push(`${t.orders} замовл.`);
+      lines.push(`   • ${mdSafe(t.name)} — ${parts.join(", ")}`);
+    }
+  }
+  return lines;
+}
+
 async function sendTelegramReport(
   changes: string[],
   failures: FailureInfo[],
@@ -556,13 +591,17 @@ async function sendTelegramReport(
   visibilityLines: string[],
   checked: number,
   scoped: number,
-  buyLines: string[] = []
+  buyLines: string[] = [],
+  siteLines: string[] = []
 ) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!botToken || !chatId) return;
 
-  const lines: string[] = [`📦 *Щоденна перевірка постачальників* (${checked}/${scoped} товарів)`];
+  // ДОДАНО 04.11.2026: ранковий звіт починається з підсумку сайту за вчора.
+  const lines: string[] = [];
+  if (siteLines.length > 0) lines.push(...siteLines, "");
+  lines.push(`📦 *Щоденна перевірка постачальників* (${checked}/${scoped} товарів)`);
 
   if (changes.length > 0) {
     lines.push("", ...changes.map((c) => `• ${c}`));
@@ -966,11 +1005,20 @@ export async function GET(req: NextRequest) {
   // було сплутати зі збоєм крона. Тепер звіт іде щодня завжди (гілка "Без
   // змін — усе як учора" у sendTelegramReport вже була готова до цього),
   // крім ручних тестових викликів з ?notify=false.
+  let siteLines: string[] = [];
+  try {
+    siteLines = await buildDailySiteLines(supabase);
+  } catch (err) {
+    // Статистика не повинна зламати звіт про постачальників
+    console.error("[check-suppliers] daily site stats failed:", err instanceof Error ? err.message : err);
+  }
+
   if (notify) {
-    await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length, buyLines);
+    await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length, buyLines, siteLines);
   }
 
   return NextResponse.json({
+    siteLines,
     scoped: scoped.length,
     checked,
     changes: changes.length,

@@ -27,6 +27,29 @@ function isValidPhone(phone: string): boolean {
   return UA_PHONE_REGEX.test(phone.replace(/[\s()-]/g, ""));
 }
 
+// Автозаповнення міста/відділення Нової Пошти (05.11.2026) — аналіз воронки
+// (product_events у Supabase) показав, що з усіх, хто дійшов до форми
+// оформлення, більшість покидає її одразу, ще до заповнення жодного поля.
+// Найімовірніша причина — поле "Відділення Нової Пошти" вимагало вручну
+// набрати точну адресу, яку рідко хто пам'ятає напам'ять. Тепер поля
+// підказують варіанти з реального довідника НП (API v2.0, ключ
+// NOVA_POSHTA_API_KEY лише на сервері — див. /api/nova-poshta/*), і
+// покупець просто впізнає своє відділення зі списку замість того, щоб
+// згадувати чи йти шукати адресу деінде. Поля лишаються звичайними
+// текстовими — якщо підказки не завантажились (НП API недоступне/ключ не
+// налаштований), все працює так само, як і раніше, нічого не блокується.
+interface NpCityOption {
+  ref: string;
+  name: string;
+  area: string;
+}
+interface NpWarehouseOption {
+  ref: string;
+  number: string;
+  description: string;
+  shortAddress: string;
+}
+
 export function OrderModal({ onClose }: OrderModalProps) {
   const { items, totalPrice, clearCart } = useCart();
   const [form, setForm] = useState({
@@ -38,6 +61,107 @@ export function OrderModal({ onClose }: OrderModalProps) {
     confirmCall: true, // чекбокс "зв'язатись для підтвердження" — за замовчуванням увімкнено
     website: "", // honeypot — hidden from users, bots fill it
   });
+
+  // Стан автозаповнення міста/відділення НП — див. коментар над компонентом.
+  const [cityOptions, setCityOptions] = useState<NpCityOption[]>([]);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [cityRef, setCityRef] = useState<string | null>(null);
+  const cityDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextCityFetchRef = useRef(false);
+
+  const [branchOptions, setBranchOptions] = useState<NpWarehouseOption[]>([]);
+  const [branchDropdownOpen, setBranchDropdownOpen] = useState(false);
+  const branchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextBranchFetchRef = useRef(false);
+
+  async function fetchWarehouses(ref: string, q: string) {
+    try {
+      const res = await fetch(
+        `/api/nova-poshta/warehouses?cityRef=${encodeURIComponent(ref)}&q=${encodeURIComponent(q)}`
+      );
+      const data = await res.json();
+      const list: NpWarehouseOption[] = data?.warehouses ?? [];
+      setBranchOptions(list);
+      setBranchDropdownOpen(list.length > 0);
+    } catch {
+      // тихо ігноруємо — поле "Відділення" лишається звичайним текстовим
+    }
+  }
+
+  function handleCityChange(value: string) {
+    setForm((prev) => ({ ...prev, city: value, branch: "" }));
+    setCityRef(null);
+    setBranchOptions([]);
+    setBranchDropdownOpen(false);
+
+    if (skipNextCityFetchRef.current) {
+      skipNextCityFetchRef.current = false;
+      setCityDropdownOpen(false);
+      return;
+    }
+
+    if (cityDebounceRef.current) clearTimeout(cityDebounceRef.current);
+    const query = value.trim();
+    if (query.length < 2) {
+      setCityOptions([]);
+      setCityDropdownOpen(false);
+      return;
+    }
+    cityDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/nova-poshta/cities?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        const list: NpCityOption[] = data?.cities ?? [];
+        setCityOptions(list);
+        setCityDropdownOpen(list.length > 0);
+      } catch {
+        // тихо ігноруємо — поле "Місто" лишається звичайним текстовим
+      }
+    }, 300);
+  }
+
+  function selectCity(opt: NpCityOption) {
+    skipNextCityFetchRef.current = true;
+    setForm((prev) => ({ ...prev, city: opt.name, branch: "" }));
+    setCityRef(opt.ref);
+    setCityOptions([]);
+    setCityDropdownOpen(false);
+    // Одразу підвантажуємо перші відділення цього міста — щоб у полі
+    // "Відділення" було що показати одразу на фокусі, без набору тексту.
+    fetchWarehouses(opt.ref, "");
+  }
+
+  function handleBranchChange(value: string) {
+    setForm((prev) => ({ ...prev, branch: value }));
+
+    if (skipNextBranchFetchRef.current) {
+      skipNextBranchFetchRef.current = false;
+      setBranchDropdownOpen(false);
+      return;
+    }
+
+    if (!cityRef) return; // місто ще не обране зі списку — поле звичайне текстове
+
+    if (branchDebounceRef.current) clearTimeout(branchDebounceRef.current);
+    branchDebounceRef.current = setTimeout(() => {
+      fetchWarehouses(cityRef, value.trim());
+    }, 300);
+  }
+
+  function selectBranch(opt: NpWarehouseOption) {
+    skipNextBranchFetchRef.current = true;
+    setForm((prev) => ({ ...prev, branch: opt.description }));
+    setBranchOptions([]);
+    setBranchDropdownOpen(false);
+  }
+
+  function handleBranchFocus() {
+    if (cityRef && branchOptions.length > 0) {
+      setBranchDropdownOpen(true);
+    } else if (cityRef && !form.branch) {
+      fetchWarehouses(cityRef, "");
+    }
+  }
 
   // InitiateCheckout — момент відкриття форми оформлення (між AddToCart і
   // Purchase). Раніше функція була написана в pixel.ts, але ніде не
@@ -555,31 +679,79 @@ export function OrderModal({ onClose }: OrderModalProps) {
               <p className="text-[11px] text-red-500 mt-1">Формат: +380XXXXXXXXX або 0XXXXXXXXX</p>
             )}
           </div>
-          <div>
+          <div className="relative">
             <label className="text-xs font-semibold text-gray-600 mb-1 block">
               Місто *
             </label>
             <input
               type="text"
               required
+              autoComplete="off"
               value={form.city}
-              onChange={(e) => setForm({ ...form, city: e.target.value })}
+              onChange={(e) => handleCityChange(e.target.value)}
+              onFocus={() => {
+                if (cityOptions.length > 0) setCityDropdownOpen(true);
+              }}
+              onBlur={() => {
+                setTimeout(() => setCityDropdownOpen(false), 150);
+              }}
               placeholder="Київ"
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
+            {cityDropdownOpen && cityOptions.length > 0 && (
+              <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {cityOptions.map((opt) => (
+                  <button
+                    key={opt.ref}
+                    type="button"
+                    onMouseDown={() => selectCity(opt)}
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-emerald-50 border-b border-gray-50 last:border-b-0"
+                  >
+                    <span className="font-medium">{opt.name}</span>
+                    {opt.area && (
+                      <span className="text-gray-400 text-xs"> · {opt.area}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          <div>
+          <div className="relative">
             <label className="text-xs font-semibold text-gray-600 mb-1 block">
               Відділення Нової Пошти *
             </label>
             <input
               type="text"
               required
+              autoComplete="off"
               value={form.branch}
-              onChange={(e) => setForm({ ...form, branch: e.target.value })}
+              onChange={(e) => handleBranchChange(e.target.value)}
+              onFocus={handleBranchFocus}
+              onBlur={() => {
+                setTimeout(() => setBranchDropdownOpen(false), 150);
+              }}
               placeholder="Відділення №5, вул. Хрещатик, 1"
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
+            {branchDropdownOpen && branchOptions.length > 0 && (
+              <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {branchOptions.map((opt) => (
+                  <button
+                    key={opt.ref}
+                    type="button"
+                    onMouseDown={() => selectBranch(opt)}
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-emerald-50 border-b border-gray-50 last:border-b-0"
+                  >
+                    {opt.description}
+                  </button>
+                ))}
+              </div>
+            )}
+            {!cityRef && (
+              <p className="text-[11px] text-gray-400 mt-1">
+                Обери місто зі списку — побачиш список відділень
+              </p>
+            )}
           </div>
           <div>
             <label className="text-xs font-semibold text-gray-600 mb-1 block">

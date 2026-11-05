@@ -3082,15 +3082,15 @@
     "buyPrice": 420,
     "emoji": "❄️",
     "inStock": true,
-    "image": "/products/ny03/hero-black-yellow.jpg",
+    "image": "/products/ny03/banner-black-yellow.jpg",
     "colors": [
       {
         "name": "Жовтий",
         "hex": "#FFC107",
-        "image": "/products/ny03/hero-black-yellow.jpg",
+        "image": "/products/ny03/banner-black-yellow.jpg",
         "images": [
-          "/products/ny03/hero-black-yellow.jpg",
           "/products/ny03/banner-black-yellow.jpg",
+          "/products/ny03/hero-black-yellow.jpg",
           "/products/ny03/diagram-length.jpg",
           "/products/ny03/banner-allyear.jpg",
           "/products/ny03/detail-coil-black.jpg",
@@ -3102,10 +3102,10 @@
       {
         "name": "Білий",
         "hex": "#F5F5F0",
-        "image": "/products/ny03/hero-black-white.jpg",
+        "image": "/products/ny03/banner-black-white.jpg",
         "images": [
-          "/products/ny03/hero-black-white.jpg",
           "/products/ny03/banner-black-white.jpg",
+          "/products/ny03/hero-black-white.jpg",
           "/products/ny03/diagram-length.jpg",
           "/products/ny03/banner-allyear.jpg",
           "/products/ny03/detail-coil-black.jpg",
@@ -3117,10 +3117,10 @@
       {
         "name": "Мультиколір",
         "hex": "#8B5CF6",
-        "image": "/products/ny03/hero-black-multi.jpg",
+        "image": "/products/ny03/banner-black-multi.jpg",
         "images": [
-          "/products/ny03/hero-black-multi.jpg",
           "/products/ny03/banner-black-multi.jpg",
+          "/products/ny03/hero-black-multi.jpg",
           "/products/ny03/diagram-length.jpg",
           "/products/ny03/banner-allyear.jpg",
           "/products/ny03/detail-coil-black.jpg",
@@ -3132,10 +3132,10 @@
       {
         "name": "Синій",
         "hex": "#2563EB",
-        "image": "/products/ny03/hero-black-blue.jpg",
+        "image": "/products/ny03/banner-black-blue.jpg",
         "images": [
-          "/products/ny03/hero-black-blue.jpg",
           "/products/ny03/banner-black-blue.jpg",
+          "/products/ny03/hero-black-blue.jpg",
           "/products/ny03/diagram-length.jpg",
           "/products/ny03/banner-allyear.jpg",
           "/products/ny03/detail-coil-black.jpg",
@@ -3186,15 +3186,15 @@
     "buyPrice": 420,
     "emoji": "❄️",
     "inStock": true,
-    "image": "/products/ny04/hero-white-multi.jpg",
+    "image": "/products/ny04/banner-white-multi.jpg",
     "colors": [
       {
         "name": "Мультиколір",
         "hex": "#8B5CF6",
-        "image": "/products/ny04/hero-white-multi.jpg",
+        "image": "/products/ny04/banner-white-multi.jpg",
         "images": [
-          "/products/ny04/hero-white-multi.jpg",
           "/products/ny04/banner-white-multi.jpg",
+          "/products/ny04/hero-white-multi.jpg",
           "/products/ny04/diagram-length.jpg",
           "/products/ny04/banner-allyear.jpg",
           "/products/ny04/detail-coil-white.jpg",
@@ -3206,10 +3206,10 @@
       {
         "name": "Синій",
         "hex": "#2563EB",
-        "image": "/products/ny04/hero-white-blue.jpg",
+        "image": "/products/ny04/banner-white-blue.jpg",
         "images": [
-          "/products/ny04/hero-white-blue.jpg",
           "/products/ny04/banner-white-blue.jpg",
+          "/products/ny04/hero-white-blue.jpg",
           "/products/ny04/diagram-length.jpg",
           "/products/ny04/banner-allyear.jpg",
           "/products/ny04/detail-coil-white.jpg",

@@ -104,6 +104,13 @@ export function Header() {
               >
                 🔦 Блекаут
               </Link>
+              <Link
+                href="/category/newyear"
+                className="text-base font-semibold hover:text-emerald-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                🎄 Новорічні товари
+              </Link>
               <hr className="my-2" />
               <Link
                 href="/"

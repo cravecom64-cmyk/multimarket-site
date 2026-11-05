@@ -252,4 +252,11 @@ export const categories = [
     gradient: "from-[#18181B] to-[#F59E0B]",
     productCount: visibleProducts().filter((p) => p.category === "blackout").length,
   },
+  {
+    slug: "newyear",
+    name: "Новорічні товари",
+    emoji: "🎄",
+    gradient: "from-[#14532D] to-[#B91C1C]",
+    productCount: visibleProducts().filter((p) => p.category === "newyear").length,
+  },
 ];

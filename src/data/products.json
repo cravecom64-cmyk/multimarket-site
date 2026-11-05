@@ -2930,7 +2930,9 @@
       "/products/bk34/hero.jpg",
       "/products/bk34/angle.jpg",
       "/products/bk34/diagram.jpg"
-    ]
+    ],
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk35",

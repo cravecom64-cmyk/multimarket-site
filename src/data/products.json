@@ -3070,5 +3070,95 @@
       "🎄 Новинка"
     ],
     "isHidden": false
+  },
+  {
+    "id": "ny03",
+    "slug": "girlyanda-bahroma-vulychna-105-led-6m-6-koloriv",
+    "name": "Новорічна гірлянда Бахрома вулична 105 LED, 6м — на вибір 6 кольорів",
+    "category": "newyear",
+    "categoryName": "Новорічні товари",
+    "price": 699,
+    "oldPrice": 949,
+    "buyPrice": 420,
+    "emoji": "❄️",
+    "inStock": true,
+    "image": "/products/ny03/hero-black-yellow.jpg",
+    "images": [
+      "/products/ny03/banner-black-yellow.jpg",
+      "/products/ny03/banner-black-white.jpg",
+      "/products/ny03/banner-black-blue.jpg",
+      "/products/ny03/banner-black-multi.jpg",
+      "/products/ny03/banner-white-blue.jpg",
+      "/products/ny03/banner-white-multi.jpg",
+      "/products/ny03/diagram-length.jpg",
+      "/products/ny03/banner-allyear.jpg",
+      "/products/ny03/detail-coil-black.jpg",
+      "/products/ny03/detail-coil-white.jpg",
+      "/products/ny03/packaging-black.jpg",
+      "/products/ny03/packaging-white.jpg",
+      "/products/ny03/box-black.jpg",
+      "/products/ny03/box-white.jpg",
+      "/products/ny03/label-specs.jpg"
+    ],
+    "colors": [
+      {
+        "name": "Чорний дріт — жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny03/hero-black-yellow.jpg"
+      },
+      {
+        "name": "Чорний дріт — білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny03/hero-black-white.jpg"
+      },
+      {
+        "name": "Чорний дріт — мультиколір",
+        "hex": "#8B5CF6",
+        "image": "/products/ny03/hero-black-multi.jpg"
+      },
+      {
+        "name": "Чорний дріт — синій",
+        "hex": "#2563EB",
+        "image": "/products/ny03/hero-black-blue.jpg"
+      },
+      {
+        "name": "Білий дріт — мультиколір",
+        "hex": "#8B5CF6",
+        "image": "/products/ny03/hero-white-multi.jpg"
+      },
+      {
+        "name": "Білий дріт — синій",
+        "hex": "#2563EB",
+        "image": "/products/ny03/hero-white-blue.jpg"
+      }
+    ],
+    "rating": 0,
+    "reviewCount": 0,
+    "orderCount": 0,
+    "season": "winter",
+    "shortDesc": "Вулична гірлянда «Бахрома», 105 LED, 6 метрів, IP44 — оберіть відтінок світіння і колір дроту (6 варіантів)",
+    "description": "Гірлянда «Бахрома» створює ефект крижаних бурульок, що звисають з даху чи карниза — класичне новорічне освітлення фасаду, вікна, балкона чи альтанки. 21 підвісна нитка різної довжини (65, 50 і 30 см) формують каскад, а 105 світлодіодів рівномірно заливають його світлом без темних проміжків. Працює від мережі 220В, має режим «флеш» — м'яке мерехтіння. Ступінь захисту IP44 дозволяє використовувати гірлянду на вулиці цілий рік — не боїться дощу, снігу та морозу. Кілька гірлянд можна з'єднувати між собою для більшої довжини. Доступна у 6 варіантах: чорний або білий дріт, світіння тепле жовте, холодне біле, синє чи мультиколірне — оберіть відтінок під колір фасаду.",
+    "features": [
+      "105 LED, довжина 6 метрів — на вікно, балкон чи невеликий карниз",
+      "21 підвісна нитка (65/50/30 см) — ефект каскаду бурульок",
+      "Ступінь захисту IP44 — для вулиці цілий рік, не боїться дощу і морозу",
+      "Можна з'єднувати кілька гірлянд між собою для більшої довжини",
+      "Режим «флеш» — м'яке мерехтіння",
+      "6 варіантів: чорний/білий дріт, тепле/холодне біле, синє чи мультиколірне світіння"
+    ],
+    "specs": {
+      "Кількість LED": "105 шт",
+      "Довжина": "6 метрів",
+      "Кількість ниток": "21 шт",
+      "Довжина ниток": "65 см, 50 см, 30 см",
+      "Ступінь захисту": "IP44",
+      "Живлення": "мережа 220-240V",
+      "Режим роботи": "флеш (мерехтіння)",
+      "Гарантія": "14 календарних днів"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "isHidden": false
   }
 ]

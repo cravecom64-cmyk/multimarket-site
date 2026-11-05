@@ -32,7 +32,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g11",
       "h13"
@@ -76,7 +75,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h10",
       "h11"
@@ -122,7 +120,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h06"
     ],
@@ -166,7 +163,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h05"
     ],
@@ -209,7 +205,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "image": "/products/h07/hero.jpg",
     "similarWith": [
@@ -251,7 +246,6 @@
       "Гарантія": "14 днів"
     },
     "badges": [],
-    "isTrending": true,
     "bundleWith": [
       "p11"
     ],
@@ -298,7 +292,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "image": "/products/h09/hero.jpg",
     "images": [
@@ -344,7 +337,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h11"
     ],
@@ -392,7 +384,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "tt01"
     ],
@@ -441,7 +432,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g12",
       "p11"
@@ -492,7 +482,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g03"
     ],
@@ -606,7 +595,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "image": "/products/g03/hero.jpg",
     "similarWith": [
@@ -647,7 +635,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g09"
     ],
@@ -691,7 +678,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g09"
     ],
@@ -755,7 +741,6 @@
       "Гарантія": "14 днів"
     },
     "badges": [],
-    "isTrending": false,
     "bundleWith": [
       "g09",
       "g11"
@@ -802,7 +787,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g03"
     ],
@@ -847,7 +831,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g10"
     ],
@@ -898,7 +881,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g09"
     ],
@@ -951,7 +933,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g09"
     ],
@@ -1007,7 +988,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": true,
     "bundleWith": [],
     "image": "/products/g12/hero3.jpg",
     "images": [
@@ -1051,7 +1031,6 @@
       "Гарантія": "14 днів"
     },
     "badges": [],
-    "isTrending": false,
     "bundleWith": [
       "p11",
       "g12"
@@ -1105,7 +1084,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "image": "/products/p01/hero-v2.jpg",
     "similarWith": [
@@ -1148,7 +1126,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "p01"
     ],
@@ -1190,7 +1167,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g13",
       "g12"
@@ -1233,7 +1209,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "p01",
       "p04"
@@ -1275,7 +1250,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h11",
       "h12"
@@ -1358,7 +1332,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g13"
     ],
@@ -1442,7 +1415,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "landing": {
       "gradient": "from-[#DB2777] to-[#EC4899]",
@@ -1509,7 +1481,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h09"
     ],
@@ -1582,7 +1553,6 @@
       "new",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "landing": {
       "gradient": "from-[#4F46E5] to-[#6366F1]",
@@ -1655,7 +1625,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk03"
@@ -1708,7 +1677,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "bk08"
     ],
@@ -1770,7 +1738,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "bk08"
     ],
@@ -1844,7 +1811,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
     "bundleWith": [],
     "similarWith": [],
     "image": "/products/bk08/hero.jpg",
@@ -1890,7 +1856,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h21"
     ],
@@ -1935,7 +1900,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "h20"
     ],
@@ -1982,7 +1946,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "h21"
@@ -2025,7 +1988,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "h22"
@@ -2069,7 +2031,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "g18"
@@ -2112,7 +2073,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 469,
@@ -2158,7 +2118,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g08"
     ],
@@ -2208,7 +2167,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g03",
       "g20"
@@ -2257,7 +2215,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [
       "g08"
     ],
@@ -2312,7 +2269,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 539,
@@ -2357,7 +2313,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 429,
@@ -2418,7 +2373,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 2969,
@@ -2461,7 +2415,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 969,
@@ -2507,7 +2460,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": true,
     "bundleWith": [],
     "similarWith": [],
     "oldPrice": 339,
@@ -2552,7 +2504,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "bk28"
     ],
@@ -2600,7 +2551,6 @@
     "badges": [
       "hit"
     ],
-    "isTrending": true,
     "bundleWith": [
       "bk27"
     ],
@@ -2649,7 +2599,6 @@
       "hit",
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk02"
@@ -2697,7 +2646,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "bk27"
     ],
@@ -2747,7 +2695,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [
       "bk28"
     ],
@@ -2804,7 +2751,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk31",
@@ -2865,7 +2811,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk27",
@@ -2922,7 +2867,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [],
     "image": "/products/bk34/hero.jpg",
@@ -2973,7 +2917,6 @@
     "badges": [
       "sale"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "similarWith": [
       "bk34"
@@ -3021,7 +2964,6 @@
     "badges": [
       "new"
     ],
-    "isTrending": false,
     "bundleWith": [],
     "image": "/products/h24/full-set-hero.jpg",
     "similarWith": [],

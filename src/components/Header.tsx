@@ -97,13 +97,6 @@ export function Header() {
               >
                 🔦 Блекаут
               </Link>
-              <Link
-                href="/trending"
-                className="text-base font-semibold text-amber-500 hover:text-amber-600 transition-colors"
-                onClick={() => setMenuOpen(false)}
-              >
-                🔥 Зараз у тренді
-              </Link>
               <hr className="my-2" />
               <Link
                 href="/"

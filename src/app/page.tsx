@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
@@ -8,13 +7,11 @@ import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import {
   getSaleProducts,
   getAllProducts,
-  getTrendingProducts,
   categories,
 } from "@/lib/products";
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
 const saleProducts = getSaleProducts();
-const trendingProducts = getTrendingProducts();
 
 // Реальні відгуки, скопійовані з products.json (той самий текст, що й на
 // сторінках товарів) — щоб на головній не було фейкових відгуків під
@@ -103,72 +100,6 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
-
-      {/* 🔥 Зараз у тренді */}
-      <section className="mt-5 px-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-base font-extrabold">🔥 Зараз у тренді</h2>
-          <Link href="/trending" className="text-[11px] text-amber-500 font-semibold">
-            Всі тренди →
-          </Link>
-        </div>
-        <p className="text-[11px] text-gray-400 mt-0.5">
-          Топ-8 популярних — переважно блекаут-набір
-        </p>
-        <InfiniteScrollRow
-          items={trendingProducts}
-          keyFn={(product) => product.id}
-          className="flex gap-2.5 mt-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
-          renderItem={(product) => {
-            const gradientParts = product.landing?.gradient
-              .replace("from-[", "")
-              .replace("] to-[", ",")
-              .replace("]", "")
-              .split(",") || ["#333", "#555"];
-            return (
-              <Link
-                href={product.externalLanding || `/product/${product.slug}`}
-                className="min-w-[160px] h-[200px] rounded-xl flex flex-col items-center justify-center relative flex-shrink-0 snap-start overflow-hidden"
-                style={
-                  product.image
-                    ? undefined
-                    : {
-                        background: `linear-gradient(135deg, ${gradientParts[0]} 0%, ${gradientParts[1]} 100%)`,
-                      }
-                }
-              >
-                {product.image && (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="160px"
-                    className="object-cover"
-                  />
-                )}
-                {product.image && (
-                  <div className="absolute inset-0 bg-black/35" />
-                )}
-                <div className="absolute top-2 left-2 bg-white/20 text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
-                  🔥 ТРЕНД
-                </div>
-                {!product.image && (
-                  <span className="text-4xl mb-2">{product.emoji}</span>
-                )}
-                <div className="text-white text-[11px] font-bold text-center leading-tight px-3 relative">
-                  {product.name}
-                </div>
-                <div className="mt-1.5 flex items-center gap-1.5 relative">
-                  <span className="text-white text-sm font-black">{product.price}₴</span>
-                  {product.oldPrice && (
-                    <span className="text-white/50 text-[10px] line-through">{product.oldPrice}₴</span>
-                  )}
-                </div>
-              </Link>
-            );
-          }}
-        />
-      </section>
 
       {/* Акції */}
       <section className="mt-5 px-4">

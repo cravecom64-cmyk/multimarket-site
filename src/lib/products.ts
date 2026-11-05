@@ -75,7 +75,6 @@ export interface Product {
   // рядки "• " = список, порожній рядок = новий абзац.
   details?: { title: string; body: string }[];
   badges: string[];
-  isTrending?: boolean;
   bundleWith?: string[];
   // Вручну підібрані СПРАВДІ схожі товари (той самий тип продукту чи
   // пряма альтернатива) — використовується в блоці "Схожі товари" замість
@@ -216,12 +215,6 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
     .sort((a, b) => b.orderCount - a.orderCount);
 
   return filler.slice(0, limit);
-}
-
-export function getTrendingProducts(): Product[] {
-  return visibleProducts()
-    .filter((p) => p.isTrending)
-    .sort((a, b) => b.orderCount - a.orderCount);
 }
 
 export function getBundleProducts(ids: string[]): Product[] {

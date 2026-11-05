@@ -87,7 +87,7 @@ export default function HomePage() {
         </p>
         <div className="flex items-center gap-2 mt-3.5 flex-wrap">
           <Link
-            href="/category/home"
+            href="/catalog"
             className="inline-block bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold"
           >
             Дивитись каталог

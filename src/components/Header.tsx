@@ -70,6 +70,13 @@ export function Header() {
             <div className="text-lg font-extrabold tracking-wider mb-8">MULTIMARKET</div>
             <nav className="flex flex-col gap-4">
               <Link
+                href="/catalog"
+                className="text-base font-semibold hover:text-emerald-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                🛍️ Весь каталог
+              </Link>
+              <Link
                 href="/category/home"
                 className="text-base font-semibold hover:text-emerald-600 transition-colors"
                 onClick={() => setMenuOpen(false)}

@@ -133,17 +133,26 @@ export function ProductPageClient() {
   const remaining = Math.max(0, FREE_SHIPPING - effectivePrice);
   const hasColors = product.colors && product.colors.length > 0;
   const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
-  // Галерея з декількох фото — тільки коли є images[] і нема вибору кольору
-  // (колір і так перемикає фото, поєднувати з галереєю поки не потрібно).
-  const galleryImages =
-    !hasColors && product.images && product.images.length > 0
+  // Галерея з декількох фото. Для товару з кольорами — це фото ЦЬОГО
+  // кольору (власне hero + спільні для товару банери/деталі, якщо задані
+  // у colors[i].images); інакше — product.image + product.images[].
+  // Важливо: масиви по кожному кольору мають однакову довжину й порядок
+  // слайдів, щоб при перемиканні кольору (selectedImage НЕ скидається,
+  // див. свотчі нижче) користувач лишався на тому самому "слайді" (напр.
+  // фото коробки), а не стрибав назад на hero — фото не "стрибають".
+  const galleryImages = hasColors
+    ? (() => {
+        const c = product.colors![selectedColor];
+        const imgs = c.images && c.images.length > 0 ? c.images : [c.image];
+        return Array.from(new Set(imgs.filter((img): img is string => Boolean(img))));
+      })()
+    : product.images && product.images.length > 0
       ? Array.from(
           new Set([product.image, ...product.images].filter((img): img is string => Boolean(img)))
         )
       : undefined;
   // Фото, доступні для повноекранного перегляду (лайтбокс) — та сама
-  // галерея, або єдине activeImage, якщо карточка без images[] (напр.
-  // товари з вибором кольору).
+  // галерея, або єдине activeImage, якщо карточка без images[].
   const lightboxImages = galleryImages ?? (activeImage ? [activeImage] : []);
 
   const scrollToImage = (i: number) => {
@@ -441,7 +450,15 @@ export function ProductPageClient() {
           {product.colors!.map((c, i) => (
             <button
               key={c.name}
-              onClick={() => setSelectedColor(i)}
+              onClick={() => {
+                // НЕ скидаємо selectedImage — лишаємось на тому самому
+                // слайді галереї (інший колір просто підставляє свої
+                // фото в ті самі позиції). Клемп — лише захист про
+                // всяк випадок, якщо колись довжини масивів розійдуться.
+                setSelectedColor(i);
+                const imgs = c.images && c.images.length > 0 ? c.images : [c.image];
+                if (selectedImage >= imgs.length) setSelectedImage(0);
+              }}
               aria-label={c.name}
               className={`w-7 h-7 rounded-full border-2 transition-transform ${
                 i === selectedColor

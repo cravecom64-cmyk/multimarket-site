@@ -1,4 +1,31 @@
 import type { NextConfig } from "next";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+// ДОДАНО 07.11.2026: постійні переадресації (301/308) зі сторінок видалених
+// товарів. Файл src/data/redirects.json поповнює адмінка командного центру
+// при видаленні картки ({ source: "/product/<slug>", destination:
+// "/category/<cat>" }) — щоб старі посилання з Google, реклами й соцмереж не
+// вели на 404. Читаємо через fs, щоб будь-яка помилка у файлі не валила білд.
+function loadRedirects(): { source: string; destination: string; permanent: boolean }[] {
+  try {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), "src", "data", "redirects.json"), "utf8"));
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter(
+        (r) =>
+          r &&
+          typeof r.source === "string" &&
+          r.source.startsWith("/") &&
+          typeof r.destination === "string" &&
+          r.destination.startsWith("/") &&
+          r.source !== r.destination
+      )
+      .map((r) => ({ source: r.source, destination: r.destination, permanent: r.permanent !== false }));
+  } catch {
+    return [];
+  }
+}
 
 const nextConfig: NextConfig = {
     images: {
@@ -17,6 +44,7 @@ const nextConfig: NextConfig = {
     // більше НЕ підміняється на raw HTML — рендериться звичайним App Router
     // роутом /product/[slug] (LandingProduct для blender, стандартний шаблон
     // для ventilyator), щоб мати спільну шапку/нав/кошик як і решта карток сайту.
+    redirects: async () => loadRedirects(),
     rewrites: async () => ({
           beforeFiles: [
             { source: "/landing/blender", destination: "/landing/blender/index.html" },

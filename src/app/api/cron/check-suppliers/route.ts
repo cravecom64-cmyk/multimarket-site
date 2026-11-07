@@ -168,7 +168,8 @@ type BuyPriceUpdate = { id: string; from: number; to: number; supplier: string }
 async function applyVisibilityChangesToGitHub(
   toHide: string[],
   toUnhide: string[],
-  buyUpdates: BuyPriceUpdate[] = []
+  buyUpdates: BuyPriceUpdate[] = [],
+  colorUpdates: { id: string; color: string; soldOut: boolean }[] = []
 ): Promise<{ ok: boolean; message: string }> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
@@ -217,6 +218,15 @@ async function applyVisibilityChangesToGitHub(
     if (p && Number(p.buyPrice) === u.from) p.buyPrice = u.to;
   }
 
+  for (const u of colorUpdates) {
+    const p = data.find((x) => x.id === u.id);
+    const colors = (p?.colors ?? []) as Array<Record<string, unknown>>;
+    const c = colors.find((x) => x.name === u.color);
+    if (!c) continue;
+    if (u.soldOut) c.soldOut = true;
+    else delete c.soldOut;
+  }
+
   const newRaw = JSON.stringify(data, null, 2) + "\n";
   const newContent = Buffer.from(newRaw, "utf-8").toString("base64");
 
@@ -225,6 +235,7 @@ async function applyVisibilityChangesToGitHub(
       toHide.length > 0 ? `приховано ${toHide.length}` : null,
       toUnhide.length > 0 ? `повернено ${toUnhide.length}` : null,
       buyUpdates.length > 0 ? `закупка ${buyUpdates.length}` : null,
+      colorUpdates.length > 0 ? `кольори ${colorUpdates.length}` : null,
     ]
       .filter(Boolean)
       .join(", ") || "без змін";
@@ -277,6 +288,10 @@ interface SupplierRow {
   // прайс VIBER-SHOP нижчий за ціну на їхньому сайті). Для таких рядків
   // перевіряємо лише наявність, ціну з сайту постачальника не записуємо.
   price_source?: string | null;
+  // ДОДАНО 07.11.2026: колір картки (colors[].name), якщо посилання веде на
+  // сторінку конкретного кольору (у LUGI кожен колір гірлянди — окремий
+  // товар). NULL — посилання на весь товар.
+  color?: string | null;
   // ДОДАНО 07.11.2026: для manual-рядків — остання відома роздрібна ціна на
   // сайті постачальника (сигнал "роздріб подорожчав → перевір дроп-ціну").
   retail_price?: number | null;
@@ -309,6 +324,10 @@ const PRICE_INCREASE_THRESHOLD = 0.03;
 const productNameById = new Map<string, string>(
   (productsData as Array<{ id: string; name: string }>).map((p) => [p.id, p.name])
 );
+
+function rowLabel(row: { product_id: string; color?: string | null }): string {
+  return productLabel(row.product_id) + (row.color ? ` — колір «${row.color}»` : "");
+}
 
 function productLabel(productId: string): string {
   const name = productNameById.get(productId);
@@ -701,7 +720,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, suppliers(name)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, suppliers(name)")
     .order("product_id");
 
   if (error || !rows) {
@@ -802,7 +821,7 @@ export async function GET(req: NextRequest) {
         if (up) {
           const pct = Math.round(((retailPrice! - prevRetail!) / prevRetail!) * 100);
           changes.push(
-            `🔎 ${productLabel(row.product_id)} у ${supplierName}: роздрібна ціна ${formatUAH(prevRetail!)} → ${formatUAH(retailPrice!)} (+${pct}%) — перевірте дроп-ціну в кабінеті`
+            `🔎 ${rowLabel(row)} у ${supplierName}: роздрібна ціна ${formatUAH(prevRetail!)} → ${formatUAH(retailPrice!)} (+${pct}%) — перевірте дроп-ціну в кабінеті`
           );
         }
       }
@@ -857,15 +876,15 @@ export async function GET(req: NextRequest) {
         const icon = result.inStock ? "✅" : "⛔";
         const statusWord = result.inStock ? "знову в наявності" : "закінчився";
         changes.push(
-          `${icon} ${productLabel(row.product_id)} у ${supplierName}: ${statusWord}, ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`
+          `${icon} ${rowLabel(row)} у ${supplierName}: ${statusWord}, ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`
         );
       } else if (stockChanged) {
         changes.push(
-          `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${productLabel(row.product_id)} у ${supplierName}` +
+          `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${rowLabel(row)} у ${supplierName}` +
             (result.price !== null ? ` (${formatUAH(result.price)})` : "")
         );
       } else if (priceChanged) {
-        changes.push(`💰 Зміна ціни: ${productLabel(row.product_id)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
+        changes.push(`💰 Зміна ціни: ${rowLabel(row)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
       }
 
       await supabase
@@ -894,10 +913,70 @@ export async function GET(req: NextRequest) {
   // вчорашніх даних), а не тільки по тому, що встигли перевірити ЦИМ
   // прогоном — інакше кожен недоперевірений товар хибно виглядав би "немає
   // в наявності всюди".
-  const productAnyInStock = new Map<string, boolean>();
+  // ЗМІНЕНО 07.11.2026 (Павло: "если в гирлянде 5 цветов и один закончился —
+  // убирать этот цвет автоматом"). Посилання з полем color відповідають за
+  // свій колір; посилання без color — за весь товар. Колір доступний, якщо
+  // в наявності хоч одне його посилання (або, коли власних посилань немає,
+  // посилання на весь товар). Колір без жодного відомого посилання —
+  // "невідомо": не ховаємо його, але й не рахуємо як наявність товару.
+  type ColorMeta = { name: string; soldOut?: boolean };
+  const colorsById = new Map<string, ColorMeta[]>(
+    (productsData as Array<{ id: string; colors?: ColorMeta[] }>)
+      .filter((p) => Array.isArray(p.colors) && p.colors.length > 0)
+      .map((p) => [p.id, p.colors!])
+  );
+  const linksByProduct = new Map<string, SupplierRow[]>();
   for (const row of scoped) {
-    const inStock = currentStock.get(row.id) ?? row.in_stock;
-    productAnyInStock.set(row.product_id, (productAnyInStock.get(row.product_id) ?? false) || inStock);
+    const arr = linksByProduct.get(row.product_id) ?? [];
+    arr.push(row);
+    linksByProduct.set(row.product_id, arr);
+  }
+  const stockOf = (r: SupplierRow) => currentStock.get(r.id) ?? r.in_stock;
+
+  const productAnyInStock = new Map<string, boolean>();
+  // колір → доступний (true/false); лише для кольорів з відомою наявністю
+  const colorAvailability = new Map<string, Map<string, boolean>>();
+  for (const [productId, links] of linksByProduct) {
+    const general = links.filter((r) => !r.color);
+    const generalInStock = general.some(stockOf);
+    const colors = colorsById.get(productId);
+    const hasColorLinks = links.some((r) => r.color);
+    if (!colors || !hasColorLinks) {
+      productAnyInStock.set(productId, links.some(stockOf));
+      continue;
+    }
+    const avail = new Map<string, boolean>();
+    for (const c of colors) {
+      const own = links.filter((r) => r.color === c.name);
+      if (own.length > 0) avail.set(c.name, own.some(stockOf));
+      else if (general.length > 0) avail.set(c.name, generalInStock);
+    }
+    colorAvailability.set(productId, avail);
+    productAnyInStock.set(productId, generalInStock || [...avail.values()].some(Boolean));
+  }
+
+  // Зміни "колір закінчився / повернувся" (поле soldOut у colors[]).
+  type ColorUpdate = { id: string; color: string; soldOut: boolean };
+  const colorUpdates: ColorUpdate[] = [];
+  for (const [productId, avail] of colorAvailability) {
+    if (!productAnyInStock.get(productId)) continue; // весь товар ховається — кольори не чіпаємо
+    for (const c of colorsById.get(productId) ?? []) {
+      const a = avail.get(c.name);
+      if (a === undefined) continue;
+      if (!a && !c.soldOut) colorUpdates.push({ id: productId, color: c.name, soldOut: true });
+      if (a && c.soldOut) colorUpdates.push({ id: productId, color: c.name, soldOut: false });
+    }
+  }
+  // Посилання з кольором, якого вже немає в картці (перейменували колір) —
+  // у звіт, щоб не перевіряти "в нікуди".
+  const orphanColorLines: string[] = [];
+  for (const [productId, links] of linksByProduct) {
+    const names = new Set((colorsById.get(productId) ?? []).map((c) => c.name));
+    for (const r of links) {
+      if (r.color && !names.has(r.color)) {
+        orphanColorLines.push(`❓ ${productLabel(productId)}: посилання постачальника для кольору «${r.color}», а такого кольору в картці немає`);
+      }
+    }
   }
 
   const productsMetaById = new Map(
@@ -943,7 +1022,25 @@ export async function GET(req: NextRequest) {
       if (!visibleAfter) continue;
       if (JSON.stringify(Object.entries(p).filter(([k]) => k !== "buyPrice")).includes('"buyPrice"')) continue;
       const buy = Number(p.buyPrice);
-      const c = cheapestById.get(id);
+      let c = cheapestById.get(id);
+      // Товар з кольорами, у яких різна закупка (у LUGI мультиколір дешевший),
+      // — закупка картки = найдорожчий із доступних кольорів, інакше маржа
+      // решти кольорів виглядала б кращою, ніж є. Найдешевший постачальник
+      // усередині кожного кольору — як і раніше.
+      const avail = colorAvailability.get(id);
+      if (avail && avail.size > 0) {
+        let worst: CheapestSupplierRow | undefined;
+        for (const [color, ok] of avail) {
+          if (!ok) continue;
+          const own = (linksByProduct.get(id) ?? []).filter((r) => r.color === color && stockOf(r) && r.price !== null);
+          if (own.length === 0) continue;
+          const best = own.reduce((a, b) => (Number(a.price) <= Number(b.price) ? a : b));
+          if (!worst || Number(best.price) > Number(worst.supplier_price)) {
+            worst = { product_id: id, supplier_name: supplierNameOf(best), supplier_price: Number(best.price) };
+          }
+        }
+        if (worst) c = worst;
+      }
       if (!c || !buy || buy <= 0) continue;
       const cheapest = Number(c.supplier_price);
       if (!Number.isFinite(cheapest) || cheapest <= 0) continue;
@@ -957,16 +1054,23 @@ export async function GET(req: NextRequest) {
     console.error("[check-suppliers] buyPrice sync failed:", err instanceof Error ? err.message : err);
   }
 
-  const visibilityLines: string[] = [];
+  const visibilityLines: string[] = [...orphanColorLines];
   const buyLines: string[] = [];
-  if (toHide.length > 0 || toUnhide.length > 0 || buyUpdates.length > 0) {
-    const result = await applyVisibilityChangesToGitHub(toHide, toUnhide, buyUpdates);
+  if (toHide.length > 0 || toUnhide.length > 0 || buyUpdates.length > 0 || colorUpdates.length > 0) {
+    const result = await applyVisibilityChangesToGitHub(toHide, toUnhide, buyUpdates, colorUpdates);
+    for (const u of colorUpdates) {
+      visibilityLines.push(
+        u.soldOut
+          ? `🎨 ${productLabel(u.id)}: колір «${u.color}» закінчився — прибрано з вибору на сайті`
+          : `🎨 ${productLabel(u.id)}: колір «${u.color}» знову є — повернено на сайт`
+      );
+    }
     for (const u of buyUpdates) {
       buyLines.push(
         `${u.to < u.from ? "⬇️" : "↗️"} ${productLabel(u.id)}: ${formatUAH(u.from)} → ${formatUAH(u.to)} (${u.supplier})`
       );
     }
-    if (!result.ok && buyUpdates.length > 0 && toHide.length === 0 && toUnhide.length === 0) {
+    if (!result.ok && buyUpdates.length > 0 && toHide.length === 0 && toUnhide.length === 0 && colorUpdates.length === 0) {
       buyLines.push(`⚠️ Закупку НЕ оновлено: ${result.message}`);
     }
     for (const id of toHide) {
@@ -1083,6 +1187,7 @@ export async function GET(req: NextRequest) {
     priceProposals: proposalLines.length,
     hidden: toHide,
     unhidden: toUnhide,
+    colorUpdates,
     changeDetails: changes,
     failureDetails: failures,
   });

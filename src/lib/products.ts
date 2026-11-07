@@ -87,7 +87,10 @@ export interface Product {
   // якщо не задано, використовується лише image. Масиви всіх кольорів мають
   // бути однакової довжини й порядку слайдів — інакше перемикання кольору
   // може "стрибнути" на інший слайд галереї.
-  colors?: { name: string; hex: string; image: string; images?: string[] }[];
+  // soldOut — колір закінчився в постачальника (ставить і знімає щоранкова
+  // перевірка /api/cron/check-suppliers). Такий колір не показується на
+  // сайті; щойно він знову є — повертається сам.
+  colors?: { name: string; hex: string; image: string; images?: string[]; soldOut?: boolean }[];
   // Розмірні варіанти товару з РІЗНОЮ ціною (напр. довжина шланга, розмір
   // гамака) — якщо задано, на сторінці товару показується селектор розміру,
   // що перемикає price/oldPrice/buyPrice. Верхньорівневі price/oldPrice/
@@ -133,7 +136,18 @@ const products: Product[] = (productsData as unknown as Product[]).map((p) => {
   const avg = count
     ? Math.round((real.reduce((s, r) => s + r.rating, 0) / count) * 10) / 10
     : 0;
-  return { ...p, rating: avg, reviewCount: count };
+  // Кольори, що закінчились, прибираємо з вибору. Якщо закінчився перший
+  // (головний) колір — головним фото картки стає перший доступний.
+  let colors = p.colors;
+  let image = p.image;
+  if (colors && colors.some((c) => c.soldOut)) {
+    const available = colors.filter((c) => !c.soldOut);
+    if (available.length > 0) {
+      if (image === colors[0].image) image = available[0].image;
+      colors = available;
+    }
+  }
+  return { ...p, colors, image, rating: avg, reviewCount: count };
 });
 
 // Товари, видимі на вітрині (каталог/категорії/головна/sitemap/фід) —

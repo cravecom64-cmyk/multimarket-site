@@ -5,7 +5,7 @@ import productsData from "@/data/products.json";
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
 // на прихований/видалений товар (пряме посилання на стару/прибрану картку).
 const PRODUCTS_BY_ID = new Map(
-  (productsData as Array<{ id: string; isHidden?: boolean }>).map((p) => [p.id, p])
+  (productsData as Array<{ id: string; isHidden?: boolean; colors?: { name: string; soldOut?: boolean }[] }>).map((p) => [p.id, p])
 );
 
 // ==================== КОМАНДНИЙ ЦЕНТР (Supabase) ====================
@@ -53,12 +53,36 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number): Pr
       body.items.map(async (item) => {
         let cheapest: { supplier_name: string; supplier_price: number; supplier_url: string } | null = null;
         if (item.id) {
-          const { data } = await supabase
-            .from("product_cheapest_supplier")
-            .select("supplier_name, supplier_price, supplier_url")
-            .eq("product_id", item.id)
-            .maybeSingle();
-          cheapest = data;
+          // Товар з кольором: посилання саме на цей колір (у LUGI кожен колір —
+          // окрема сторінка), щоб замовляти в постачальника той, що обрав клієнт.
+          const colorName = item.name.match(/\(([^()]+)\)\s*$/)?.[1];
+          if (colorName) {
+            const { data: byColor } = await supabase
+              .from("product_suppliers")
+              .select("price, url, in_stock, suppliers(name)")
+              .eq("product_id", item.id)
+              .eq("color", colorName)
+              .order("in_stock", { ascending: false })
+              .order("price", { ascending: true })
+              .limit(1)
+              .maybeSingle();
+            if (byColor) {
+              const sup = byColor.suppliers as unknown as { name: string } | { name: string }[] | null;
+              cheapest = {
+                supplier_name: (Array.isArray(sup) ? sup[0]?.name : sup?.name) ?? "",
+                supplier_price: Number(byColor.price),
+                supplier_url: byColor.url,
+              };
+            }
+          }
+          if (!cheapest) {
+            const { data } = await supabase
+              .from("product_cheapest_supplier")
+              .select("supplier_name, supplier_price, supplier_url")
+              .eq("product_id", item.id)
+              .maybeSingle();
+            cheapest = data;
+          }
         }
         return {
           order_id: orderId,
@@ -455,6 +479,15 @@ export async function POST(req: NextRequest) {
         console.error(`[order] Rejected checkout for hidden/unknown product id: ${item.id}`);
         return NextResponse.json(
           { error: "Один із товарів у замовленні зараз недоступний. Оновіть сторінку і спробуйте ще раз." },
+          { status: 400 }
+        );
+      }
+      // Колір, що вже закінчився (кошик зібрано до ранкової перевірки).
+      // Назва позиції з кольором має вигляд "Назва (Колір)".
+      const soldOutColor = catalogProduct.colors?.find((c) => c.soldOut && item.name.endsWith(`(${c.name})`));
+      if (soldOutColor) {
+        return NextResponse.json(
+          { error: `Колір «${soldOutColor.name}» щойно закінчився. Видаліть його з кошика й оберіть інший колір.` },
           { status: 400 }
         );
       }

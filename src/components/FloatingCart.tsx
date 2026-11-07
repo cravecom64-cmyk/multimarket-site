@@ -18,6 +18,29 @@ const STORAGE_KEY = "mm_floating_cart_pos";
 const BUTTON_W = 84; // приблизна ширина пігулки (px) — для обмеження в межах екрана
 const BUTTON_H = 44; // приблизна висота
 const DRAG_THRESHOLD = 5; // px — менше цього вважаємо кліком, не перетягуванням
+const BOTTOM_NAV_CLEARANCE = 64; // висота нижньої навігації + safe-area — кнопка не ховається під нею
+
+// Сайт рендериться як колонка з max-width (480/560/680/820px залежно від
+// ширини вікна, див. layout.tsx/Header.tsx/BottomNav.tsx), центрована на
+// широких екранах. Раніше межі перетягування рахувались від усього вікна
+// браузера (window.innerWidth) — на широкому десктопному моніторі це
+// дозволяло затягнути кнопку в сіре поле ПОЗА білою колонкою сайту, де її
+// легко "загубити" (вона технічно на екрані, але не на сайті, і очима там
+// ніхто не шукає). Тепер межі рахуються від реальної колонки сайту.
+function getColumnMaxWidth(viewportWidth: number): number {
+  if (viewportWidth >= 1024) return 820;
+  if (viewportWidth >= 768) return 680;
+  if (viewportWidth >= 640) return 560;
+  return 480;
+}
+
+function getColumnBounds(): { left: number; right: number } {
+  if (typeof window === "undefined") return { left: 0, right: 480 };
+  const vw = window.innerWidth;
+  const columnWidth = Math.min(getColumnMaxWidth(vw), vw);
+  const left = (vw - columnWidth) / 2;
+  return { left, right: left + columnWidth };
+}
 
 interface Pos {
   x: number;
@@ -26,11 +49,14 @@ interface Pos {
 
 function clampToViewport(x: number, y: number): Pos {
   if (typeof window === "undefined") return { x, y };
-  const maxX = Math.max(8, window.innerWidth - BUTTON_W - 8);
-  const maxY = Math.max(8, window.innerHeight - BUTTON_H - 8);
+  const { left, right } = getColumnBounds();
+  const minX = left + 8;
+  const maxX = Math.max(minX, right - BUTTON_W - 8);
+  const minY = 8;
+  const maxY = Math.max(minY, window.innerHeight - BUTTON_H - 8 - BOTTOM_NAV_CLEARANCE);
   return {
-    x: Math.min(Math.max(8, x), maxX),
-    y: Math.min(Math.max(8, y), maxY),
+    x: Math.min(Math.max(minX, x), maxX),
+    y: Math.min(Math.max(minY, y), maxY),
   };
 }
 
@@ -39,8 +65,8 @@ function getDefaultPos(): Pos {
   // Той самий орієнтир, що й раніше: близько до лівого краю центрованої
   // на широких екранах колонки шириною 480px, і вище sticky-панелей
   // знизу (bottom nav + sticky "Замовити" на сторінці товару).
-  const columnLeft = Math.max(16, (window.innerWidth - 480) / 2 + 16);
-  return clampToViewport(columnLeft, window.innerHeight - 190);
+  const { left } = getColumnBounds();
+  return clampToViewport(left + 16, window.innerHeight - 190);
 }
 
 export function FloatingCart() {
@@ -67,14 +93,21 @@ export function FloatingCart() {
     setPos(getDefaultPos());
   }, []);
 
-  // Якщо змінюється розмір вікна (поворот телефона тощо) — підтягуємо
-  // кнопку назад у межі екрана, щоб вона не "загубилась" за краєм.
+  // Якщо змінюється розмір вікна (поворот телефона, зміна ширини колонки
+  // сайту тощо) — підтягуємо кнопку назад у межі. window.resize не завжди
+  // спрацьовує на мобільних, коли ховається/з'являється адресний рядок
+  // браузера (саме так висота екрана "на льоту" змінюється найчастіше) —
+  // тому додатково слухаємо visualViewport, де він є.
   useEffect(() => {
     const onResize = () => {
       setPos((prev) => (prev ? clampToViewport(prev.x, prev.y) : prev));
     };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+    };
   }, []);
 
   const onPointerDown = useCallback(

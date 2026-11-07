@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { PROMO, isPromoActive } from "@/lib/promo";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const promoActive = isPromoActive();
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const [bannerHeight, setBannerHeight] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -14,20 +17,44 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Банер — position: fixed до вікна (а не sticky до хедера), тому він
+  // лишається видимим зверху екрана завжди, незалежно від скролу чи
+  // будь-яких обгорток. Висоту міряємо реально (текст може перенестись
+  // на 2 рядки на вузьких екранах), щоб контент під банером і сам
+  // хедер (sticky, з відступом top = висота банера) не стрибали.
+  useEffect(() => {
+    if (!promoActive) {
+      setBannerHeight(0);
+      return;
+    }
+    const measure = () => {
+      if (bannerRef.current) setBannerHeight(bannerRef.current.offsetHeight);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [promoActive]);
+
   return (
     <>
-      <header
-        className={`sticky top-0 z-50 bg-white transition-shadow max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto ${
-          scrolled ? "shadow-md" : ""
-        }`}
-      >
-        {/* Promo banner — всередині sticky-хедера, тому завжди видима при скролі */}
-        {isPromoActive() && (
-          <div className="bg-black text-white text-center text-xs font-bold py-2 px-3">
+      {promoActive && (
+        <>
+          <div
+            ref={bannerRef}
+            className="fixed top-0 left-0 right-0 z-[65] bg-black text-white text-center text-xs font-bold py-2 px-3 max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto"
+          >
             🖤 {PROMO.name} — знижки на все до {PROMO.endsAtLabel}
           </div>
-        )}
-
+          {/* Розпірка — займає місце банера в потоці, бо сам банер fixed і з потоку вийнятий */}
+          <div style={{ height: bannerHeight }} aria-hidden />
+        </>
+      )}
+      <header
+        className={`sticky z-50 bg-white transition-shadow max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto ${
+          scrolled ? "shadow-md" : ""
+        }`}
+        style={{ top: bannerHeight }}
+      >
         {/* Nav bar */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
           <button

@@ -3549,9 +3549,8 @@
     "buyPrice": 310,
     "emoji": "✨",
     "inStock": true,
-    "image": "/products/ny10/hero.jpg",
+    "image": "/products/ny10/banner-rosa.jpg",
     "images": [
-      "/products/ny10/hero.jpg",
       "/products/ny10/banner-rosa.jpg",
       "/products/ny10/atmosphere.jpg",
       "/products/ny10/schema.jpg",
@@ -3561,7 +3560,8 @@
       "/products/ny10/detail-coil-lit-1.jpg",
       "/products/ny10/detail-coil-lit-2.jpg",
       "/products/ny10/usb-plug.jpg",
-      "/products/ny10/unboxed.jpg"
+      "/products/ny10/unboxed.jpg",
+      "/products/ny10/hero.jpg"
     ],
     "rating": 0,
     "reviewCount": 0,

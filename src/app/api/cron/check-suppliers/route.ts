@@ -720,7 +720,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, suppliers(name)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, suppliers(name, price_rule)")
     .order("product_id");
 
   if (error || !rows) {
@@ -774,6 +774,8 @@ export async function GET(req: NextRequest) {
   // товару — так воно коректно працює навіть якщо через CHECK_PHASE_DEADLINE_MS
   // не всі постачальники товару встигли перевіритись цим прогоном.
   const currentStock = new Map<number, boolean>();
+  // ДОДАНО 07.11.2026: свіжа роздрібна ціна (= РРЦ у LUGI) по рядках цього прогону
+  const freshRetail = new Map<number, number>();
   for (const r of scoped) currentStock.set(r.id, r.in_stock);
 
   // ЗМІНЕНО 09.10.2026: Promise.race із жорстким дедлайном замість простого
@@ -808,6 +810,7 @@ export async function GET(req: NextRequest) {
       if (retailPrice !== null && prevRetail !== null && prevRetail > 0 && (retailPrice < prevRetail / 3 || retailPrice > prevRetail * 3)) {
         retailPrice = null;
       }
+      if (retailPrice !== null) freshRetail.set(row.id, retailPrice);
       const retailChanged =
         retailPrice !== null && prevRetail !== null && prevRetail > 0 && Math.abs(retailPrice - prevRetail) / prevRetail > PRICE_INCREASE_THRESHOLD;
       if (retailChanged) {
@@ -1134,6 +1137,49 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // ---- Постачальники "за РРЦ" (LUGI, з 07.11.2026: "по луги мы работаем
+    // только по ррц"). РРЦ = ціна на їхньому сайті для гостя (її й так читаємо
+    // як роздрібну). Якщо наша ціна відрізняється від РРЦ (у будь-який бік) —
+    // пропозиція привести до РРЦ; закупка не змінюється.
+    const proposedIds = new Set(newProposals.map((p) => String(p.product_id)));
+    const rrcByProduct = new Map<string, { rrc: number; supplier: string }>();
+    const nonRrcProducts = new Set<string>();
+    for (const r of scoped) {
+      const supRaw = (r as unknown as { suppliers?: unknown }).suppliers;
+      const sup = (Array.isArray(supRaw) ? supRaw[0] : supRaw) as { price_rule?: string | null } | null | undefined;
+      if (sup?.price_rule !== "rrc") {
+        nonRrcProducts.add(r.product_id);
+        continue;
+      }
+      if (!stockOf(r)) continue;
+      const rrc = freshRetail.get(r.id) ?? (r.retail_price != null ? Number(r.retail_price) : null);
+      if (!rrc || rrc <= 0) continue;
+      const cur = rrcByProduct.get(r.product_id);
+      // у різних кольорів РРЦ зазвичай однакова; якщо ні — беремо найвищу
+      if (!cur || rrc > cur.rrc) rrcByProduct.set(r.product_id, { rrc, supplier: supplierNameOf(r) });
+    }
+    for (const [productId, { rrc, supplier }] of rrcByProduct) {
+      if (nonRrcProducts.has(productId)) continue; // є інший постачальник — ціну не нав'язуємо
+      if (pendingIds.has(productId) || proposedIds.has(productId)) continue;
+      const product = productsById.get(productId);
+      if (!product || !product.price || Math.abs(product.price - rrc) < 1) continue;
+      if (rrc < product.price / 3 || rrc > product.price * 3) continue; // підозрілий парсинг
+      const ratio = rrc / product.price;
+      const newOld = product.oldPrice ? Math.max(Math.round(product.oldPrice * ratio), Math.round(rrc * 1.2)) : null;
+      newProposals.push({
+        product_id: productId,
+        product_name: productNameById.get(productId) ?? productId,
+        supplier_name: `${supplier} (РРЦ)`,
+        old_buy_price: product.buyPrice,
+        new_buy_price: product.buyPrice,
+        old_site_price: product.price,
+        new_site_price: rrc,
+        old_old_price: product.oldPrice,
+        new_old_price: newOld,
+        pct_change: Math.round((ratio - 1) * 1000) / 10,
+      });
+    }
+
     if (newProposals.length > 0) {
       const { data: inserted, error: insertError } = await supabase
         .from("price_proposals")
@@ -1151,7 +1197,9 @@ export async function GET(req: NextRequest) {
             expected ? `&secret=${expected}` : ""
           }`;
           proposalLines.push(
-            `💡 *${p.product_name}* у ${p.supplier_name} подорожчав на ${p.pct_change}% — підняти нашу ціну ${formatUAH(Number(p.old_site_price))} → ${formatUAH(Number(p.new_site_price))}? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
+            String(p.supplier_name).endsWith("(РРЦ)")
+              ? `🏷️ *${p.product_name}*: РРЦ ${String(p.supplier_name).replace(" (РРЦ)", "")} ${formatUAH(Number(p.new_site_price))}, у нас ${formatUAH(Number(p.old_site_price))} — привести до РРЦ? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
+              : `💡 *${p.product_name}* у ${p.supplier_name} подорожчав на ${p.pct_change}% — підняти нашу ціну ${formatUAH(Number(p.old_site_price))} → ${formatUAH(Number(p.new_site_price))}? [Підтвердити](${approveUrl}) · [Пропустити](${rejectUrl})`
           );
         }
       }

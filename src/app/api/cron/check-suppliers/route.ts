@@ -471,6 +471,24 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
         stockText = $(".cs-sticky-panel__product-status").first().text().trim();
       }
       priceText = $(".b-product-cost__price").first().text().trim();
+    } else if (url.includes("lugi.com.ua")) {
+      // ДОДАНО 07.11.2026: LUGI (OpenCart, тема luxshop). Видимі на сторінці
+      // блоки .stock-status належать каруселі "схожих товарів", а не самому
+      // товару, тому наявність беремо зі schema.org-розмітки Product
+      // (offers.availability — InStock / OutOfStock / PreOrder…). JSON там
+      // невалідний (JSON.parse падає), тому витягуємо регуляркою саме з
+      // блоку Product. Ціна в розмітці — РОЗДРІБНА (629 ₴ проти оптових
+      // 493 ₴ для гірлянди ny01), оптова видна лише в кабінеті дропшипера,
+      // тож ціну з LUGI свідомо не читаємо: закупка ведеться вручну
+      // (price_source = manual), крон стежить тільки за наявністю.
+      const productLd = (html.match(/"@type"\s*:\s*"Product"[\s\S]*?"offers"\s*:\s*\{[\s\S]*?\}/) || [""])[0];
+      const availability = (productLd.match(/"availability"\s*:\s*"https?:\/\/schema\.org\/(\w+)"/) || [])[1];
+      if (availability) {
+        stockText = /^(InStock|LimitedAvailability|InStoreOnly|OnlineOnly)$/.test(availability)
+          ? "в наявності"
+          : "немає в наявності";
+      }
+      priceText = "";
     } else if (url.includes("tanu.ua")) {
       // Хорошоп
       stockText = $(".product-header__availability").first().text().trim();

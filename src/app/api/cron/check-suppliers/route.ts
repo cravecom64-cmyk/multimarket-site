@@ -553,7 +553,35 @@ function isRetryableProxyError(error: string | undefined): boolean {
   return !!error && (error.includes("схоже на бот-захист") || error.includes("HTTP 429"));
 }
 
+// ДОДАНО 07.11.2026: LUGI на кілька паралельних запитів з одного IP
+// відповідає "HTTP 429" (через це частина товарів LUGI щоранку не
+// перевірялась, а з окремими сторінками кольорів запитів до них стало
+// більше). Тож до lugi.com.ua ходимо по одному з паузою, а на 429 —
+// ще одна спроба після паузи.
+const SERIAL_HOSTS = ["lugi.com.ua"];
+const SERIAL_GAP_MS = 700;
+let serialChain: Promise<unknown> = Promise.resolve();
+function runSerial<T>(fn: () => Promise<T>): Promise<T> {
+  const run = serialChain.then(async () => {
+    try {
+      return await fn();
+    } finally {
+      await new Promise((r) => setTimeout(r, SERIAL_GAP_MS));
+    }
+  });
+  serialChain = run.catch(() => undefined);
+  return run;
+}
+
 async function fetchSupplierStatus(url: string): Promise<CheckResult> {
+  if (SERIAL_HOSTS.some((h) => url.includes(h))) {
+    return runSerial(async () => {
+      const first = await fetchSupplierStatusOnce(url);
+      if (first.error !== "HTTP 429") return first;
+      await new Promise((r) => setTimeout(r, 3000));
+      return fetchSupplierStatusOnce(url);
+    });
+  }
   const first = await fetchSupplierStatusOnce(url);
   const { viaProxy } = buildFetchTarget(url);
   if (viaProxy && isRetryableProxyError(first.error)) {
@@ -786,7 +814,18 @@ export async function GET(req: NextRequest) {
   // щодня лишались РІЗНІ товари, а не завжди одні й ті самі останні за
   // product_id.
   await Promise.race([
-    runWithConcurrency(shuffle(scoped), 9, async (row) => {
+    // LUGI — окремою чергою по одному (див. SERIAL_HOSTS), щоб чекання на
+    // їхню чергу не займало потоки решти постачальників.
+    (async () => {
+      const isSerial = (r: SupplierRow) => SERIAL_HOSTS.some((h) => r.url.includes(h));
+      await Promise.all([
+        runWithConcurrency(shuffle(scoped.filter((r) => !isSerial(r))), 9, checkRow),
+        runWithConcurrency(shuffle(scoped.filter(isSerial)), 1, checkRow),
+      ]);
+    })(),
+    new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
+  ]);
+  async function checkRow(row: SupplierRow) {
       const supplierName = supplierNameOf(row);
       const result = await fetchSupplierStatus(row.url);
       checked++;
@@ -890,7 +929,7 @@ export async function GET(req: NextRequest) {
         changes.push(`💰 Зміна ціни: ${rowLabel(row)} у ${supplierName}: ${formatUAH(prevPrice!)} → ${formatUAH(result.price!)}`);
       }
 
-      await supabase
+      await supabase!
         .from("product_suppliers")
         .update({
           in_stock: result.inStock,
@@ -900,9 +939,7 @@ export async function GET(req: NextRequest) {
           ...(retailChanged ? { retail_price_changed_at: new Date().toISOString() } : {}),
         })
         .eq("id", row.id);
-    }),
-    new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
-  ]);
+  }
 
   if (stockEvents.length > 0) {
     const { error: evError } = await supabase.from("supplier_stock_events").insert(stockEvents);

@@ -207,7 +207,11 @@ function toTurboSmsPhone(phone: string): string | null {
 
 async function pushSmsNotification(body: OrderBody, orderId: number | null) {
   const apiKey = process.env.TURBOSMS_API_KEY;
-  if (!apiKey) return; // токена ще нема — просто виходимо
+  if (!apiKey) {
+    console.error("[order] TurboSMS: TURBOSMS_API_KEY не знайдено в env — SMS не відправлено");
+    return;
+  }
+  console.log(`[order] TurboSMS: ключ знайдено (довжина ${apiKey.length}), готуємо відправку`);
 
   const recipient = toTurboSmsPhone(body.phone);
   if (!recipient) {
@@ -221,6 +225,8 @@ async function pushSmsNotification(body: OrderBody, orderId: number | null) {
     " "
   );
 
+  console.log(`[order] TurboSMS: відправляємо на ${recipient}, sequence_id=order-${orderId}`);
+
   try {
     const res = await fetch("https://api.turbosms.ua/message/send.json", {
       method: "POST",
@@ -233,8 +239,11 @@ async function pushSmsNotification(body: OrderBody, orderId: number | null) {
         sequence_id: orderId ? `order-${orderId}` : undefined,
       }),
     });
+    const responseText = await res.text();
     if (!res.ok) {
-      console.error("[order] TurboSMS push failed:", res.status, await res.text());
+      console.error("[order] TurboSMS push failed:", res.status, responseText);
+    } else {
+      console.log("[order] TurboSMS push OK:", res.status, responseText);
     }
   } catch (err) {
     console.error("[order] TurboSMS push error:", err);

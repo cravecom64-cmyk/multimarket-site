@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { PROMO, isPromoActive } from "@/lib/promo";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -20,19 +21,12 @@ export function Header() {
           scrolled ? "shadow-md" : ""
         }`}
       >
-        {/* Marquee */}
-        <div className="bg-amber-500 overflow-hidden whitespace-nowrap py-1.5">
-          <div className="inline-block animate-marquee text-[11px] text-white font-medium">
-            &nbsp;&nbsp;📦 Безкоштовна доставка НП від 2000₴ &nbsp;&nbsp;·&nbsp;&nbsp;
-            💰 Оплата при отриманні — нічим не ризикуєш &nbsp;&nbsp;·&nbsp;&nbsp;
-            ⚡ Відправка 1-3 дні по всій Україні &nbsp;&nbsp;·&nbsp;&nbsp;
-            🔥 Знижки до -25% на товари для саду &nbsp;&nbsp;·&nbsp;&nbsp;
-            📦 Безкоштовна доставка НП від 2000₴ &nbsp;&nbsp;·&nbsp;&nbsp;
-            💰 Оплата при отриманні — нічим не ризикуєш &nbsp;&nbsp;·&nbsp;&nbsp;
-            ⚡ Відправка 1-3 дні по всій Україні &nbsp;&nbsp;·&nbsp;&nbsp;
-            🔥 Знижки до -25% на товари для саду
+        {/* Promo banner — всередині sticky-хедера, тому завжди видима при скролі */}
+        {isPromoActive() && (
+          <div className="bg-black text-white text-center text-xs font-bold py-2 px-3">
+            🖤 {PROMO.name} — знижки на все до {PROMO.endsAtLabel}
           </div>
-        </div>
+        )}
 
         {/* Nav bar */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">

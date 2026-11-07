@@ -9,7 +9,6 @@ import { FloatingCart } from "@/components/FloatingCart";
 import { MetaPixel } from "@/components/MetaPixel";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SiteAnalytics } from "@/components/SiteAnalytics";
-import { PromoBanner } from "@/components/PromoBanner";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.multi-market.com.ua"),
@@ -83,7 +82,6 @@ export default function RootLayout({
         <SiteAnalytics />
         <CartProvider>
           <div className="max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto bg-white min-h-screen shadow-sm lg:shadow-lg">
-            <PromoBanner />
             <Header />
             <main className="pb-16">{children}</main>
             <BottomNav />

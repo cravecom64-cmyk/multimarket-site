@@ -277,6 +277,9 @@ interface SupplierRow {
   // прайс VIBER-SHOP нижчий за ціну на їхньому сайті). Для таких рядків
   // перевіряємо лише наявність, ціну з сайту постачальника не записуємо.
   price_source?: string | null;
+  // ДОДАНО 07.11.2026: для manual-рядків — остання відома роздрібна ціна на
+  // сайті постачальника (сигнал "роздріб подорожчав → перевір дроп-ціну").
+  retail_price?: number | null;
   suppliers: { name: string } | { name: string }[] | null;
 }
 
@@ -479,8 +482,8 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
       // невалідний (JSON.parse падає), тому витягуємо регуляркою саме з
       // блоку Product. Ціна в розмітці — РОЗДРІБНА (629 ₴ проти оптових
       // 493 ₴ для гірлянди ny01), оптова видна лише в кабінеті дропшипера,
-      // тож ціну з LUGI свідомо не читаємо: закупка ведеться вручну
-      // (price_source = manual), крон стежить тільки за наявністю.
+      // тож як закупку її не беремо (price_source = manual). З 07.11.2026
+      // читаємо її лише як роздрібний сигнал — див. retail_price нижче.
       const productLd = (html.match(/"@type"\s*:\s*"Product"[\s\S]*?"offers"\s*:\s*\{[\s\S]*?\}/) || [""])[0];
       const availability = (productLd.match(/"availability"\s*:\s*"https?:\/\/schema\.org\/(\w+)"/) || [])[1];
       if (availability) {
@@ -488,7 +491,7 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
           ? "в наявності"
           : "немає в наявності";
       }
-      priceText = "";
+      priceText = (productLd.match(/"price"\s*:\s*"?([\d.,\s]+)"?/) || [])[1] ?? "";
     } else if (url.includes("tanu.ua")) {
       // Хорошоп
       stockText = $(".product-header__availability").first().text().trim();
@@ -698,7 +701,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, price_source, suppliers(name)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, suppliers(name)")
     .order("product_id");
 
   if (error || !rows) {
@@ -726,7 +729,14 @@ export async function GET(req: NextRequest) {
     product_supplier_id: number;
     product_id: string;
     supplier_id: number | null;
-    event: "out_of_stock" | "back_in_stock" | "price_up" | "price_down" | "check_failed";
+    event:
+      | "out_of_stock"
+      | "back_in_stock"
+      | "price_up"
+      | "price_down"
+      | "check_failed"
+      | "retail_price_up"
+      | "retail_price_down";
     old_price?: number | null;
     new_price?: number | null;
   };
@@ -766,9 +776,36 @@ export async function GET(req: NextRequest) {
         return;
       }
 
-      // Домовлена ціна: ціну з сайту постачальника ігноруємо повністю (ні
-      // запису, ні подій, ні пропозицій), лишаємо тільки наявність.
-      if (row.price_source === "manual") result.price = null;
+      // Домовлена ціна: як закупку ціну з сайту постачальника не беремо (ні
+      // запису в price, ні подій, ні пропозицій). Але з 07.11.2026 (ідея
+      // Павла) запам'ятовуємо її як РОЗДРІБНУ: якщо роздріб помітно виріс,
+      // скоріш за все виросла й дроп-ціна — у звіті з'являється нагадування
+      // перевірити її в кабінеті постачальника.
+      const isManual = row.price_source === "manual";
+      let retailPrice: number | null = isManual ? result.price : null;
+      if (isManual) result.price = null;
+      const prevRetail = row.retail_price !== null && row.retail_price !== undefined ? Number(row.retail_price) : null;
+      // той самий запобіжник від кривого парсингу, що й для звичайних цін
+      if (retailPrice !== null && prevRetail !== null && prevRetail > 0 && (retailPrice < prevRetail / 3 || retailPrice > prevRetail * 3)) {
+        retailPrice = null;
+      }
+      const retailChanged =
+        retailPrice !== null && prevRetail !== null && prevRetail > 0 && Math.abs(retailPrice - prevRetail) / prevRetail > PRICE_INCREASE_THRESHOLD;
+      if (retailChanged) {
+        const up = retailPrice! > prevRetail!;
+        stockEvents.push({
+          ...evBase(row),
+          event: up ? "retail_price_up" : "retail_price_down",
+          old_price: prevRetail,
+          new_price: retailPrice,
+        });
+        if (up) {
+          const pct = Math.round(((retailPrice! - prevRetail!) / prevRetail!) * 100);
+          changes.push(
+            `🔎 ${productLabel(row.product_id)} у ${supplierName}: роздрібна ціна ${formatUAH(prevRetail!)} → ${formatUAH(retailPrice!)} (+${pct}%) — перевірте дроп-ціну в кабінеті`
+          );
+        }
+      }
 
       // ДОДАНО 01.11.2026: запобіжник від кривого парсингу. Ціна, що змінилась
       // більш ніж утричі за добу, майже напевно прочитана неправильно (як
@@ -837,6 +874,8 @@ export async function GET(req: NextRequest) {
           in_stock: result.inStock,
           price: result.price !== null ? result.price : row.price,
           checked_at: new Date().toISOString(),
+          ...(retailPrice !== null ? { retail_price: retailPrice } : {}),
+          ...(retailChanged ? { retail_price_changed_at: new Date().toISOString() } : {}),
         })
         .eq("id", row.id);
     }),

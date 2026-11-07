@@ -35,7 +35,12 @@ const commit = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null;
 
 const num = (v) => (v === null || v === undefined || v === "" ? null : Number(v));
 const same = (a, b) => (a ?? null) === (b ?? null) || (typeof a === "number" && typeof b === "number" && Math.abs(a - b) < 0.005);
-const FIELDS = ["name", "category", "our_url", "price", "buy_price", "is_hidden", "hidden_reason"];
+const FIELDS = ["name", "category", "our_url", "price", "buy_price", "is_hidden", "hidden_reason", "old_price", "has_variants"];
+
+// Варіанти з власними цінами (розміри тощо): будь-який вкладений об'єкт з
+// price/buyPrice. Адмінка центру таким товарам не дає правити ціну одним полем.
+const hasVariants = (p) =>
+  Object.entries(p).some(([k, v]) => k !== "price" && k !== "buyPrice" && k !== "oldPrice" && /"(price|buyPrice)"\s*:/.test(JSON.stringify(v ?? null)));
 
 async function main() {
   if (!isProd) return log("не production-білд — пропускаю");
@@ -68,6 +73,8 @@ async function main() {
           buy_price: num(p.buyPrice),
           is_hidden: p.isHidden === true,
           hidden_reason: p.isHidden ? p.hiddenReason ?? null : null,
+          old_price: num(p.oldPrice),
+          has_variants: hasVariants(p),
         },
       ])
     );

@@ -191,6 +191,56 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
   }
 }
 
+// ==================== TurboSMS ====================
+// SMS одразу після оформлення заявки — "Дякуємо, менеджер зателефонує".
+// Незалежний від Telegram/KeyCRM/SalesDrive пуш: якщо він впаде, замовлення
+// все одно вже збережене в Supabase і пішло в Telegram/SalesDrive вище.
+// Ім'я відправника "Multimarket" зараз на реєстрації в операторів (10-14
+// робочих днів) — поки вона триває, TurboSMS сам підміняє його на загальний
+// відправник; жодних правок коду тут не знадобиться, коли реєстрація пройде.
+function toTurboSmsPhone(phone: string): string | null {
+  const cleaned = phone.replace(/[\s()-]/g, "").replace(/^\+/, "");
+  if (/^380\d{9}$/.test(cleaned)) return cleaned;
+  if (/^0\d{9}$/.test(cleaned)) return "38" + cleaned;
+  return null;
+}
+
+async function pushSmsNotification(body: OrderBody, orderId: number | null) {
+  const apiKey = process.env.TURBOSMS_API_KEY;
+  if (!apiKey) return; // токена ще нема — просто виходимо
+
+  const recipient = toTurboSmsPhone(body.phone);
+  if (!recipient) {
+    console.error("[order] TurboSMS: не вдалось розпізнати номер телефону", body.phone);
+    return;
+  }
+
+  const orderLabel = orderId ? `№${orderId}` : body.orderId ? `№${body.orderId}` : "";
+  const text = `Дякуємо за замовлення ${orderLabel}! Менеджер зателефонує Вам найближчим часом для підтвердження. Multimarket`.replace(
+    /\s+/g,
+    " "
+  );
+
+  try {
+    const res = await fetch("https://api.turbosms.ua/message/send.json", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        recipients: [recipient],
+        sms: { sender: "Multimarket", text },
+        // orderId як sequence_id — захист від повторної відправки SMS, якщо
+        // цей самий запит випадково прилетить двічі (ретрай тощо).
+        sequence_id: orderId ? `order-${orderId}` : undefined,
+      }),
+    });
+    if (!res.ok) {
+      console.error("[order] TurboSMS push failed:", res.status, await res.text());
+    }
+  } catch (err) {
+    console.error("[order] TurboSMS push error:", err);
+  }
+}
+
 // ==================== RATE LIMITING ====================
 // In-memory store: IP → timestamps of recent requests
 const rateLimitMap = new Map<string, number[]>();
@@ -466,6 +516,9 @@ ${paymentLine}
 
     // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
     await pushOrderToSalesDrive(body, commandCenterOrderId);
+
+    // --- TurboSMS: no-op, поки немає ключа (див. функцію вище) ---
+    await pushSmsNotification(body, commandCenterOrderId);
 
     return NextResponse.json({ success: true, notified: tgRes.ok });
   } catch (error) {

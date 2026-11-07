@@ -195,9 +195,21 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
 // SMS одразу після оформлення заявки — "Дякуємо, менеджер зателефонує".
 // Незалежний від Telegram/KeyCRM/SalesDrive пуш: якщо він впаде, замовлення
 // все одно вже збережене в Supabase і пішло в Telegram/SalesDrive вище.
-// Ім'я відправника "Multimarket" зараз на реєстрації в операторів (10-14
-// робочих днів) — поки вона триває, TurboSMS сам підміняє його на загальний
-// відправник; жодних правок коду тут не знадобиться, коли реєстрація пройде.
+//
+// Ім'я відправника "Multimarket" зараз на НАЙПЕРШІЙ стадії модерації
+// (⏳ — на розгляді в самого TurboSMS, ще навіть не передано операторам).
+// На цій стадії TurboSMS НЕ підміняє його на загальний відправник (на
+// відміну від того, що написано в їх загальній документації) — запит
+// з sender="Multimarket" просто відхиляється з кодом
+// NOT_ALLOWED_MESSAGE_SENDER (перевірено 07.11.2026 по живих логах).
+// Автопідміна запрацює тільки на НАСТУПНІЙ стадії (✅🔄 — пройшло
+// модерацію TurboSMS, очікує реєстрації в операторів).
+//
+// Тому поки що відправляємо від готового "спільного" (Общие) відправника
+// з кабінету TurboSMS — TurboSMS → Отправители → Отправители SMS → Общие.
+// Коли "Multimarket" дійде до стадії ✅🔄 (чи повної реєстрації), просто
+// повернути sender назад на "Multimarket" нижче.
+const TURBOSMS_SENDER = "MAGAZIN";
 function toTurboSmsPhone(phone: string): string | null {
   const cleaned = phone.replace(/[\s()-]/g, "").replace(/^\+/, "");
   if (/^380\d{9}$/.test(cleaned)) return cleaned;
@@ -233,7 +245,7 @@ async function pushSmsNotification(body: OrderBody, orderId: number | null) {
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         recipients: [recipient],
-        sms: { sender: "Multimarket", text },
+        sms: { sender: TURBOSMS_SENDER, text },
         // orderId як sequence_id — захист від повторної відправки SMS, якщо
         // цей самий запит випадково прилетить двічі (ретрай тощо).
         sequence_id: orderId ? `order-${orderId}` : undefined,

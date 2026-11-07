@@ -231,8 +231,11 @@ async function pushSmsNotification(body: OrderBody, orderId: number | null) {
     return;
   }
 
-  const orderLabel = orderId ? `№${orderId}` : body.orderId ? `№${body.orderId}` : "";
-  const text = `Дякуємо за замовлення ${orderLabel}! Менеджер зателефонує Вам найближчим часом для підтвердження. Multimarket`.replace(
+  // Без номера замовлення (виглядає зайво "офіційно" для нового магазину —
+  // знижує довіру) і без прямої обіцянки "зателефонує": частина клієнтів
+  // на сайті явно просить НЕ дзвонити (чекбокс confirmCall), а ця SMS
+  // йде всім однаково, тож формулювання має підходити для обох випадків.
+  const text = `Ваше замовлення вже в обробці! Найближчим часом ми з Вами зв'яжемося для підтвердження. Multimarket`.replace(
     /\s+/g,
     " "
   );

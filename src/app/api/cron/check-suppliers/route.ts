@@ -707,6 +707,18 @@ async function buildDailySiteLines(supabase: NonNullable<ReturnType<typeof supab
   return lines;
 }
 
+async function sendTelegramText(text: string) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!botToken || !chatId) return;
+  const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown", disable_web_page_preview: true }),
+  });
+  if (!res.ok) console.error("[check-suppliers] Telegram send failed:", await res.text());
+}
+
 async function sendTelegramReport(
   changes: string[],
   failures: FailureInfo[],
@@ -769,11 +781,22 @@ export async function GET(req: NextRequest) {
   // Variables заданий CRON_SECRET — тож цей env var треба один раз додати
   // вручну на Vercel (сюди немає прямого доступу з цієї сесії).
   const expected = process.env.CRON_SECRET;
-  if (expected) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${expected}`) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  // ДОДАНО 09.11.2026 (Павло: "да настрой" — щогодинна перевірка LUGI):
+  // ?scope=feeds — легкий прогін лише по постачальниках з XML-вивантаженням.
+  // Його щогодини викликає pg_cron у Supabase з окремим токеном
+  // (private_settings.stock_check_token), який дає право ЛИШЕ на цей режим.
+  const feedOnly = req.nextUrl.searchParams.get("scope") === "feeds";
+  const auth = req.headers.get("authorization");
+  if (expected && auth !== `Bearer ${expected}`) {
+    let ok = false;
+    if (feedOnly && auth?.startsWith("Bearer ")) {
+      const db = supabaseServer();
+      const { data: tok } = db
+        ? await db.from("private_settings").select("value").eq("key", "stock_check_token").maybeSingle()
+        : { data: null };
+      ok = Boolean(tok?.value && tok.value.length >= 32 && auth === `Bearer ${tok.value}`);
     }
+    if (!ok) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
   // ДОДАНО 08.10.2026: під час налагодження ScraperAPI-проксі я кілька разів
@@ -818,9 +841,15 @@ export async function GET(req: NextRequest) {
   // стоять in_stock=false, тож на авто-приховання й вибір найдешевшого
   // постачальника це не впливає.
   const isStoppedSupplier = (r: SupplierRow) => /ПРИПИНЕНО/i.test(supplierNameOf(r));
-  const scoped = (rows as unknown as SupplierRow[]).filter(
+  const allScoped = (rows as unknown as SupplierRow[]).filter(
     (r) => activeProductIds.has(r.product_id) && !isStoppedSupplier(r)
   );
+  // У режимі feeds перевіряємо лише рядки з вивантаженням, але інші рядки тих
+  // самих товарів лишаються в розрахунку наявності (зі збереженим in_stock) —
+  // щоб не сховати товар, який є в іншого постачальника.
+  const feedProductIds = new Set(allScoped.filter((r) => feedUrlOf(r)).map((r) => r.product_id));
+  const scoped = feedOnly ? allScoped.filter((r) => feedProductIds.has(r.product_id)) : allScoped;
+  const toCheck = feedOnly ? scoped.filter((r) => feedUrlOf(r)) : scoped;
 
   const changes: string[] = [];
   const failures: FailureInfo[] = [];
@@ -870,7 +899,7 @@ export async function GET(req: NextRequest) {
   // product_id.
   // вивантаження постачальників — по одному завантаженню на прогін
   const feedPromises = new Map<string, Promise<Map<string, FeedOffer> | { error: string }>>();
-  for (const r of scoped) {
+  for (const r of toCheck) {
     const f = feedUrlOf(r);
     if (f && !feedPromises.has(f)) feedPromises.set(f, loadFeed(f));
   }
@@ -881,8 +910,8 @@ export async function GET(req: NextRequest) {
     (async () => {
       const isSerial = (r: SupplierRow) => !feedUrlOf(r) && SERIAL_HOSTS.some((h) => r.url.includes(h));
       await Promise.all([
-        runWithConcurrency(shuffle(scoped.filter((r) => !isSerial(r))), 9, checkRow),
-        runWithConcurrency(shuffle(scoped.filter(isSerial)), 1, checkRow),
+        runWithConcurrency(shuffle(toCheck.filter((r) => !isSerial(r))), 9, checkRow),
+        runWithConcurrency(shuffle(toCheck.filter(isSerial)), 1, checkRow),
       ]);
     })(),
     new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
@@ -1131,6 +1160,7 @@ export async function GET(req: NextRequest) {
     const unhideSet = new Set(toUnhide);
     for (const p of productsData as Array<Record<string, unknown>>) {
       const id = String(p.id);
+      if (feedOnly && !feedProductIds.has(id)) continue; // щогодинний режим — лише товари з вивантаженням
       const visibleAfter = unhideSet.has(id) || (!p.isHidden && !hideSet.has(id));
       if (!visibleAfter) continue;
       if (JSON.stringify(Object.entries(p).filter(([k]) => k !== "buyPrice")).includes('"buyPrice"')) continue;
@@ -1199,7 +1229,7 @@ export async function GET(req: NextRequest) {
 
   // ---- Пропозиції підняти ціну на сайті (тільки при зростанні) ----
   const proposalLines: string[] = [];
-  try {
+  if (!feedOnly) try {
     const { data: cheapest } = await supabase
       .from("product_cheapest_supplier")
       .select("product_id, supplier_name, supplier_price")
@@ -1325,15 +1355,22 @@ export async function GET(req: NextRequest) {
   // змін — усе як учора" у sendTelegramReport вже була готова до цього),
   // крім ручних тестових викликів з ?notify=false.
   let siteLines: string[] = [];
-  try {
+  if (!feedOnly) try {
     siteLines = await buildDailySiteLines(supabase);
   } catch (err) {
     // Статистика не повинна зламати звіт про постачальників
     console.error("[check-suppliers] daily site stats failed:", err instanceof Error ? err.message : err);
   }
 
-  if (notify) {
+  if (notify && !feedOnly) {
     await sendTelegramReport(changes, failures, proposalLines, visibilityLines, checked, scoped.length, buyLines, siteLines);
+  }
+  // Щогодинний прогін пише в Telegram лише коли щось змінилось (наявність,
+  // РРЦ, товар/колір сховано чи повернено) — без щогодинного спаму.
+  if (notify && feedOnly && (visibilityLines.length > 0 || changes.length > 0)) {
+    await sendTelegramText(
+      ["⏱ *Щогодинна перевірка (вивантаження LUGI)*", "", ...changes.map((c) => `• ${c}`), "", ...visibilityLines].join("\n")
+    );
   }
 
   return NextResponse.json({

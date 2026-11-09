@@ -207,7 +207,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // будь-якій 400-помилці (напр. закоротке поле) показувався загальний
   // "Щось пішло не так" — покупець не розумів що саме виправити.
   const VALIDATION_MESSAGES: Record<string, string> = {
-    "Invalid name": "Перевір поле «Ім'я» — має бути мінімум 2 символи.",
+    "Invalid name": "Перевір поле «Ім'я та прізвище» — має бути мінімум 2 символи.",
     "Invalid phone number": "Перевір номер телефону — формат +380XXXXXXXXX.",
     "Invalid city": "Перевір поле «Місто» — має бути мінімум 2 символи.",
     "Invalid NP branch": "Вкажи відділення Нової Пошти детальніше (мінімум 3 символи, напр. «Відділення №5»).",
@@ -639,14 +639,14 @@ export function OrderModal({ onClose }: OrderModalProps) {
           </div>
           <div>
             <label className="text-xs font-semibold text-gray-600 mb-1 block">
-              Ім&apos;я *
+              Ім&apos;я та прізвище *
             </label>
             <input
               type="text"
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Олена"
+              placeholder="Олена Коваленко"
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
           </div>

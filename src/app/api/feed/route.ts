@@ -39,6 +39,7 @@ const GPC_BY_ID: Record<string, number> = {
   bk06: 338, // Flashlights & Headlamps
   bk08: 338,
   bk29: 505295, // Electronics > ... > Power > Power Adapters & Chargers
+  bk32: 1015, // Kitchen Appliances > Portable Cooking Stoves
 };
 
 // Важкі товари (> 2 кг): доставка НП по Україні до 10 кг — 135₴ (тарифи з 13.04.2026).
@@ -78,7 +79,10 @@ export async function GET() {
         : `${SITE_URL}/product/${p.slug}`;
       const image = `${SITE_URL}${p.image}`;
       const gpc = GPC_BY_ID[p.id] ?? GPC_BY_CATEGORY[p.category] ?? 536;
-      const fbCategory = FB_CATEGORY_MAP[p.category] || "Home & Garden";
+      const fbCategory =
+        p.id === "bk32"
+          ? "Home & Garden > Kitchen & Dining > Kitchen Appliances"
+          : FB_CATEGORY_MAP[p.category] || "Home & Garden";
       // Ціна = реальна ціна продажу (як у JSON-LD на сторінці). oldPrice не
       // передаємо як sale: «стара» ціна фактично не діяла, а Merchant Center
       // вимагає, щоб звичайна ціна була реальною (misrepresentation).

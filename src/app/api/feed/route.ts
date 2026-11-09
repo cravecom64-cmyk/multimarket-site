@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllProducts } from "@/lib/products";
+import { getAllProducts, getWeightKg } from "@/lib/products";
 
 // Товарний фід для Meta Commerce Manager / Google Merchant Center.
 // URL: /api/feed — вставити його в Commerce Manager як "Feed URL"
@@ -42,6 +42,8 @@ const GPC_BY_ID: Record<string, number> = {
 };
 
 // Важкі товари (> 2 кг): доставка НП по Україні до 10 кг — 135₴ (тарифи з 13.04.2026).
+// Важкість визначається автоматично за вагою (weightKg / specs["Вага"]);
+// HEAVY_IDS — лише для товарів, у яких вага ще не вказана.
 // Решта бере тариф з налаштувань Merchant Center: 90₴, безкоштовно від 2000₴.
 // Item-level shipping перекриває налаштування акаунта, тому для товарів
 // від 2000₴ нічого не задаємо — спрацює безкоштовна доставка з акаунта.
@@ -80,8 +82,14 @@ export async function GET() {
       // Ціна = реальна ціна продажу (як у JSON-LD на сторінці). oldPrice не
       // передаємо як sale: «стара» ціна фактично не діяла, а Merchant Center
       // вимагає, щоб звичайна ціна була реальною (misrepresentation).
+      const weight = getWeightKg(p);
+      const isHeavy = weight !== null ? weight > 2 : HEAVY_IDS.has(p.id);
+      const weightTag =
+        weight !== null
+          ? `      <g:shipping_weight>${Math.round(weight * 1000)} g</g:shipping_weight>\n`
+          : "";
       const shippingBlock =
-        HEAVY_IDS.has(p.id) && p.price < FREE_SHIPPING_FROM
+        isHeavy && p.price < FREE_SHIPPING_FROM
           ? `      <g:shipping>
         <g:country>UA</g:country>
         <g:service>Нова Пошта</g:service>
@@ -104,7 +112,7 @@ export async function GET() {
       <g:google_product_category>${gpc}</g:google_product_category>
       <g:product_type>${escapeXml(p.categoryName)}</g:product_type>
       <g:fb_product_category>${escapeXml(fbCategory)}</g:fb_product_category>
-${shippingBlock}    </item>`;
+${weightTag}${shippingBlock}    </item>`;
     })
     .join("");
 

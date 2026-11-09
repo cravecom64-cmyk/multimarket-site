@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { categories, getProductsByCategory } from "@/lib/products";
 import { CategoryPageClient } from "./CategoryPageClient";
+import { buildMetaDescription, pluralUk } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -27,10 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const products = getProductsByCategory(slug);
-  const title = `${category.name} — купити в Україні, ${products.length} товарів`;
-  const description =
-    categoryDescriptions[slug] ||
-    `${category.name}: ${products.length} товарів з доставкою по Україні.`;
+  const n = products.length;
+  const title = `${category.name} – купити в Україні, ${n} ${pluralUk(n, "товар", "товари", "товарів")}`;
+  const description = buildMetaDescription(
+    categoryDescriptions[slug] || `${category.name}: товари з доставкою по Україні`,
+  );
   const url = `https://www.multi-market.com.ua/category/${slug}`;
 
   return {

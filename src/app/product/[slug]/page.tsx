@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products";
+import { buildMetaDescription } from "@/lib/seo";
 import { ProductPageClient } from "./ProductPageClient";
 
 type Props = {
@@ -18,9 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const title = `${product.name} купити за ${product.price}₴ в Україні`;
-  const description =
-    product.shortDesc ||
-    `${product.name} з доставкою по Україні. Оплата при отриманні, відправка 1-3 дні. ${product.price}₴.`;
+  const description = buildMetaDescription(product.shortDesc || product.name);
   const url = `https://www.multi-market.com.ua/product/${product.slug}`;
 
   return {

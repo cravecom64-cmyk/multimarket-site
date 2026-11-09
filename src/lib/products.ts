@@ -74,6 +74,8 @@ export interface Product {
   // body: міні-markdown — **жирний**, [текст](/внутрішнє-посилання),
   // рядки "• " = список, порожній рядок = новий абзац.
   details?: { title: string; body: string }[];
+  // Вага з упаковкою, кг (для доставки в Merchant Center). Якщо нема — береться specs["Вага"].
+  weightKg?: number;
   badges: string[];
   bundleWith?: string[];
   // Вручну підібрані СПРАВДІ схожі товари (той самий тип продукту чи
@@ -278,3 +280,16 @@ export const categories = [
     productCount: visibleProducts().filter((p) => p.category === "newyear").length,
   },
 ];
+
+// Вага товару в кг: явне поле weightKg або розбір specs["Вага"]
+// ("270 г", "1,9 кг", "456 г (з упаковкою)"). null — якщо невідомо.
+export function getWeightKg(p: Product): number | null {
+  if (typeof p.weightKg === "number") return p.weightKg;
+  const raw = p.specs?.["Вага"];
+  if (!raw) return null;
+  const m = String(raw).replace(",", ".").match(/([\d.]+)\s*(кг|г)/i);
+  if (!m) return null;
+  const v = parseFloat(m[1]);
+  if (!isFinite(v)) return null;
+  return m[2].toLowerCase() === "кг" ? v : v / 1000;
+}

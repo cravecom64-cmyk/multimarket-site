@@ -693,7 +693,7 @@ export function ProductPageClient() {
             <div className="px-3.5 pb-3">
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
                 <div className="text-[11px] text-gray-500">
-                  Поки без відгуків — будьте першим, хто розповість про цей товар!
+                  Поки без відгуків – будьте першим, хто розповість про цей товар!
                 </div>
               </div>
             </div>

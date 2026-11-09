@@ -292,6 +292,8 @@ interface SupplierRow {
   // сторінку конкретного кольору (у LUGI кожен колір гірлянди — окремий
   // товар). NULL — посилання на весь товар.
   color?: string | null;
+  // артикул у постачальника — для пошуку у його XML-вивантаженні
+  supplier_sku?: string | null;
   // ДОДАНО 07.11.2026: для manual-рядків — остання відома роздрібна ціна на
   // сайті постачальника (сигнал "роздріб подорожчав → перевір дроп-ціну").
   retail_price?: number | null;
@@ -553,6 +555,59 @@ function isRetryableProxyError(error: string | undefined): boolean {
   return !!error && (error.includes("схоже на бот-захист") || error.includes("HTTP 429"));
 }
 
+// ДОДАНО 09.11.2026: XML-вивантаження постачальника (suppliers.feed_url).
+// Сайт LUGI стоїть за захистом хостингу, який не пускає хмарні сервери
+// (сторінка "Захищена сторінка", HTTP 429) — тож наявність і РРЦ беремо з
+// їхнього офіційного вивантаження для дропшиперів (те саме, що забирають
+// Prom/Rozetka), шукаючи товар за артикулом (product_suppliers.supplier_sku).
+// Вивантаження велике (~12 МБ, ~4400 товарів), качаємо його один раз на прогін.
+type FeedOffer = { available: boolean; price: number | null; qty: number | null };
+
+// Артикули LUGI часом містять кириличні літери, схожі на латинські
+// ("6МBY" з кириличною М) — порівнюємо в нормалізованому вигляді.
+function normSku(s: string): string {
+  const map: Record<string, string> = { А: "A", В: "B", Е: "E", К: "K", М: "M", Н: "H", О: "O", Р: "P", С: "C", Т: "T", Х: "X", І: "I" };
+  return s.trim().toUpperCase().replace(/[АВЕКМНОРСТХІ]/g, (ch) => map[ch] ?? ch);
+}
+
+async function loadFeed(url: string): Promise<Map<string, FeedOffer> | { error: string }> {
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; MultiMarketStockCheck/1.0; +https://www.multi-market.com.ua)" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    });
+    if (!res.ok) return { error: `вивантаження: HTTP ${res.status}` };
+    const xml = await res.text();
+    const map = new Map<string, FeedOffer>();
+    for (const chunk of xml.split("<offer ").slice(1)) {
+      const sku = /<vendorCode>(?:<!\[CDATA\[)?([^<\]]+)/.exec(chunk)?.[1];
+      if (!sku) continue;
+      const head = chunk.slice(0, chunk.indexOf(">"));
+      const available = /available="true"/.test(head);
+      const priceRaw = /<price>([^<]+)<\/price>/.exec(chunk)?.[1];
+      const qtyRaw = /<quantity_in_stock>([^<]+)<\/quantity_in_stock>/.exec(chunk)?.[1];
+      const price = priceRaw ? Number(priceRaw.replace(",", ".")) : null;
+      const qty = qtyRaw !== undefined ? Number(qtyRaw) : null;
+      map.set(normSku(sku), {
+        available,
+        price: price !== null && Number.isFinite(price) && price > 0 ? price : null,
+        qty: qty !== null && Number.isFinite(qty) ? qty : null,
+      });
+    }
+    if (map.size < 100) return { error: `вивантаження: підозріло мало товарів (${map.size})` };
+    return map;
+  } catch (e) {
+    return { error: `вивантаження: ${e instanceof Error ? e.message : "помилка"}` };
+  }
+}
+
+function feedUrlOf(row: SupplierRow): string | null {
+  const s = (row as unknown as { suppliers?: unknown }).suppliers;
+  const sup = (Array.isArray(s) ? s[0] : s) as { feed_url?: string | null } | null | undefined;
+  return sup?.feed_url ?? null;
+}
+
 // ДОДАНО 07.11.2026: LUGI на кілька паралельних запитів з одного IP
 // відповідає "HTTP 429" (через це частина товарів LUGI щоранку не
 // перевірялась, а з окремими сторінками кольорів запитів до них стало
@@ -748,7 +803,7 @@ export async function GET(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, suppliers(name, price_rule)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, supplier_sku, suppliers(name, price_rule, feed_url)")
     .order("product_id");
 
   if (error || !rows) {
@@ -813,11 +868,18 @@ export async function GET(req: NextRequest) {
   // перемішується, щоб при регулярному впиранні в дедлайн недоперевіреними
   // щодня лишались РІЗНІ товари, а не завжди одні й ті самі останні за
   // product_id.
+  // вивантаження постачальників — по одному завантаженню на прогін
+  const feedPromises = new Map<string, Promise<Map<string, FeedOffer> | { error: string }>>();
+  for (const r of scoped) {
+    const f = feedUrlOf(r);
+    if (f && !feedPromises.has(f)) feedPromises.set(f, loadFeed(f));
+  }
+
   await Promise.race([
     // LUGI — окремою чергою по одному (див. SERIAL_HOSTS), щоб чекання на
     // їхню чергу не займало потоки решти постачальників.
     (async () => {
-      const isSerial = (r: SupplierRow) => SERIAL_HOSTS.some((h) => r.url.includes(h));
+      const isSerial = (r: SupplierRow) => !feedUrlOf(r) && SERIAL_HOSTS.some((h) => r.url.includes(h));
       await Promise.all([
         runWithConcurrency(shuffle(scoped.filter((r) => !isSerial(r))), 9, checkRow),
         runWithConcurrency(shuffle(scoped.filter(isSerial)), 1, checkRow),
@@ -825,9 +887,20 @@ export async function GET(req: NextRequest) {
     })(),
     new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
   ]);
+  async function statusFor(row: SupplierRow): Promise<CheckResult> {
+    const feedUrl = feedUrlOf(row);
+    if (!feedUrl) return fetchSupplierStatus(row.url);
+    const feed = await feedPromises.get(feedUrl)!;
+    if (!(feed instanceof Map)) return { inStock: false, price: null, error: feed.error };
+    if (!row.supplier_sku) return { inStock: false, price: null, error: "не вказано артикул постачальника (supplier_sku)" };
+    const offer = feed.get(normSku(row.supplier_sku));
+    if (!offer) return { inStock: false, price: null, error: `артикулу ${row.supplier_sku} немає у вивантаженні` };
+    return { inStock: offer.available && (offer.qty === null || offer.qty > 0), price: offer.price };
+  }
+
   async function checkRow(row: SupplierRow) {
       const supplierName = supplierNameOf(row);
-      const result = await fetchSupplierStatus(row.url);
+      const result = await statusFor(row);
       checked++;
 
       if (result.error) {

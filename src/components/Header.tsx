@@ -2,12 +2,28 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { PROMO, isPromoActive } from "@/lib/promo";
+import { getActiveHeroScenario, formatCountdown } from "@/lib/promo";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const promoActive = isPromoActive();
+  const heroScenario = getActiveHeroScenario();
+  const promoActive = heroScenario !== null;
+  // Бігучий рядок — замість однієї статичної фрази ротація 2 коротких
+  // повідомлень через плавний fade (не "біжучий" зліва-направо текст, той
+  // погано читається на ходу). Рішення Павла 10.11.2026. Додаючи новий
+  // сезон у HERO_SCENARIOS (src/lib/promo.ts) — tickerMessages підхопиться
+  // сам, нічого тут міняти не треба.
+  const tickerMessages = heroScenario
+    ? (() => {
+        const countdown = formatCountdown(heroScenario.countdownTargetIso);
+        return countdown
+          ? [...heroScenario.tickerMessages, `⏳ Залишилось: ${countdown}`]
+          : heroScenario.tickerMessages;
+      })()
+    : [];
+  const [tickerIndex, setTickerIndex] = useState(0);
+  const [tickerVisible, setTickerVisible] = useState(true);
   const bannerRef = useRef<HTMLDivElement>(null);
   const [bannerHeight, setBannerHeight] = useState(0);
 
@@ -16,6 +32,19 @@ export function Header() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Ротація фраз бігучого рядка: fade-out, зміна тексту, fade-in.
+  useEffect(() => {
+    if (tickerMessages.length <= 1) return;
+    const interval = setInterval(() => {
+      setTickerVisible(false);
+      setTimeout(() => {
+        setTickerIndex((i) => (i + 1) % tickerMessages.length);
+        setTickerVisible(true);
+      }, 400);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [tickerMessages.length]);
 
   // Банер — position: fixed до вікна (а не sticky до хедера), тому він
   // лишається видимим зверху екрана завжди, незалежно від скролу чи
@@ -43,7 +72,12 @@ export function Header() {
             ref={bannerRef}
             className="fixed top-0 left-0 right-0 z-[65] bg-black text-white text-center text-xs font-bold py-2 px-3 max-w-[480px] sm:max-w-[560px] md:max-w-[680px] lg:max-w-[820px] mx-auto"
           >
-            🖤 {PROMO.name} — знижки на все до {PROMO.endsAtLabel}
+            <span
+              className="ticker-fade inline-block"
+              style={{ opacity: tickerVisible ? 1 : 0 }}
+            >
+              {tickerMessages[tickerIndex] ?? ""}
+            </span>
           </div>
           {/* Розпірка — займає місце банера в потоці, бо сам банер fixed і з потоку вийнятий */}
           <div style={{ height: bannerHeight }} aria-hidden />

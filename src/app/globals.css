@@ -61,3 +61,42 @@ img {
 .badge-pulse {
   animation: badge-pulse 2s ease-in-out infinite;
 }
+
+/* Hero banner — ледь помітний діагональний відблиск, що повільно
+   "проходить" по банеру раз на ~4.5с. Чистий CSS, без JS/канвасу —
+   не впливає на швидкість завантаження. */
+.hero-sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-sheen::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -40%;
+  width: 35%;
+  height: 220%;
+  background: linear-gradient(
+    75deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+  animation: hero-sheen-sweep 4.5s ease-in-out infinite;
+}
+@keyframes hero-sheen-sweep {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(380%);
+  }
+}
+
+/* Бігучий рядок у хедері — плавна зміна фраз через fade, без "біжучого"
+   зліва-направо тексту (той погано читається на ходу). */
+.ticker-fade {
+  transition: opacity 0.4s ease;
+}

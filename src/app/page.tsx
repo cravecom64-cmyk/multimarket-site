@@ -6,12 +6,18 @@ import { Footer } from "@/components/Footer";
 import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import {
   getHomepageSaleProducts,
+  getSaleProducts,
   getAllProducts,
   categories,
 } from "@/lib/products";
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
+import { getActiveHeroScenario, formatCountdown } from "@/lib/promo";
 
 const saleProducts = getHomepageSaleProducts();
+// Для підзаголовка хіро — загальна кількість товарів зі знижкою по всьому
+// сайту (а не лише ті, що потрапили у звужений ряд "Акції та спецціни" на
+// головній), щоб цифра відповідала дійсності ("обирай, поки в наявності").
+const heroSaleCount = getSaleProducts().length;
 
 // Реальні відгуки, скопійовані з products.json (той самий текст, що й на
 // сторінках товарів) — щоб на головній не було фейкових відгуків під
@@ -41,6 +47,9 @@ const trustItems = [
 ];
 
 export default function HomePage() {
+  const heroScenario = getActiveHeroScenario();
+  const heroCountdown = heroScenario ? formatCountdown(heroScenario.countdownTargetIso) : null;
+
   // Живе ранжування "Топ продажів" — переглядів/кошика/покупок за 30 днів
   // (product_events у Supabase), з фолбеком на orderCount, поки даних
   // немає. Див. lib/popularityClient.ts.
@@ -71,33 +80,53 @@ export default function HomePage() {
           }),
         }}
       />
-      {/* Hero Banner */}
+      {/* Hero Banner — "розумний" під інфопривід: Black Friday (01.11-30.11),
+          Новий рік (01.12-08.01), поза цими періодами — нейтральний дефолт.
+          Конфіг періодів: src/lib/promo.ts (HERO_SCENARIOS). Рішення Павла
+          10.11.2026: підзаголовок — жива цифра товарів зі знижкою (не
+          перелік розділів), фон — ледь помітний CSS-відблиск (.hero-sheen),
+          чип з лічильником пульсує (.badge-pulse), кнопки без змін. */}
       <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#1E3A5F] to-[#2D5A8E] px-6 py-7 relative overflow-hidden">
-        <h1 className="text-xl font-extrabold text-white leading-tight">
-          Перевіряємо товар.
-          <br />
-          Оплата при отриманні.
-          <br />
-          Відправка 1-3 дні.
-        </h1>
-        <p className="text-[11px] text-blue-200 mt-2 leading-relaxed">
-          Товари для дому, саду й тварин — і все необхідне
-          <br />
-          на випадок відключень світла. Готуйся заздалегідь.
-        </p>
-        <div className="flex items-center gap-2 mt-3.5 flex-wrap">
-          <Link
-            href="/catalog"
-            className="inline-block bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold"
-          >
-            Дивитись каталог
-          </Link>
-          <Link
-            href="/category/blackout"
-            className="inline-block bg-white/15 text-white px-4 py-2.5 rounded-lg text-xs font-bold border border-white/30"
-          >
-            🔦 На випадок блекауту
-          </Link>
+        <div className="hero-sheen" aria-hidden />
+        <div className="relative z-10">
+          {heroScenario ? (
+            <>
+              <h1 className="text-xl font-extrabold text-white leading-tight">
+                🔥 {heroScenario.headlinePrefix}
+                <span className="text-amber-400">{heroScenario.headlineAccent}</span>
+              </h1>
+              {heroCountdown && (
+                <span className="badge-pulse inline-flex items-center gap-1 mt-2 bg-white/15 border border-white/30 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                  {heroScenario.chipEmoji} Залишилось: {heroCountdown}
+                </span>
+              )}
+            </>
+          ) : (
+            <h1 className="text-xl font-extrabold text-white leading-tight">
+              Перевіряємо товар.
+              <br />
+              Оплата при отриманні.
+              <br />
+              Відправка 1-3 дні.
+            </h1>
+          )}
+          <p className="text-[11px] text-blue-200 mt-2 leading-relaxed">
+            {heroSaleCount} товарів зі знижкою — обирай, поки в наявності
+          </p>
+          <div className="flex items-center gap-2 mt-3.5 flex-wrap">
+            <Link
+              href="/catalog"
+              className="inline-block bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold"
+            >
+              Дивитись каталог
+            </Link>
+            <Link
+              href="/category/blackout"
+              className="inline-block bg-white/15 text-white px-4 py-2.5 rounded-lg text-xs font-bold border border-white/30"
+            >
+              🔦 На випадок блекауту
+            </Link>
+          </div>
         </div>
       </div>
 

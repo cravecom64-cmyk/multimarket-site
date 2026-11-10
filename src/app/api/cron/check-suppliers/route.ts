@@ -775,7 +775,21 @@ async function sendTelegramReport(
   }
 }
 
+// ДОДАНО 10.11.2026: частина щогодинних прогонів повертала голий Vercel 500
+// без деталей — тепер помилка повертається текстом (видно в
+// net._http_response у Supabase), щоб знайти причину.
 export async function GET(req: NextRequest) {
+  try {
+    return await handleGet(req);
+  } catch (err) {
+    const message = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    const where = err instanceof Error ? (err.stack ?? "").split("\n").slice(1, 4).join(" | ") : "";
+    console.error("[check-suppliers] unhandled:", message, where);
+    return NextResponse.json({ error: "unhandled", message, where }, { status: 500 });
+  }
+}
+
+async function handleGet(req: NextRequest) {
   // Vercel сам підставляє "Authorization: Bearer $CRON_SECRET" при виклику
   // за розкладом (vercel.json), якщо в Project Settings → Environment
   // Variables заданий CRON_SECRET — тож цей env var треба один раз додати

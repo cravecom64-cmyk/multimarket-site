@@ -182,6 +182,32 @@ export function getSaleProducts(): Product[] {
   return visibleProducts().filter((p) => p.oldPrice && p.oldPrice > p.price);
 }
 
+// Для блоку "Акції та спецціни" на головній (вузький горизонтальний ряд,
+// перше, що бачить людина) — на відміну від /sale (де показуємо геть усі
+// знижки), тут навмисно звужуємо до того, що актуально зараз і найближчі
+// 2-3 місяці: категорії "Блекаут" і "Новий рік" (завжди доречні в цей
+// період) + найпопулярніші товари з інших категорій. Відверто летні/не по
+// сезону товари (городні насадки, гамаки, садові LED-ліхтарі тощо —
+// season "Весна-Літо-Осінь" / "Літо" / "Літо-Осінь") прибираємо звідси,
+// лишаючи їх тільки на /sale і в каталозі. (Правка 10.11.2026 на прохання
+// Павла — до цього блок просто показував усі товари зі знижкою поспіль, і
+// туди потрапляли явно не по сезону позиції.)
+const OFF_SEASON = new Set(["Весна-Літо-Осінь", "Літо", "Літо-Осінь"]);
+
+export function getHomepageSaleProducts(): Product[] {
+  const inSeason = getSaleProducts().filter((p) => !OFF_SEASON.has(p.season));
+
+  const priority = inSeason
+    .filter((p) => p.category === "blackout" || p.category === "newyear")
+    .sort((a, b) => b.orderCount - a.orderCount);
+
+  const topSellers = inSeason
+    .filter((p) => p.category !== "blackout" && p.category !== "newyear")
+    .sort((a, b) => b.orderCount - a.orderCount);
+
+  return [...priority, ...topSellers];
+}
+
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
   // Пріоритет — вручну підібрані справді схожі товари (той самий тип
   // продукту: інший гамак, інший вентилятор, інший блендер тощо), а не

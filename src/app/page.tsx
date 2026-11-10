@@ -5,13 +5,13 @@ import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import {
-  getSaleProducts,
+  getHomepageSaleProducts,
   getAllProducts,
   categories,
 } from "@/lib/products";
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
 
-const saleProducts = getSaleProducts();
+const saleProducts = getHomepageSaleProducts();
 
 // Реальні відгуки, скопійовані з products.json (той самий текст, що й на
 // сторінках товарів) — щоб на головній не було фейкових відгуків під

@@ -71,18 +71,6 @@ export function ProductCard({
             </span>
           )}
 
-          {/* Rank badge */}
-          {rank && rank <= 4 && (
-            <span className="absolute top-1.5 left-1.5 bg-amber-500 text-white text-[8px] px-1.5 py-0.5 rounded font-bold">
-              #{rank}
-            </span>
-          )}
-          {rank && rank > 4 && (
-            <span className="absolute top-1.5 left-1.5 bg-gray-400 text-white text-[8px] px-1.5 py-0.5 rounded font-bold">
-              #{rank}
-            </span>
-          )}
-
           {/* Sale badge */}
           {discount > 0 && (
             <span className="absolute top-1.5 right-1.5 bg-red-500 text-white text-[8px] px-1.5 py-0.5 rounded font-bold badge-pulse">

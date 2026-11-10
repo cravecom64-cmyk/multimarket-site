@@ -46,6 +46,7 @@ import {
   getRelatedProducts,
   getCrossSellProducts,
   getBundleProducts,
+  variantLabel,
 } from "@/lib/products";
 
 export function ProductPageClient() {
@@ -219,7 +220,7 @@ export function ProductPageClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxOpen]);
   const orderName = hasColors
-    ? `${product.name} (${product.colors![selectedColor].name})`
+    ? `${product.name} (${variantLabel(product.colors![selectedColor])})`
     : activeSize
       ? `${product.name} (${activeSize.label})`
       : product.name;
@@ -451,36 +452,65 @@ export function ProductPageClient() {
         )}
       </div>
 
-      {/* Color swatches */}
-      {hasColors && (
-        <div className="flex items-center gap-2.5 px-4 mt-3">
-          <span className="text-gray-400 text-xs font-semibold">Колір:</span>
-          {product.colors!.map((c, i) => (
-            <button
-              key={c.name}
-              onClick={() => {
-                // НЕ скидаємо selectedImage — лишаємось на тому самому
-                // слайді галереї (інший колір просто підставляє свої
-                // фото в ті самі позиції). Клемп — лише захист про
-                // всяк випадок, якщо колись довжини масивів розійдуться.
-                setSelectedColor(i);
-                const imgs = c.images && c.images.length > 0 ? c.images : [c.image];
-                if (selectedImage >= imgs.length) setSelectedImage(0);
-              }}
-              aria-label={c.name}
-              className={`w-7 h-7 rounded-full border-2 transition-transform ${
-                i === selectedColor
-                  ? "border-gray-900 scale-110"
-                  : "border-gray-200"
-              }`}
-              style={{ backgroundColor: c.hex }}
-            />
-          ))}
-          <span className="text-gray-700 text-xs font-semibold ml-0.5">
-            {product.colors![selectedColor].name}
-          </span>
-        </div>
-      )}
+      {/* Color swatches (+ вибір кольору дроту для гірлянд, з 10.11.2026) */}
+      {hasColors && (() => {
+        const colors = product.colors!;
+        const current = colors[selectedColor];
+        const wires = Array.from(
+          new Map(colors.filter((c) => c.wire).map((c) => [c.wire!, c.wireHex ?? "#9ca3af"])).entries()
+        );
+        const pick = (i: number) => {
+          // НЕ скидаємо selectedImage — лишаємось на тому самому слайді
+          // галереї; клемп, якщо в нового варіанта менше фото.
+          setSelectedColor(i);
+          const c = colors[i];
+          const imgs = c.images && c.images.length > 0 ? c.images : [c.image];
+          if (selectedImage >= imgs.length) setSelectedImage(0);
+        };
+        const visible = colors
+          .map((c, i) => ({ c, i }))
+          .filter(({ c }) => !current.wire || c.wire === current.wire);
+        return (
+          <>
+            {wires.length > 1 && (
+              <div className="flex items-center gap-2.5 px-4 mt-3">
+                <span className="text-gray-400 text-xs font-semibold">Колір дроту:</span>
+                {wires.map(([wire, hex]) => (
+                  <button
+                    key={wire}
+                    onClick={() => {
+                      // той самий колір світіння на іншому дроті, якщо є
+                      const same = colors.findIndex((c) => c.wire === wire && c.name === current.name);
+                      pick(same >= 0 ? same : colors.findIndex((c) => c.wire === wire));
+                    }}
+                    aria-label={`Дріт: ${wire}`}
+                    className={`w-7 h-7 rounded-full border-2 transition-transform ${
+                      wire === current.wire ? "border-gray-900 scale-110" : "border-gray-200"
+                    }`}
+                    style={{ backgroundColor: hex }}
+                  />
+                ))}
+                <span className="text-gray-700 text-xs font-semibold ml-0.5">{current.wire}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2.5 px-4 mt-3">
+              <span className="text-gray-400 text-xs font-semibold">{wires.length > 1 ? "Колір світіння:" : "Колір:"}</span>
+              {visible.map(({ c, i }) => (
+                <button
+                  key={`${c.wire ?? ""}-${c.name}`}
+                  onClick={() => pick(i)}
+                  aria-label={c.name}
+                  className={`w-7 h-7 rounded-full border-2 transition-transform ${
+                    i === selectedColor ? "border-gray-900 scale-110" : "border-gray-200"
+                  }`}
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+              <span className="text-gray-700 text-xs font-semibold ml-0.5">{current.name}</span>
+            </div>
+          </>
+        );
+      })()}
 
       {/* Title & Price */}
       <div className="px-4 mt-1">

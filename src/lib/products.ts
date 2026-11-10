@@ -92,7 +92,9 @@ export interface Product {
   // soldOut — колір закінчився в постачальника (ставить і знімає щоранкова
   // перевірка /api/cron/check-suppliers). Такий колір не показується на
   // сайті; щойно він знову є — повертається сам.
-  colors?: { name: string; hex: string; image: string; images?: string[]; soldOut?: boolean }[];
+  // wire / wireHex (з 10.11.2026, ідея Павла) — колір дроту гірлянди: варіанти
+  // з різним дротом в одній картці, на сайті — окремий вибір «Колір дроту».
+  colors?: ProductColor[];
   // Розмірні варіанти товару з РІЗНОЮ ціною (напр. довжина шланга, розмір
   // гамака) — якщо задано, на сторінці товару показується селектор розміру,
   // що перемикає price/oldPrice/buyPrice. Верхньорівневі price/oldPrice/
@@ -132,6 +134,22 @@ export interface Product {
 // Рейтинг і кількість оцінок рахуються ТІЛЬКИ з реальних відгуків (reviews[]).
 // Статичні rating/reviewCount у products.json ігноруються (були вигадані).
 // Немає відгуків → reviewCount = 0, і вітрина не показує зірки взагалі.
+export type ProductColor = {
+  name: string;
+  hex: string;
+  image: string;
+  images?: string[];
+  soldOut?: boolean;
+  wire?: string;
+  wireHex?: string;
+};
+
+// Назва варіанта для кошика, замовлення й прив'язки постачальника
+// (product_suppliers.color): "Жовтий" або "Жовтий, зелений дріт".
+export function variantLabel(c: { name: string; wire?: string }): string {
+  return c.wire ? `${c.name}, ${c.wire.toLowerCase()} дріт` : c.name;
+}
+
 const products: Product[] = (productsData as unknown as Product[]).map((p) => {
   const real = p.reviews ?? [];
   const count = real.length;

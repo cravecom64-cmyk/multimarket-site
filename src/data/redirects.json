@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "source": "/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah-zelenyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah-bilyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah-bilyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah-zelenyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-100-led-10m-usb-zelenyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-100-led-10m-usb",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-100-led-10m-usb-bilyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-100-led-10m-usb",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-200-led-20m-usb-zelenyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-200-led-20m-usb",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-rosa-nytka-200-led-20m-usb-bilyi-drit",
+    "destination": "/product/girlyanda-rosa-nytka-200-led-20m-usb",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-nytka-120-led-10m-vid-merezhi-prozoryi-drit",
+    "destination": "/product/girlyanda-nytka-120-led-10m-vid-merezhi",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-nytka-120-led-10m-vid-merezhi-chornyi-drit",
+    "destination": "/product/girlyanda-nytka-120-led-10m-vid-merezhi",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-bahroma-vulychna-105-led-6m-chorna-nytka",
+    "destination": "/product/girlyanda-bahroma-vulychna-105-led-6m",
+    "permanent": true
+  },
+  {
+    "source": "/product/girlyanda-bahroma-vulychna-105-led-6m-bila-nytka",
+    "destination": "/product/girlyanda-bahroma-vulychna-105-led-6m",
+    "permanent": true
+  }
+]

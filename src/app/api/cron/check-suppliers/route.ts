@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { variantLabel } from "@/lib/products";
 import { getSiteSummary, getTopProducts, kyivToday, addDays, fmtDay, formatUAH as fmtUAHStat, pctDelta, CLEAN_DATA_FROM } from "@/lib/siteStats";
 import * as cheerio from "cheerio";
 import productsData from "@/data/products.json";
@@ -220,8 +221,8 @@ async function applyVisibilityChangesToGitHub(
 
   for (const u of colorUpdates) {
     const p = data.find((x) => x.id === u.id);
-    const colors = (p?.colors ?? []) as Array<Record<string, unknown>>;
-    const c = colors.find((x) => x.name === u.color);
+    const colors = (p?.colors ?? []) as Array<Record<string, unknown> & { name: string; wire?: string }>;
+    const c = colors.find((x) => variantLabel(x) === u.color);
     if (!c) continue;
     if (u.soldOut) c.soldOut = true;
     else delete c.soldOut;
@@ -1075,7 +1076,9 @@ async function handleGet(req: NextRequest) {
   // в наявності хоч одне його посилання (або, коли власних посилань немає,
   // посилання на весь товар). Колір без жодного відомого посилання —
   // "невідомо": не ховаємо його, але й не рахуємо як наявність товару.
-  type ColorMeta = { name: string; soldOut?: boolean };
+  type ColorMeta = { name: string; wire?: string; soldOut?: boolean };
+  // Ключ варіанта = product_suppliers.color: "Жовтий" або "Жовтий, зелений дріт"
+  const vkey = (c: ColorMeta) => variantLabel(c);
   const colorsById = new Map<string, ColorMeta[]>(
     (productsData as Array<{ id: string; colors?: ColorMeta[] }>)
       .filter((p) => Array.isArray(p.colors) && p.colors.length > 0)
@@ -1103,9 +1106,9 @@ async function handleGet(req: NextRequest) {
     }
     const avail = new Map<string, boolean>();
     for (const c of colors) {
-      const own = links.filter((r) => r.color === c.name);
-      if (own.length > 0) avail.set(c.name, own.some(stockOf));
-      else if (general.length > 0) avail.set(c.name, generalInStock);
+      const own = links.filter((r) => r.color === vkey(c));
+      if (own.length > 0) avail.set(vkey(c), own.some(stockOf));
+      else if (general.length > 0) avail.set(vkey(c), generalInStock);
     }
     colorAvailability.set(productId, avail);
     productAnyInStock.set(productId, generalInStock || [...avail.values()].some(Boolean));
@@ -1117,17 +1120,17 @@ async function handleGet(req: NextRequest) {
   for (const [productId, avail] of colorAvailability) {
     if (!productAnyInStock.get(productId)) continue; // весь товар ховається — кольори не чіпаємо
     for (const c of colorsById.get(productId) ?? []) {
-      const a = avail.get(c.name);
+      const a = avail.get(vkey(c));
       if (a === undefined) continue;
-      if (!a && !c.soldOut) colorUpdates.push({ id: productId, color: c.name, soldOut: true });
-      if (a && c.soldOut) colorUpdates.push({ id: productId, color: c.name, soldOut: false });
+      if (!a && !c.soldOut) colorUpdates.push({ id: productId, color: vkey(c), soldOut: true });
+      if (a && c.soldOut) colorUpdates.push({ id: productId, color: vkey(c), soldOut: false });
     }
   }
   // Посилання з кольором, якого вже немає в картці (перейменували колір) —
   // у звіт, щоб не перевіряти "в нікуди".
   const orphanColorLines: string[] = [];
   for (const [productId, links] of linksByProduct) {
-    const names = new Set((colorsById.get(productId) ?? []).map((c) => c.name));
+    const names = new Set((colorsById.get(productId) ?? []).map(vkey));
     for (const r of links) {
       if (r.color && !names.has(r.color)) {
         orphanColorLines.push(`❓ ${productLabel(productId)}: посилання постачальника для кольору «${r.color}», а такого кольору в картці немає`);

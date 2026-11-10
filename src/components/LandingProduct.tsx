@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Product, getBundleProducts } from "@/lib/products";
+import { Product, getBundleProducts, variantLabel } from "@/lib/products";
 import { useCart } from "./CartProvider";
 import { ProductCard } from "./ProductCard";
 
@@ -20,7 +20,7 @@ export function LandingProduct({ product }: LandingProductProps) {
   const hasColors = product.colors && product.colors.length > 0;
   const activeImage = hasColors ? product.colors![selectedColor].image : product.image;
   const orderName = hasColors
-    ? `${product.name} (${product.colors![selectedColor].name})`
+    ? `${product.name} (${variantLabel(product.colors![selectedColor])})`
     : product.name;
 
   const savings = product.oldPrice ? product.oldPrice - product.price : 0;

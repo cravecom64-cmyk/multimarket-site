@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
+import { variantLabel } from "@/lib/products";
 
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
 // на прихований/видалений товар (пряме посилання на стару/прибрану картку).
 const PRODUCTS_BY_ID = new Map(
-  (productsData as Array<{ id: string; isHidden?: boolean; colors?: { name: string; soldOut?: boolean }[] }>).map((p) => [p.id, p])
+  (productsData as Array<{ id: string; isHidden?: boolean; colors?: { name: string; wire?: string; soldOut?: boolean }[] }>).map((p) => [p.id, p])
 );
 
 // ==================== КОМАНДНИЙ ЦЕНТР (Supabase) ====================
@@ -488,10 +489,10 @@ export async function POST(req: NextRequest) {
       }
       // Колір, що вже закінчився (кошик зібрано до ранкової перевірки).
       // Назва позиції з кольором має вигляд "Назва (Колір)".
-      const soldOutColor = catalogProduct.colors?.find((c) => c.soldOut && item.name.endsWith(`(${c.name})`));
+      const soldOutColor = catalogProduct.colors?.find((c) => c.soldOut && item.name.endsWith(`(${variantLabel(c)})`));
       if (soldOutColor) {
         return NextResponse.json(
-          { error: `Колір «${soldOutColor.name}» щойно закінчився. Видаліть його з кошика й оберіть інший колір.` },
+          { error: `Колір «${variantLabel(soldOutColor)}» щойно закінчився. Видаліть його з кошика й оберіть інший колір.` },
           { status: 400 }
         );
       }

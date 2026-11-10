@@ -571,7 +571,9 @@ function normSku(s: string): string {
   return s.trim().toUpperCase().replace(/[АВЕКМНОРСТХІ]/g, (ch) => map[ch] ?? ch);
 }
 
-async function loadFeed(url: string): Promise<Map<string, FeedOffer> | { error: string }> {
+// keyBy "offerId": вивантаження з фільтром product_ids (Aveopt/aveon) —
+// товар шукаємо за id пропозиції (<offer id="…">), він же supplier_sku.
+async function loadFeed(url: string, keyBy: "vendorCode" | "offerId" = "vendorCode"): Promise<Map<string, FeedOffer> | { error: string }> {
   try {
     const res = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; MultiMarketStockCheck/1.0; +https://www.multi-market.com.ua)" },
@@ -582,7 +584,10 @@ async function loadFeed(url: string): Promise<Map<string, FeedOffer> | { error: 
     const xml = await res.text();
     const map = new Map<string, FeedOffer>();
     for (const chunk of xml.split("<offer ").slice(1)) {
-      const sku = /<vendorCode>(?:<!\[CDATA\[)?([^<\]]+)/.exec(chunk)?.[1];
+      const sku =
+        keyBy === "offerId"
+          ? /^id="([^"]+)"/.exec(chunk)?.[1]
+          : /<vendorCode>(?:<!\[CDATA\[)?([^<\]]+)/.exec(chunk)?.[1];
       if (!sku) continue;
       const head = chunk.slice(0, chunk.indexOf(">"));
       const available = /available="true"/.test(head);
@@ -596,17 +601,28 @@ async function loadFeed(url: string): Promise<Map<string, FeedOffer> | { error: 
         qty: qty !== null && Number.isFinite(qty) ? qty : null,
       });
     }
-    if (map.size < 100) return { error: `вивантаження: підозріло мало товарів (${map.size})` };
+    if (keyBy === "vendorCode" && map.size < 100) return { error: `вивантаження: підозріло мало товарів (${map.size})` };
     return map;
   } catch (e) {
     return { error: `вивантаження: ${e instanceof Error ? e.message : "помилка"}` };
   }
 }
 
-function feedUrlOf(row: SupplierRow): string | null {
+// feed_mode "stock" (Aveopt, з 10.11.2026): ціна у вивантаженні — роздрібна,
+// а не дроп, тож з нього беремо лише наявність і лише в щогодинних прогонах;
+// щоденна перевірка, як і раніше, читає сторінку товару (там дроп-ціна).
+// feed_url з "{ids}" — у product_ids підставляються наші артикули (id
+// пропозицій), і файл важить кілька КБ замість 40 МБ.
+function supplierOf(row: SupplierRow): { feed_url?: string | null; feed_mode?: string | null } | null {
   const s = (row as unknown as { suppliers?: unknown }).suppliers;
-  const sup = (Array.isArray(s) ? s[0] : s) as { feed_url?: string | null } | null | undefined;
-  return sup?.feed_url ?? null;
+  return ((Array.isArray(s) ? s[0] : s) as { feed_url?: string | null; feed_mode?: string | null } | null) ?? null;
+}
+
+function feedUrlOf(row: SupplierRow, feedRun = true): string | null {
+  const sup = supplierOf(row);
+  if (!sup?.feed_url) return null;
+  if (sup.feed_mode === "stock" && !feedRun) return null;
+  return sup.feed_url;
 }
 
 // ДОДАНО 07.11.2026: LUGI на кілька паралельних запитів з одного IP
@@ -841,7 +857,7 @@ async function handleGet(req: NextRequest) {
 
   const { data: rows, error } = await supabase
     .from("product_suppliers")
-    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, supplier_sku, suppliers(name, price_rule, feed_url)")
+    .select("id, product_id, supplier_id, url, price, in_stock, price_source, retail_price, color, supplier_sku, suppliers(name, price_rule, feed_url, feed_mode)")
     .order("product_id");
 
   if (error || !rows) {
@@ -865,6 +881,7 @@ async function handleGet(req: NextRequest) {
   const feedProductIds = new Set(allScoped.filter((r) => feedUrlOf(r)).map((r) => r.product_id));
   const scoped = feedOnly ? allScoped.filter((r) => feedProductIds.has(r.product_id)) : allScoped;
   const toCheck = feedOnly ? scoped.filter((r) => feedUrlOf(r)) : scoped;
+  const useFeed = (r: SupplierRow) => feedUrlOf(r, feedOnly);
 
   const changes: string[] = [];
   const failures: FailureInfo[] = [];
@@ -915,15 +932,21 @@ async function handleGet(req: NextRequest) {
   // вивантаження постачальників — по одному завантаженню на прогін
   const feedPromises = new Map<string, Promise<Map<string, FeedOffer> | { error: string }>>();
   for (const r of toCheck) {
-    const f = feedUrlOf(r);
-    if (f && !feedPromises.has(f)) feedPromises.set(f, loadFeed(f));
+    const f = useFeed(r);
+    if (!f || feedPromises.has(f)) continue;
+    if (f.includes("{ids}")) {
+      const ids = toCheck.filter((x) => useFeed(x) === f && x.supplier_sku).map((x) => encodeURIComponent(x.supplier_sku!.trim()));
+      feedPromises.set(f, loadFeed(f.replace("{ids}", ids.join(",")), "offerId"));
+    } else {
+      feedPromises.set(f, loadFeed(f));
+    }
   }
 
   await Promise.race([
     // LUGI — окремою чергою по одному (див. SERIAL_HOSTS), щоб чекання на
     // їхню чергу не займало потоки решти постачальників.
     (async () => {
-      const isSerial = (r: SupplierRow) => !feedUrlOf(r) && SERIAL_HOSTS.some((h) => r.url.includes(h));
+      const isSerial = (r: SupplierRow) => !useFeed(r) && SERIAL_HOSTS.some((h) => r.url.includes(h));
       await Promise.all([
         runWithConcurrency(shuffle(toCheck.filter((r) => !isSerial(r))), 9, checkRow),
         runWithConcurrency(shuffle(toCheck.filter(isSerial)), 1, checkRow),
@@ -932,14 +955,15 @@ async function handleGet(req: NextRequest) {
     new Promise<void>((resolve) => setTimeout(resolve, CHECK_PHASE_DEADLINE_MS)),
   ]);
   async function statusFor(row: SupplierRow): Promise<CheckResult> {
-    const feedUrl = feedUrlOf(row);
+    const feedUrl = useFeed(row);
     if (!feedUrl) return fetchSupplierStatus(row.url);
     const feed = await feedPromises.get(feedUrl)!;
     if (!(feed instanceof Map)) return { inStock: false, price: null, error: feed.error };
     if (!row.supplier_sku) return { inStock: false, price: null, error: "не вказано артикул постачальника (supplier_sku)" };
     const offer = feed.get(normSku(row.supplier_sku));
     if (!offer) return { inStock: false, price: null, error: `артикулу ${row.supplier_sku} немає у вивантаженні` };
-    return { inStock: offer.available && (offer.qty === null || offer.qty > 0), price: offer.price };
+    const stockOnly = supplierOf(row)?.feed_mode === "stock";
+    return { inStock: offer.available && (offer.qty === null || offer.qty > 0), price: stockOnly ? null : offer.price };
   }
 
   async function checkRow(row: SupplierRow) {

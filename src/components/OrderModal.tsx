@@ -240,12 +240,19 @@ export function OrderModal({ onClose }: OrderModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPhoneTouched(true);
+    // Обидві перевірки нижче лише виставляли errorMessage, але банер помилки
+    // рендериться за умовою status === "error" — без setStatus("error") текст
+    // ніколи не показувався (ні для імені, ні раніше для телефону), форма
+    // просто мовчки "зависала". Виявлено 10.11.2026 під час перевірки фіксу
+    // валідації імені.
     if (!isValidFullName(form.name)) {
       setErrorMessage("Вкажи ім'я та прізвище повністю — одного слова недостатньо.");
+      setStatus("error");
       return;
     }
     if (!isValidPhone(form.phone)) {
       setErrorMessage("Перевір номер телефону — формат +380XXXXXXXXX.");
+      setStatus("error");
       return;
     }
     setStatus("sending");

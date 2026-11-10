@@ -419,7 +419,11 @@ export async function POST(req: NextRequest) {
     const branch = sanitize(body.branch || "");
     const comment = sanitize(body.comment || "");
 
-    if (!name || name.length < 2) {
+    // "Ім'я та прізвище" - одне поле, але вимагаємо хоча б два слова (не
+    // лише довжину), інакше "тест" чи будь-яке одне слово проходило далі
+    // і прізвище потім доводилось уточнювати в дзвінку (10.11.2026).
+    const nameWordCount = name.split(/\s+/).filter(Boolean).length;
+    if (!name || name.length < 2 || nameWordCount < 2) {
       return NextResponse.json(
         { error: "Invalid name" },
         { status: 400 }

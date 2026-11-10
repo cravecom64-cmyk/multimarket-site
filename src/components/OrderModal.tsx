@@ -27,6 +27,14 @@ function isValidPhone(phone: string): boolean {
   return UA_PHONE_REGEX.test(phone.replace(/[\s()-]/g, ""));
 }
 
+// Поле "Ім'я та прізвище" — одне поле, але має містити хоча б два слова.
+// До 10.11.2026 перевірялась лише довжина (>=2 символи), тому "тест" чи
+// будь-яке одне слово проходило валідацію — форма йшла далі, а кол-центру
+// потім доводилось самим перепитувати прізвище під час дзвінка.
+function isValidFullName(name: string): boolean {
+  return name.trim().split(/\s+/).filter(Boolean).length >= 2;
+}
+
 // Автозаповнення міста/відділення Нової Пошти (05.11.2026) — аналіз воронки
 // (product_events у Supabase) показав, що з усіх, хто дійшов до форми
 // оформлення, більшість покидає її одразу, ще до заповнення жодного поля.
@@ -207,7 +215,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // будь-якій 400-помилці (напр. закоротке поле) показувався загальний
   // "Щось пішло не так" — покупець не розумів що саме виправити.
   const VALIDATION_MESSAGES: Record<string, string> = {
-    "Invalid name": "Перевір поле «Ім'я та прізвище» — має бути мінімум 2 символи.",
+    "Invalid name": "Вкажи ім'я та прізвище повністю — одного слова недостатньо.",
     "Invalid phone number": "Перевір номер телефону — формат +380XXXXXXXXX.",
     "Invalid city": "Перевір поле «Місто» — має бути мінімум 2 символи.",
     "Invalid NP branch": "Вкажи відділення Нової Пошти детальніше (мінімум 3 символи, напр. «Відділення №5»).",
@@ -232,6 +240,10 @@ export function OrderModal({ onClose }: OrderModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPhoneTouched(true);
+    if (!isValidFullName(form.name)) {
+      setErrorMessage("Вкажи ім'я та прізвище повністю — одного слова недостатньо.");
+      return;
+    }
     if (!isValidPhone(form.phone)) {
       setErrorMessage("Перевір номер телефону — формат +380XXXXXXXXX.");
       return;

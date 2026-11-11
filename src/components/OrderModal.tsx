@@ -10,6 +10,7 @@ import {
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
 import { trackCheckoutEvent } from "@/lib/analytics";
+import { COD_MIN_TOTAL } from "@/lib/checkout";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -17,8 +18,11 @@ interface OrderModalProps {
 
 type PaymentMethod = "card_mono" | "card_wfp" | "cod";
 
-// Тимчасово вимкнено онлайн-оплату (mono, WayForPay) — лишаємо тільки оплату при отриманні, поки не внесені всі правки.
-const ONLINE_PAYMENTS_ENABLED = false;
+// Онлайн-оплата (mono, WayForPay) увімкнена поряд з оплатою при отриманні.
+// Потрібна як альтернатива для замовлень дешевших за COD_MIN_TOTAL, які не
+// можна відправити по накладеному платежу (див. нижче, requiresPrepayment).
+// Рішення Павла 10.11.2026.
+const ONLINE_PAYMENTS_ENABLED = true;
 
 // Той самий формат, що й на сервері (src/app/api/order/route.ts) — приймає
 // +380XXXXXXXXX, 380XXXXXXXXX, 0XXXXXXXXX (пробіли/дужки/дефіси прибираються).
@@ -204,6 +208,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  // Замовлення дешевші за COD_MIN_TOTAL не можна відправити по накладеному
+  // платежу — тільки повна передоплата карткою онлайн.
+  const requiresPrepayment = totalPrice < COD_MIN_TOTAL;
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Чи покупець вже вийшов з поля телефону хоч раз — щоб не показувати
@@ -222,6 +229,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
     "Invalid cart": "Кошик порожній або некоректний — онови сторінку і спробуй ще раз.",
     "Invalid cart item": "Один з товарів у кошику некоректний — онови сторінку і спробуй ще раз.",
     "Too many requests": "Забагато спроб поспіль — зачекай хвилину і спробуй ще раз.",
+    "cod_min_total": `Замовлення до ${COD_MIN_TOTAL}₴ відправляються лише з повною оплатою — обери оплату карткою вище.`,
   };
 
   async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
@@ -252,6 +260,11 @@ export function OrderModal({ onClose }: OrderModalProps) {
     }
     if (!isValidPhone(form.phone)) {
       setErrorMessage("Перевір номер телефону — формат +380XXXXXXXXX.");
+      setStatus("error");
+      return;
+    }
+    if (paymentMethod === "cod" && requiresPrepayment) {
+      setErrorMessage(`Замовлення до ${COD_MIN_TOTAL}₴ відправляються лише з повною оплатою — обери оплату карткою вище.`);
       setStatus("error");
       return;
     }
@@ -290,7 +303,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
       });
 
       if (!res.ok) {
-        setErrorMessage(await extractErrorMessage(res, "Не вдалося відправити заявку. Спробуй ще раз або напиши нам у Telegram."));
+        setErrorMessage(await extractErrorMessage(res, "Не вдалося відправити заявку. Спробуй ще раз."));
         setStatus("error");
         return;
       }
@@ -320,7 +333,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         });
 
         if (!invoiceRes.ok) {
-          setErrorMessage("Не вдалося створити оплату mono. Спробуй ще раз, обери інший спосіб оплати або напиши нам у Telegram.");
+          setErrorMessage("Не вдалося створити оплату mono. Спробуй ще раз або обери інший спосіб оплати.");
           setStatus("error");
           return;
         }
@@ -371,7 +384,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
         });
 
         if (!purchaseRes.ok) {
-          setErrorMessage("Не вдалося створити оплату WayForPay. Спробуй ще раз, обери інший спосіб оплати або напиши нам у Telegram.");
+          setErrorMessage("Не вдалося створити оплату WayForPay. Спробуй ще раз або обери інший спосіб оплати.");
           setStatus("error");
           return;
         }
@@ -465,7 +478,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           <div className="text-sm text-gray-500 mb-1">
             {form.confirmCall
               ? "Ми зв'яжемося з тобою протягом 30 хвилин для підтвердження."
-              : "Обробимо без дзвінка — якщо щось потрібно уточнити, напишемо в SMS/Telegram."}
+              : "Обробимо без дзвінка — якщо щось потрібно уточнити, напишемо в SMS."}
           </div>
           <div className="text-xs text-gray-400 mb-6">
             Відправка Новою Поштою · Оплата при отриманні
@@ -641,6 +654,11 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 }`}
               />
             </button>
+            {paymentMethod === "cod" && requiresPrepayment && (
+              <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
+                ⚠️ Замовлення до {COD_MIN_TOTAL}₴ відправляються лише з повною оплатою. Обери оплату карткою вище, щоб оформити замовлення.
+              </div>
+            )}
           </div>
         </div>
 
@@ -799,13 +817,13 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
           {status === "error" && (
             <div className="text-xs text-red-500 text-center">
-              {errorMessage || "Щось пішло не так. Спробуй ще раз або напиши нам у Telegram."}
+              {errorMessage || "Щось пішло не так. Спробуй ще раз."}
             </div>
           )}
 
           <button
             type="submit"
-            disabled={status === "sending"}
+            disabled={status === "sending" || (paymentMethod === "cod" && requiresPrepayment)}
             className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white py-3.5 rounded-xl text-base font-extrabold transition-colors"
           >
             {status === "sending"

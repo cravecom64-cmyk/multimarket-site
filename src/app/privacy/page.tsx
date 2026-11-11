@@ -93,8 +93,7 @@ export default function PrivacyPage() {
           </div>
           <p>
             Ти маєш право запросити перегляд, виправлення або видалення
-            своїх персональних даних, звернувшись до нас у Telegram
-            @multimarket_ua. Ми відповімо і виконаємо запит протягом
+            своїх персональних даних. Ми відповімо і виконаємо запит протягом
             розумного строку.
           </p>
         </div>
@@ -107,24 +106,6 @@ export default function PrivacyPage() {
             Дані зберігаються на серверах, доступ до яких обмежений. Ми
             вживаємо розумних технічних і організаційних заходів для
             захисту даних від несанкціонованого доступу.
-          </p>
-        </div>
-
-        <div>
-          <div className="font-extrabold text-gray-900 text-[14px] mb-2">
-            7. Контакти
-          </div>
-          <p>
-            Питання щодо цієї Політики — у Telegram{" "}
-            <a
-              href="https://t.me/multimarket_ua"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-emerald-600 font-semibold"
-            >
-              @multimarket_ua
-            </a>
-            .
           </p>
         </div>
 

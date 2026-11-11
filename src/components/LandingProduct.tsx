@@ -342,8 +342,8 @@ export function LandingProduct({ product }: LandingProductProps) {
             <div className="text-[11px] font-semibold text-gray-600">Повернення 14 днів</div>
           </div>
           <div className="bg-gray-50 rounded-xl p-3">
-            <div className="text-lg mb-0.5">💬</div>
-            <div className="text-[11px] font-semibold text-gray-600">Підтримка в Telegram</div>
+            <div className="text-lg mb-0.5">✅</div>
+            <div className="text-[11px] font-semibold text-gray-600">Перевірка перед відправкою</div>
           </div>
         </div>
       </section>

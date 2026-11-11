@@ -26,14 +26,6 @@ function FailedContent() {
         <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block w-full max-w-xs">
           Спробувати ще раз
         </Link>
-        <a
-          href="https://t.me/multimarket_ua"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm font-semibold text-gray-600 underline"
-        >
-          Написати нам у Telegram
-        </a>
       </div>
     </div>
   );

@@ -3,7 +3,6 @@ import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
-import { TelegramButton } from "@/components/TelegramButton";
 import { CartDrawer } from "@/components/CartDrawer";
 import { FloatingCart } from "@/components/FloatingCart";
 import { MetaPixel } from "@/components/MetaPixel";
@@ -88,7 +87,6 @@ export default function RootLayout({
           </div>
           <CartDrawer />
           <FloatingCart />
-          <TelegramButton />
         </CartProvider>
       </body>
     </html>

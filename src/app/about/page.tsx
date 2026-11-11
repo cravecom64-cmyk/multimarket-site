@@ -59,18 +59,6 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <p>
-          Є питання? Пиши в{" "}
-          <a
-            href="https://t.me/multimarket_ua"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-emerald-600 font-semibold"
-          >
-            Telegram
-          </a>{" "}
-          — відповідаємо живою людиною, не ботом.
-        </p>
       </div>
 
       <Footer />

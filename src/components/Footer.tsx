@@ -48,9 +48,6 @@ export function Footer() {
           <a href="https://instagram.com/multimarket_ua" target="_blank" rel="noopener noreferrer" className="hover:text-white">
             📸 Instagram
           </a>
-          <a href="https://t.me/multimarket_ua" target="_blank" rel="noopener noreferrer" className="hover:text-white">
-            ✈️ Telegram
-          </a>
         </div>
         <div className="border-t border-gray-700 pt-3 text-[9px] text-gray-600 flex flex-wrap gap-x-3 gap-y-1">
           <span>© 2026 Multimarket · Всі права захищені</span>

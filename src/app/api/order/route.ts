@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
+import { COD_MIN_TOTAL } from "@/lib/checkout";
 import { variantLabel } from "@/lib/products";
 
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
@@ -510,14 +511,24 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
-    // --- Командний центр: пишемо ПЕРШИМИ, до Telegram і CRM ---
-    // Не блокує відповідь користувачу, якщо Supabase недоступний.
-    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal);
-
     const paymentMethod =
       body.paymentMethod === "card_mono" || body.paymentMethod === "card_wfp"
         ? body.paymentMethod
         : "cod";
+
+    // Наложка (оплата при отриманні) недоступна для замовлень дешевших за
+    // COD_MIN_TOTAL (src/lib/checkout.ts) — такі замовлення відправляються лише з
+    // повною передоплатою. Дублює клієнтську перевірку в
+    // OrderModal.tsx (захист на випадок, якщо клієнтську валідацію
+    // обійшли). Рішення Павла 10.11.2026.
+    if (paymentMethod === "cod" && calculatedTotal < COD_MIN_TOTAL) {
+      return NextResponse.json({ error: "cod_min_total" }, { status: 400 });
+    }
+
+    // --- Командний центр: пишемо ПЕРШИМИ, до Telegram і CRM ---
+    // Не блокує відповідь користувачу, якщо Supabase недоступний.
+    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal);
+
     const paymentLine =
       paymentMethod === "card_mono"
         ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через Monobank — очікуємо підтвердження оплати*"

@@ -13,6 +13,11 @@ interface PendingOrder {
   wfpRef?: string; // тільки для wayforpay — технічний orderReference з телефоном
   items: { id: string; name: string; price: number; quantity: number; category?: string }[];
   totalPrice: number;
+  // Рішення Павла 12.11.2026 — чистої "наложки" без передоплати більше
+  // нема; якщо isDeposit, залишок codRemainder клієнт платить при
+  // отриманні на Новій Пошті, і про це треба сказати на цій сторінці.
+  isDeposit?: boolean;
+  codRemainder?: number;
 }
 
 type PageStatus = "checking" | "success" | "failure" | "pending" | "notfound";
@@ -22,6 +27,7 @@ function SuccessContent() {
   const router = useRouter();
   const ref = searchParams.get("ref");
   const [status, setStatus] = useState<PageStatus>("checking");
+  const [codRemainder, setCodRemainder] = useState<number | null>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -50,6 +56,9 @@ function SuccessContent() {
       // моменту заповнення форми (див. коментар у pixel.ts/ga4.ts).
       trackPurchasePixel(pending.items, pending.totalPrice);
       trackPurchaseGA4(pending.items, pending.totalPrice);
+      if (pending.isDeposit && pending.codRemainder) {
+        setCodRemainder(pending.codRemainder);
+      }
       localStorage.removeItem("mm_pending_order");
       setStatus("success");
     };
@@ -112,9 +121,15 @@ function SuccessContent() {
       <div className="text-center">
         <div className="text-5xl mb-4">✅</div>
         <div className="text-xl font-extrabold mb-2">Оплата пройшла успішно!</div>
-        <div className="text-sm text-gray-500 mb-6">
+        <div className="text-sm text-gray-500 mb-2">
           Дякуємо за замовлення. Ми вже готуємо його до відправки Новою Поштою.
         </div>
+        {codRemainder != null && (
+          <div className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 mb-6 inline-block">
+            💰 Залишок <b>{codRemainder}₴</b> сплатиш при отриманні на Новій Пошті.
+          </div>
+        )}
+        {codRemainder == null && <div className="mb-6" />}
         <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
           На головну
         </Link>

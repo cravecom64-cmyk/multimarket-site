@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createInvoice } from "@/lib/monobank";
+import { getPaymentSplit } from "@/lib/checkout";
 
 // Той самий rate-limit підхід, що й у /api/order — окремий лічильник,
 // бо це окремий serverless endpoint (Vercel не ділить in-memory стан між ними).
@@ -80,6 +81,13 @@ export async function POST(req: NextRequest) {
       0
     );
 
+    // Чистої "наложки" більше не існує (Рішення Павла 12.11.2026): від
+    // COD_MIN_TOTAL стягуємо лише депозит (getPaymentSplit), не повну суму
+    // товарів — тож і фіскальний чек-кошик для депозиту має бути ОДНИМ
+    // рядком "Передоплата" на суму депозиту, а не реальним переліком
+    // товарів за повною ціною (інакше сума кошика не зійдеться з amount).
+    const split = getPaymentSplit(calculatedTotal);
+
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
     // reference не показується клієнту (на відміну від destination) — сюди
     // безпечно додати телефон і назву товару, щоб у webhook-сповіщенні про
@@ -91,23 +99,37 @@ export async function POST(req: NextRequest) {
       .slice(0, 100) + (body.items.length > 2 ? ` +${body.items.length - 2}` : "");
     const reference = `${body.orderId}--p${phoneDigits}--i${encodeURIComponent(itemSummary)}`;
 
+    const basketOrder = split.isDeposit
+      ? [
+          {
+            name: `Передоплата за замовлення ${body.orderId} (залишок ${split.codRemainder}\u20b4 — при отриманні)`.slice(0, 128),
+            qty: 1,
+            sum: Math.round(split.onlineAmount * 100),
+            unit: "шт",
+            code: "deposit",
+          },
+        ]
+      : body.items.map((i, idx) => ({
+          name: i.name.slice(0, 128),
+          qty: i.quantity,
+          sum: Math.round(i.price * 100),
+          unit: "шт",
+          // Код позиції — обов'язковий, бо на акаунті увімкнена фіскалізація.
+          // Беремо id товару з каталогу; якщо його немає (не мало б траплятись
+          // з нашого фронтенду) — падаємо на порядковий номер, аби не зривати
+          // весь чек через одну позицію без id.
+          code: i.id || `item-${idx + 1}`,
+          // Абсолютний URL — Monobank не приймає відносні шляхи для icon.
+          icon: i.image ? `${SITE_URL}${i.image}` : undefined,
+        }));
+
     const invoice = await createInvoice({
-      amount: Math.round(calculatedTotal * 100), // копійки
+      amount: Math.round(split.onlineAmount * 100), // копійки — депозит або повна сума, НЕ завжди calculatedTotal
       reference,
-      destination: `Замовлення ${body.orderId} — Multimarket`,
-      basketOrder: body.items.map((i, idx) => ({
-        name: i.name.slice(0, 128),
-        qty: i.quantity,
-        sum: Math.round(i.price * 100),
-        unit: "шт",
-        // Код позиції — обов'язковий, бо на акаунті увімкнена фіскалізація.
-        // Беремо id товару з каталогу; якщо його немає (не мало б траплятись
-        // з нашого фронтенду) — падаємо на порядковий номер, аби не зривати
-        // весь чек через одну позицію без id.
-        code: i.id || `item-${idx + 1}`,
-        // Абсолютний URL — Monobank не приймає відносні шляхи для icon.
-        icon: i.image ? `${SITE_URL}${i.image}` : undefined,
-      })),
+      destination: split.isDeposit
+        ? `Передоплата за замовлення ${body.orderId} — Multimarket`
+        : `Замовлення ${body.orderId} — Multimarket`,
+      basketOrder,
       redirectUrl: `${SITE_URL}/order/success?ref=${encodeURIComponent(body.orderId)}`,
       webHookUrl: `${SITE_URL}/api/webhook/monobank`,
       validitySeconds: 3600,

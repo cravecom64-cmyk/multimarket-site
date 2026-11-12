@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPurchaseFields } from "@/lib/wayforpay";
+import { getPaymentSplit } from "@/lib/checkout";
 
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT_WINDOW = 60_000;
@@ -71,15 +72,34 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Сума рахується СЕРВЕРНО з items, а не з того, що передав клієнт —
+    // і від неї рахуємо депозит/повну оплату (Рішення Павла 12.11.2026).
+    // buildPurchaseFields сам підсумовує items у amount, тому для депозиту
+    // підміняємо items на один синтетичний рядок "Передоплата" на суму
+    // депозиту — інакше WayForPay стягне повну вартість товарів.
+    const calculatedTotal = body.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const split = getPaymentSplit(calculatedTotal);
+
     const { actionUrl, fields } = buildPurchaseFields({
       // Чистий orderId — WayForPay показує це значення клієнту в чеку як
       // номер замовлення, тому сюди не можна вшивати технічні дані.
       orderReference: body.orderId,
-      items: body.items.map((i) => ({
-        name: i.name.slice(0, 128),
-        price: i.price,
-        count: i.quantity,
-      })),
+      items: split.isDeposit
+        ? [
+            {
+              name: `Передоплата за замовлення ${body.orderId} (залишок ${split.codRemainder}\u20b4 - при отриманні)`.slice(0, 128),
+              price: split.onlineAmount,
+              count: 1,
+            },
+          ]
+        : body.items.map((i) => ({
+            name: i.name.slice(0, 128),
+            price: i.price,
+            count: i.quantity,
+          })),
       // Повертаємо НЕ напряму на /order/success (сторінку), а на проміжний
       // API-роут — WayForPay POST-ить сюди дані оплати, а звичайна Next.js
       // сторінка не вміє приймати POST ("Server action not found").

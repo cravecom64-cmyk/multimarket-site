@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
-import { COD_MIN_TOTAL } from "@/lib/checkout";
+import { getPaymentSplit, type PaymentSplit } from "@/lib/checkout";
 import { variantLabel } from "@/lib/products";
 
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
@@ -23,7 +23,7 @@ function supabaseServer() {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number): Promise<number | null> {
+async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, split: PaymentSplit): Promise<number | null> {
   const supabase = supabaseServer();
   if (!supabase) return null;
 
@@ -35,9 +35,11 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number): Pr
         customer_phone: body.phone,
         city: body.city,
         np_warehouse: body.branch,
-        payment_method: body.paymentMethod === "cod" ? "cod" : "prepay_card",
+        payment_method: split.isDeposit ? "deposit_cod" : "prepay_card",
         payment_status: "not_paid",
         total_amount: calculatedTotal,
+        prepaid_amount: split.onlineAmount,
+        cod_amount: split.codRemainder,
         status: "new",
         confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
       })
@@ -147,7 +149,7 @@ async function pushOrderToKeyCRM(body: OrderBody, orderId: number | null) {
 // Окремий, незалежний від KeyCRM пуш — SalesWave дзвонить клієнту й підтверджує
 // замовлення перед відправкою. Мінімальний набір полів (без email — його й
 // нема в формі, без UTM/gaClientId — це наша внутрішня аналітика, їм зайве).
-async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
+async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null, split: PaymentSplit) {
   const apiKey = process.env.SALESDRIVE_API_KEY;
   if (!apiKey) return; // ключа ще нема — просто виходимо
 
@@ -156,10 +158,12 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
   const fName = nameParts[0] ?? body.name;
   const lName = nameParts.slice(1).join(" ") || undefined;
 
-  const paymentLabel =
-    body.paymentMethod === "cod" || !body.paymentMethod
-      ? "Накладений платіж"
-      : "Оплата карткою онлайн";
+  // Чистої "наложки" без онлайн-частини більше не існує (Рішення Павла
+  // 12.11.2026) — лейбл явно каже, скільки вже прийшло онлайн і скільки
+  // лишилось стягнути при отриманні, щоб КЦ/ТТН не взяли повну суму ще раз.
+  const paymentLabel = split.isDeposit
+    ? `Передоплата ${split.onlineAmount}\u20b4 ОТРИМАНА онлайн, накладений платіж ${split.codRemainder}\u20b4 (НЕ стягувати повну суму!)`
+    : "Оплата карткою онлайн (повна сума)";
 
   // Чекбокс "Зв'язатися зі мною для підтвердження замовлення" з форми —
   // передаємо менеджеру SalesDrive, щоб він знав дзвонити чи просто писати.
@@ -169,7 +173,13 @@ async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null) {
       ? "\ud83d\udce9 Клієнт просить НЕ дзвонити — писати повідомленням/SMS"
       : "\u260e\ufe0f Клієнт очікує дзвінок для підтвердження";
 
-  const fullComment = [callPrefTag, body.comment].filter(Boolean).join(" | ");
+  // Та сама інформація про залишок — ще й у коментар, щоб було видно й
+  // живій людині, яка дивиться заявку, а не лише в полі payment_method.
+  const paymentNote = split.isDeposit
+    ? `\u26a0\ufe0f Передоплата ${split.onlineAmount}\u20b4 вже отримана онлайн. До сплати при отриманні: ${split.codRemainder}\u20b4.`
+    : null;
+
+  const fullComment = [callPrefTag, paymentNote, body.comment].filter(Boolean).join(" | ");
 
   try {
     const res = await fetch("https://saleswave.salesdrive.me/handler/", {
@@ -358,10 +368,12 @@ interface OrderBody {
   comment: string;
   items: OrderItem[];
   totalPrice: number;
-  // "card_mono" — оплата карткою через Monobank Acquiring;
-  // "card_wfp" — оплата карткою через WayForPay;
-  // "cod" — оплата при отриманні (за замовчуванням, якщо поле відсутнє)
-  paymentMethod?: "card_mono" | "card_wfp" | "cod";
+  // "card_mono" — оплата карткою через Monobank Acquiring (депозит або повна
+  // сума — рахує getPaymentSplit, src/lib/checkout.ts); "card_wfp" — те
+  // саме через WayForPay. Чистої "наложки" без онлайн-частини більше не
+  // існує — відсутнє/некоректне поле трактуємо як "card_mono" (Рішення
+  // Павла 12.11.2026).
+  paymentMethod?: "card_mono" | "card_wfp";
   // Наш внутрішній ID замовлення — генерується на клієнті ДО відправки,
   // передається і сюди (для Telegram), і в /api/checkout/monobank (як
   // reference в інвойсі), і в webhook — так продавець може зіставити
@@ -511,30 +523,23 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
-    const paymentMethod =
-      body.paymentMethod === "card_mono" || body.paymentMethod === "card_wfp"
-        ? body.paymentMethod
-        : "cod";
+    // Чистої "наложки" без онлайн-частини більше не існує (Рішення Павла
+    // 12.11.2026): від COD_MIN_TOTAL — передоплата COD_DEPOSIT_AMOUNT,
+    // залишок накладеним платежем; нижче порогу — повна оплата онлайн.
+    // Єдине джерело цієї логіки — src/lib/checkout.ts.
+    const split = getPaymentSplit(calculatedTotal);
 
-    // Наложка (оплата при отриманні) недоступна для замовлень дешевших за
-    // COD_MIN_TOTAL (src/lib/checkout.ts) — такі замовлення відправляються лише з
-    // повною передоплатою. Дублює клієнтську перевірку в
-    // OrderModal.tsx (захист на випадок, якщо клієнтську валідацію
-    // обійшли). Рішення Павла 10.11.2026.
-    if (paymentMethod === "cod" && calculatedTotal < COD_MIN_TOTAL) {
-      return NextResponse.json({ error: "cod_min_total" }, { status: 400 });
-    }
+    const paymentMethod: "card_mono" | "card_wfp" =
+      body.paymentMethod === "card_wfp" ? "card_wfp" : "card_mono";
 
     // --- Командний центр: пишемо ПЕРШИМИ, до Telegram і CRM ---
     // Не блокує відповідь користувачу, якщо Supabase недоступний.
-    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal);
+    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal, split);
 
-    const paymentLine =
-      paymentMethod === "card_mono"
-        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через Monobank — очікуємо підтвердження оплати*"
-        : paymentMethod === "card_wfp"
-        ? "💳 *Оплата: КАРТКОЮ ОНЛАЙН через WayForPay — очікуємо підтвердження оплати*"
-        : "💰 *Оплата: при отриманні \\(накладений платіж\\)*";
+    const gatewayLabel = paymentMethod === "card_mono" ? "Monobank" : "WayForPay";
+    const paymentLine = split.isDeposit
+      ? `💳 *Передоплата ${split.onlineAmount}\u20b4 через ${gatewayLabel} — очікуємо підтвердження*\n💰 *Залишок ${split.codRemainder}\u20b4 — накладеним платежем при отриманні*`
+      : `💳 *Оплата: ПОВНІСТЮ ОНЛАЙН через ${gatewayLabel}, ${split.onlineAmount}\u20b4 — очікуємо підтвердження*`;
     const orderIdLine = body.orderId ? `🔖 *№ ${escapeMarkdown(body.orderId)}*\n` : "";
     const confirmCallLine =
       body.confirmCall === false
@@ -590,7 +595,7 @@ ${paymentLine}
     await pushOrderToKeyCRM(body, commandCenterOrderId);
 
     // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
-    await pushOrderToSalesDrive(body, commandCenterOrderId);
+    await pushOrderToSalesDrive(body, commandCenterOrderId, split);
 
     // --- TurboSMS: no-op, поки немає ключа (див. функцію вище) ---
     await pushSmsNotification(body, commandCenterOrderId);

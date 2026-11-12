@@ -10,19 +10,13 @@ import {
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
 import { trackCheckoutEvent } from "@/lib/analytics";
-import { COD_MIN_TOTAL } from "@/lib/checkout";
+import { COD_MIN_TOTAL, getPaymentSplit } from "@/lib/checkout";
 
 interface OrderModalProps {
   onClose: () => void;
 }
 
-type PaymentMethod = "card_mono" | "card_wfp" | "cod";
-
-// Онлайн-оплата (mono, WayForPay) увімкнена поряд з оплатою при отриманні.
-// Потрібна як альтернатива для замовлень дешевших за COD_MIN_TOTAL, які не
-// можна відправити по накладеному платежу (див. нижче, requiresPrepayment).
-// Рішення Павла 10.11.2026.
-const ONLINE_PAYMENTS_ENABLED = true;
+type PaymentMethod = "card_mono" | "card_wfp";
 
 // Той самий формат, що й на сервері (src/app/api/order/route.ts) — приймає
 // +380XXXXXXXXX, 380XXXXXXXXX, 0XXXXXXXXX (пробіли/дужки/дефіси прибираються).
@@ -207,10 +201,13 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // за досвідом). Назви без логотипів — за брендбуком monobank для сайтів
   // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
-  // Замовлення дешевші за COD_MIN_TOTAL не можна відправити по накладеному
-  // платежу — тільки повна передоплата карткою онлайн.
-  const requiresPrepayment = totalPrice < COD_MIN_TOTAL;
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
+  // Оплата тепер завжди хоча б частково онлайн: від COD_MIN_TOTAL —
+  // передоплата COD_DEPOSIT_AMOUNT карткою, залишок накладеним платежем
+  // при отриманні; нижче порогу — повна оплата онлайн. Єдине джерело цієї
+  // логіки (і на клієнті, і на сервері) — src/lib/checkout.ts. Рішення
+  // Павла 12.11.2026 (замінює попередню модель "або картка, або наложка").
+  const { onlineAmount, codRemainder, isDeposit } = getPaymentSplit(totalPrice);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Чи покупець вже вийшов з поля телефону хоч раз — щоб не показувати
@@ -229,7 +226,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
     "Invalid cart": "Кошик порожній або некоректний — онови сторінку і спробуй ще раз.",
     "Invalid cart item": "Один з товарів у кошику некоректний — онови сторінку і спробуй ще раз.",
     "Too many requests": "Забагато спроб поспіль — зачекай хвилину і спробуй ще раз.",
-    "cod_min_total": `Замовлення до ${COD_MIN_TOTAL}₴ відправляються лише з повною оплатою — обери оплату карткою вище.`,
   };
 
   async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
@@ -260,11 +256,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
     }
     if (!isValidPhone(form.phone)) {
       setErrorMessage("Перевір номер телефону — формат +380XXXXXXXXX.");
-      setStatus("error");
-      return;
-    }
-    if (paymentMethod === "cod" && requiresPrepayment) {
-      setErrorMessage(`Замовлення до ${COD_MIN_TOTAL}₴ відправляються лише з повною оплатою — обери оплату карткою вище.`);
       setStatus("error");
       return;
     }
@@ -356,6 +347,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
               category: i.categoryName ?? i.category,
             })),
             totalPrice,
+            isDeposit,
+            codRemainder,
           })
         );
 
@@ -408,6 +401,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
               category: i.categoryName ?? i.category,
             })),
             totalPrice,
+            isDeposit,
+            codRemainder,
           })
         );
 
@@ -573,7 +568,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
             Спосіб оплати
           </label>
           <div className="space-y-2">
-            {ONLINE_PAYMENTS_ENABLED && (
             <button
               type="button"
               onClick={() => setPaymentMethod("card_mono")}
@@ -603,8 +597,6 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 }`}
               />
             </button>
-            )}
-            {ONLINE_PAYMENTS_ENABLED && (
             <button
               type="button"
               onClick={() => setPaymentMethod("card_wfp")}
@@ -629,36 +621,19 @@ export function OrderModal({ onClose }: OrderModalProps) {
                 }`}
               />
             </button>
-            )}
-            <button
-              type="button"
-              onClick={() => setPaymentMethod("cod")}
-              className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
-                paymentMethod === "cod"
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-gray-200"
-              }`}
-            >
-              <span className="text-xl">💰</span>
-              <span className="flex-1 min-w-0">
-                <span className="text-sm font-bold">Оплата при отриманні</span>
-                <span className="block text-[11px] text-gray-500">
-                  Готівкою або карткою на Новій Пошті
-                </span>
-              </span>
-              <span
-                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
-                  paymentMethod === "cod"
-                    ? "border-emerald-500 bg-emerald-500"
-                    : "border-gray-300"
-                }`}
-              />
-            </button>
-            {paymentMethod === "cod" && requiresPrepayment && (
-              <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
-                ⚠️ Замовлення до {COD_MIN_TOTAL}₴ відправляються лише з повною оплатою. Обери оплату карткою вище, щоб оформити замовлення.
-              </div>
-            )}
+            <div className="text-[11px] text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 leading-relaxed">
+              {isDeposit ? (
+                <>
+                  💳 Зараз оплачуєш передоплату <b>{onlineAmount}₴</b>. Залишок{" "}
+                  <b>{codRemainder}₴</b> — готівкою або карткою при отриманні на Новій Пошті.
+                </>
+              ) : (
+                <>
+                  💳 Замовлення до {COD_MIN_TOTAL}₴ оплачується повністю онлайн —{" "}
+                  <b>{onlineAmount}₴</b>.
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -823,20 +798,14 @@ export function OrderModal({ onClose }: OrderModalProps) {
 
           <button
             type="submit"
-            disabled={status === "sending" || (paymentMethod === "cod" && requiresPrepayment)}
+            disabled={status === "sending"}
             className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white py-3.5 rounded-xl text-base font-extrabold transition-colors"
           >
-            {status === "sending"
-              ? "Відправляю..."
-              : paymentMethod === "cod"
-              ? "Замовити · Оплата при отриманні"
-              : "Замовити · Оплата карткою"}
+            {status === "sending" ? "Відправляю..." : `Оплатити ${onlineAmount}₴`}
           </button>
 
           <div className="text-[10px] text-gray-400 text-center">
-            {paymentMethod === "cod"
-              ? "💰 Оплата при отриманні на Новій Пошті"
-              : "💳 Перейдеш на захищену сторінку оплати"}
+            💳 Перейдеш на захищену сторінку оплати
           </div>
         </form>
       </div>

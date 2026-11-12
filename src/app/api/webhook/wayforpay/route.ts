@@ -1,5 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { verifyWebhookSignature, buildWebhookResponse, type WebhookPayload } from "@/lib/wayforpay";
+
+// Той самий підхід, що й в api/order/route.ts (КОМАНДНИЙ ЦЕНТР) і у
+// webhook/monobank — 12.11.2026: раніше вебхук лише слав Telegram і
+// НІКОЛИ не оновлював payment_status у Supabase. Виправлено: шукаємо
+// рядок по order_ref (клієнтський orderId) і виставляємо paid/failed.
+function supabaseServer() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+async function updatePaymentStatus(orderRef: string, status: "paid" | "failed") {
+  const supabase = supabaseServer();
+  if (!supabase || !orderRef) return;
+  const { error } = await supabase
+    .from("orders")
+    .update({ payment_status: status })
+    .eq("order_ref", orderRef);
+  if (error) console.error("[webhook/wayforpay] Supabase payment_status update failed:", error);
+}
 
 function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, "\\$&");
@@ -64,6 +86,7 @@ export async function POST(req: NextRequest) {
   const sum = payload.amount;
 
   if (payload.transactionStatus === "Approved") {
+    await updatePaymentStatus(orderId, "paid");
     await sendTelegram(
       `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: WayForPay${itemLine}${phoneLine}`
     );
@@ -73,6 +96,7 @@ export async function POST(req: NextRequest) {
     payload.transactionStatus === "Refunded" ||
     payload.transactionStatus === "Voided"
   ) {
+    await updatePaymentStatus(orderId, "failed");
     const reason = payload.reason ? escapeMarkdown(payload.reason) : "невідома причина";
     // phone/item тепер зазвичай порожні (orderReference більше не несе
     // цих даних) — телефон+товар шукай у ПЕРШОМУ повідомленні з цим самим

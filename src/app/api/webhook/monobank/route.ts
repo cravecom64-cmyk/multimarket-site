@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { verifyWebhookSignature } from "@/lib/monobank";
+
+// Той самий підхід, що й в api/order/route.ts (КОМАНДНИЙ ЦЕНТР) — окремий
+// клієнт тут, бо це інший serverless-роут. 12.11.2026: раніше вебхук лише
+// слав Telegram і НІКОЛИ не оновлював payment_status у Supabase — рядок
+// замовлення назавжди лишався "not_paid", навіть якщо оплата реально
+// пройшла. Виправлено: шукаємо рядок по order_ref (клієнтський orderId,
+// той самий, що в reference) і виставляємо paid/failed.
+function supabaseServer() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+async function updatePaymentStatus(orderRef: string, status: "paid" | "failed") {
+  const supabase = supabaseServer();
+  if (!supabase || orderRef === "?") return;
+  const { error } = await supabase
+    .from("orders")
+    .update({ payment_status: status })
+    .eq("order_ref", orderRef);
+  if (error) console.error("[webhook/monobank] Supabase payment_status update failed:", error);
+}
 
 // Тіло вебхука ідентичне відповіді "Статус рахунку" (invoice/status).
 // Вебхук НЕ надсилається для статусу expired (документація Monobank).
@@ -92,10 +116,12 @@ export async function POST(req: NextRequest) {
   const sum = ((payload.finalAmount ?? payload.amount) / 100).toFixed(2);
 
   if (payload.status === "success") {
+    await updatePaymentStatus(orderId, "paid");
     await sendTelegram(
       `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: Monobank Acquiring${itemLine}${phoneLine}`
     );
   } else if (payload.status === "failure" || payload.status === "reversed") {
+    await updatePaymentStatus(orderId, "failed");
     const reason = payload.failureReason ? escapeMarkdown(payload.failureReason) : "невідома причина";
     await sendTelegram(
       `❌ *ОПЛАТА НЕ ПРОЙШЛА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n⚠️ Причина: ${reason}${itemLine}${phoneLine}\n\n☎️ Зателефонуй клієнту і допоможи провести оплату повторно.`

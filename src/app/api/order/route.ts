@@ -40,6 +40,10 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, spl
         total_amount: calculatedTotal,
         prepaid_amount: split.onlineAmount,
         cod_amount: split.codRemainder,
+        // Клієнтський orderId (той самий, що летить у Monobank/WayForPay як
+        // reference/orderReference) — по ньому вебхуки оплати (api/webhook/*)
+        // знаходять цей рядок і виставляють payment_status. 12.11.2026.
+        order_ref: body.orderId || null,
         status: "new",
         confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
       })

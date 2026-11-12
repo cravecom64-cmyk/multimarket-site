@@ -168,6 +168,34 @@ export default function HomePage() {
         />
       </section>
 
+      {/* Блекаут — другий сезонний промо-банер (зима, сезон відключень світла).
+          Копірайт узгоджений з category/[slug] (блекаут): той самий офер
+          "2 товари = -10%" і той самий градієнт, що й на картці категорії
+          на головній (from-[#18181B] to-[#F59E0B]), щоб виглядало як одна
+          візуальна лінія, а не окрема випадкова вставка. Рішення Павла
+          12.11.2026. */}
+      <div className="mx-3 mt-5 rounded-2xl bg-gradient-to-br from-[#18181B] to-[#F59E0B] px-5 py-5 relative overflow-hidden">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] font-bold text-amber-200 uppercase tracking-wide">
+              Сезон відключень
+            </div>
+            <h2 className="text-base font-extrabold text-white mt-0.5 leading-tight">
+              🔋 Готуйся до блекауту заздалегідь
+            </h2>
+            <p className="text-[11px] text-white/70 mt-1">
+              Павербанк + ліхтар — мінімальний набір. 2 товари для блекауту = -10%.
+            </p>
+          </div>
+          <Link
+            href="/category/blackout"
+            className="flex-shrink-0 bg-white text-gray-900 px-4 py-2.5 rounded-lg text-xs font-bold"
+          >
+            Дивитись →
+          </Link>
+        </div>
+      </div>
+
       {/* Топ продажів */}
       <section className="mt-5 px-4">
         <h2 className="text-base font-extrabold">

@@ -591,27 +591,14 @@ ${paymentLine}
       console.error("Telegram API error:", await tgRes.text());
     }
 
-    // ВІДКАТИТИ РАЗОМ ІЗ ТЕСТОВОЮ ЦІНОЮ h08 (1₴) — живий тест оплати
-    // 12.11.2026: щоб колл-центр SalesWave не дзвонив по тестовому
-    // замовленню і воно не лягало в KeyCRM/SMS, пропускаємо ці пуші для
-    // замовлень на явно нереальну суму (найдешевший товар каталогу — 59₴,
-    // тож поріг 10₴ не зачепить жодне справжнє замовлення). Telegram-
-    // сповіщення і запис у Supabase (командний центр) навмисно НЕ
-    // пропускаються — саме вони й потрібні, щоб перевірити весь цикл.
-    const isLiveTestOrder = calculatedTotal < 10;
+    // --- KeyCRM: no-op, поки немає ключа (див. функцію вище) ---
+    await pushOrderToKeyCRM(body, commandCenterOrderId);
 
-    if (isLiveTestOrder) {
-      console.log("[order] Тестове замовлення — KeyCRM/SalesDrive/SMS пропущено:", commandCenterOrderId);
-    } else {
-      // --- KeyCRM: no-op, поки немає ключа (див. функцію вище) ---
-      await pushOrderToKeyCRM(body, commandCenterOrderId);
+    // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
+    await pushOrderToSalesDrive(body, commandCenterOrderId, split);
 
-      // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
-      await pushOrderToSalesDrive(body, commandCenterOrderId, split);
-
-      // --- TurboSMS: no-op, поки немає ключа (див. функцію вище) ---
-      await pushSmsNotification(body, commandCenterOrderId);
-    }
+    // --- TurboSMS: no-op, поки немає ключа (див. функцію вище) ---
+    await pushSmsNotification(body, commandCenterOrderId);
 
     return NextResponse.json({ success: true, notified: tgRes.ok });
   } catch (error) {

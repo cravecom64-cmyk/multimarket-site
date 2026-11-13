@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Доставка і оплата",
   description:
-    "Доставка Новою Поштою по всій Україні 1-3 дні, безкоштовно від 2000₴. Оплата при отриманні або карткою онлайн.",
+    "Доставка Новою Поштою по всій Україні 1-3 дні, безкоштовно від 2000₴. Оплата карткою онлайн — частково (від 300₴) або повністю.",
   alternates: {
     canonical: "https://www.multi-market.com.ua/delivery",
   },

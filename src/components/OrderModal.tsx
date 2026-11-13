@@ -10,7 +10,7 @@ import {
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
 import { trackCheckoutEvent } from "@/lib/analytics";
-import { COD_MIN_TOTAL, getPaymentSplit } from "@/lib/checkout";
+import { COD_MIN_TOTAL, getPaymentSplit, orderMargin } from "@/lib/checkout";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -207,7 +207,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // при отриманні; нижче порогу — повна оплата онлайн. Єдине джерело цієї
   // логіки (і на клієнті, і на сервері) — src/lib/checkout.ts. Рішення
   // Павла 12.11.2026 (замінює попередню модель "або картка, або наложка").
-  const { onlineAmount, codRemainder, isDeposit } = getPaymentSplit(totalPrice);
+  const { onlineAmount, codRemainder, isDeposit } = getPaymentSplit(totalPrice, orderMargin(items));
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Чи покупець вже вийшов з поля телефону хоч раз — щоб не показувати

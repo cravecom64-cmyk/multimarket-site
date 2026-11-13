@@ -61,20 +61,21 @@ export default function DeliveryPage() {
           <div className="space-y-3">
             <div>
               <div className="font-semibold text-gray-900">
-                Наложний платіж
+                Передоплата + накладений платіж
               </div>
               <div className="text-gray-600">
-                Оплата при отриманні на пошті. Ти спочатку бачиш товар,
-                потім платиш. Комісія НП за переказ — 20₴ + 2% від суми.
+                Для замовлень від 300₴: невелика передоплата карткою (до 200₴,
+                точну суму видно при оформленні), решту — при отриманні на
+                пошті. Комісія НП за переказ — 20₴ + 2% від суми.
               </div>
             </div>
             <div>
               <div className="font-semibold text-gray-900">
-                Оплата карткою онлайн
+                Повна оплата карткою онлайн
               </div>
               <div className="text-gray-600">
-                Visa, Mastercard. Списується одразу при оформленні. Без
-                комісії.
+                Visa, Mastercard, Apple Pay, Google Pay. Замовлення до 300₴
+                оплачуються лише так. Без комісії.
               </div>
             </div>
           </div>

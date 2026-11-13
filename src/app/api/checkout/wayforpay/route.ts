@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPurchaseFields } from "@/lib/wayforpay";
-import { getPaymentSplit } from "@/lib/checkout";
+import { getPaymentSplit, orderMargin } from "@/lib/checkout";
 
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT_WINDOW = 60_000;
@@ -18,6 +18,7 @@ function isRateLimited(ip: string): boolean {
 }
 
 interface OrderItem {
+  id?: string;
   name: string;
   price: number;
   quantity: number;
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const split = getPaymentSplit(calculatedTotal);
+    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items));
 
     const { actionUrl, fields } = buildPurchaseFields({
       // Чистий orderId — WayForPay показує це значення клієнту в чеку як

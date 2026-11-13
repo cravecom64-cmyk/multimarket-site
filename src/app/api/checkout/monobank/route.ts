@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createInvoice } from "@/lib/monobank";
-import { getPaymentSplit } from "@/lib/checkout";
+import { getPaymentSplit, orderMargin } from "@/lib/checkout";
 
 // Той самий rate-limit підхід, що й у /api/order — окремий лічильник,
 // бо це окремий serverless endpoint (Vercel не ділить in-memory стан між ними).
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
     // товарів — тож і фіскальний чек-кошик для депозиту має бути ОДНИМ
     // рядком "Передоплата" на суму депозиту, а не реальним переліком
     // товарів за повною ціною (інакше сума кошика не зійдеться з amount).
-    const split = getPaymentSplit(calculatedTotal);
+    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items));
 
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
     // reference не показується клієнту (на відміну від destination) — сюди

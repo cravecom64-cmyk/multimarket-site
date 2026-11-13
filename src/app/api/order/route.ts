@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
-import { getPaymentSplit, type PaymentSplit } from "@/lib/checkout";
+import { getPaymentSplit, orderMargin, type PaymentSplit } from "@/lib/checkout";
 import { variantLabel } from "@/lib/products";
 
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
@@ -531,7 +531,7 @@ export async function POST(req: NextRequest) {
     // 12.11.2026): від COD_MIN_TOTAL — передоплата COD_DEPOSIT_AMOUNT,
     // залишок накладеним платежем; нижче порогу — повна оплата онлайн.
     // Єдине джерело цієї логіки — src/lib/checkout.ts.
-    const split = getPaymentSplit(calculatedTotal);
+    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items));
 
     const paymentMethod: "card_mono" | "card_wfp" =
       body.paymentMethod === "card_wfp" ? "card_wfp" : "card_mono";

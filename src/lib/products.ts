@@ -265,20 +265,16 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
     .map((id) => products.find((p) => p.id === id))
     .filter((p): p is Product => !!p && p.id !== product.id && !p.isHidden);
 
-  if (curated.length >= limit) return curated.slice(0, limit);
-
-  // Так само як у getRelatedProducts — якщо куратор щось задав, це і
-  // показуємо. Раніше філлер завжди добивав список до 4 товарів топ-продажем
-  // з інших категорій, тому майже кожна картка рекомендувала купити разом
-  // один і той самий хітовий товар (напр. міні-кондиціонер) незалежно від
-  // того, чи має це сенс.
-  if (curated.length > 0) return curated;
-
-  const filler = visibleProducts()
-    .filter((p) => p.id !== product.id && p.category !== product.category)
-    .sort((a, b) => b.orderCount - a.orderCount);
-
-  return filler.slice(0, limit);
+  // 14.11.2026 (запит Павла — блок радив лампі купити разом садові
+  // рукавички й машинку для катишків): раніше без bundleWith товар
+  // отримував філлер — топ-продаж з ІНШОЇ категорії, і це означало
+  // буквально будь-що, бо жодна формула з категорії й продажів не
+  // замінює реальне смислове поєднання товарів. Тепер без курації блок
+  // просто не показується (crossSell.length === 0 — ProductPageClient
+  // ховає секцію), чесніше за випадкову пару. Додаючи новий товар —
+  // не забути проставити йому bundleWith у products.json, інакше "З цим
+  // купують" для нього не з'явиться.
+  return curated.slice(0, limit);
 }
 
 export function getBundleProducts(ids: string[]): Product[] {

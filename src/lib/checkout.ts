@@ -36,8 +36,25 @@ export const COD_DEPOSIT_AMOUNT = 200;
 export const COD_DEPOSIT_MIN = 50;
 
 type MarginItem = { id?: string; price: number; quantity: number };
-type CatalogRow = { id: string; buyPrice?: number; sizes?: { slug: string; buyPrice?: number }[] };
+type CatalogRow = { id: string; buyPrice?: number; supplier?: string; sizes?: { slug: string; buyPrice?: number }[] };
 const BUY_BY_ID = new Map((productsData as CatalogRow[]).map((p) => [p.id, p]));
+
+// ДОДАНО 14.11.2026 (рішення Павла): VIBER-SHOP не може переадресувати
+// накладений платіж на нашу картку після нашої передоплати їм — для товарів
+// цього постачальника модель "депозит + наложка" працює некоректно (клієнт
+// ризикує заплатити двічі). Тому такі товари — ЗАВЖДИ повна оплата онлайн,
+// незалежно від суми замовлення й маржі. Позначаються `supplier: "viber-shop"`
+// у products.json (зараз: bk31, bk32, bk33, g12) — додаючи новий товар від
+// VIBER-SHOP, не забути поставити це поле.
+export function hasViberShopItem(items: MarginItem[]): boolean {
+  for (const it of items) {
+    if (!it.id) continue;
+    const [productId] = it.id.split("__");
+    const p = BUY_BY_ID.get(productId);
+    if (p?.supplier === "viber-shop") return true;
+  }
+  return false;
+}
 
 /** Маржа замовлення за закупками з каталогу; null — якщо закупка якогось товару невідома. */
 export function orderMargin(items: MarginItem[]): number | null {
@@ -64,8 +81,12 @@ export interface PaymentSplit {
   isDeposit: boolean;
 }
 
-export function getPaymentSplit(total: number, margin: number | null = null): PaymentSplit {
-  if (total < COD_MIN_TOTAL) {
+export function getPaymentSplit(
+  total: number,
+  margin: number | null = null,
+  forceFullPayment: boolean = false,
+): PaymentSplit {
+  if (forceFullPayment || total < COD_MIN_TOTAL) {
     return { onlineAmount: total, codRemainder: 0, isDeposit: false };
   }
   let deposit = COD_DEPOSIT_AMOUNT;

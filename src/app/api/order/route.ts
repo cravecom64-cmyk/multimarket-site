@@ -46,6 +46,8 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, spl
         order_ref: body.orderId || null,
         status: "new",
         confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
+        // коментар клієнта — для CRM, яка тепер отримує замовлення пізніше (lib/crmPush.ts)
+        order_comment: body.comment?.trim() || null,
       })
       .select("id")
       .single();
@@ -150,86 +152,8 @@ async function pushOrderToKeyCRM(body: OrderBody, orderId: number | null) {
 }
 
 // ==================== SalesDrive (колл-центр SalesWave) ====================
-// Окремий, незалежний від KeyCRM пуш — SalesWave дзвонить клієнту й підтверджує
-// замовлення перед відправкою. Мінімальний набір полів (без email — його й
-// нема в формі, без UTM/gaClientId — це наша внутрішня аналітика, їм зайве).
-async function pushOrderToSalesDrive(body: OrderBody, orderId: number | null, split: PaymentSplit) {
-  const apiKey = process.env.SALESDRIVE_API_KEY;
-  if (!apiKey) return; // ключа ще нема — просто виходимо
-
-  // Форма сайту збирає одне поле "ім'я" — ділимо на ім'я/прізвище для SalesDrive
-  const nameParts = body.name.trim().split(/\s+/);
-  const fName = nameParts[0] ?? body.name;
-  const lName = nameParts.slice(1).join(" ") || undefined;
-
-  // Чистої "наложки" без онлайн-частини більше не існує (Рішення Павла
-  // 12.11.2026) — лейбл явно каже, скільки вже прийшло онлайн і скільки
-  // лишилось стягнути при отриманні, щоб КЦ/ТТН не взяли повну суму ще раз.
-  const paymentLabel = split.isDeposit
-    ? `Передоплата ${split.onlineAmount}\u20b4 ОТРИМАНА онлайн, накладений платіж ${split.codRemainder}\u20b4 (НЕ стягувати повну суму!)`
-    : "Оплата карткою онлайн (повна сума)";
-
-  // Чекбокс "Зв'язатися зі мною для підтвердження замовлення" з форми —
-  // передаємо менеджеру SalesDrive, щоб він знав дзвонити чи просто писати.
-  // За замовчуванням (поле відсутнє) вважаємо true, як і на сайті.
-  const callPrefTag =
-    body.confirmCall === false
-      ? "\ud83d\udce9 Клієнт просить НЕ дзвонити — писати повідомленням/SMS"
-      : "\u260e\ufe0f Клієнт очікує дзвінок для підтвердження";
-
-  // Та сама інформація про залишок — ще й у коментар, щоб було видно й
-  // живій людині, яка дивиться заявку, а не лише в полі payment_method.
-  const paymentNote = split.isDeposit
-    ? `\u26a0\ufe0f Передоплата ${split.onlineAmount}\u20b4 вже отримана онлайн. До сплати при отриманні: ${split.codRemainder}\u20b4.`
-    : null;
-
-  const fullComment = [callPrefTag, paymentNote, body.comment].filter(Boolean).join(" | ");
-
-  try {
-    const res = await fetch("https://saleswave.salesdrive.me/handler/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Api-Key": apiKey },
-      body: JSON.stringify({
-        getResultData: "1",
-        phone: body.phone,
-        fName,
-        lName,
-        novaposhta: {
-          ServiceType: "Warehouse",
-          payer: "recipient",
-          city: body.city,
-          WarehouseNumber: body.branch,
-        },
-        products: body.items.map((i) => ({
-          id: i.id,
-          name: i.name,
-          costPerItem: i.price,
-          amount: i.quantity,
-          sku: i.id,
-        })),
-        payment_method: paymentLabel,
-        shipping_method: "Нова Пошта",
-        comment: fullComment,
-        sajt: "multi-market.com.ua",
-        externalId: orderId ? String(orderId) : body.orderId,
-      }),
-    });
-    if (!res.ok) {
-      console.error("[order] SalesDrive push failed:", res.status, await res.text());
-      return;
-    }
-    const data = await res.json();
-    if (orderId && data?.data?.id) {
-      const supabase = supabaseServer();
-      await supabase
-        ?.from("orders")
-        .update({ salesdrive_order_id: String(data.data.id), salesdrive_synced_at: new Date().toISOString() })
-        .eq("id", orderId);
-    }
-  } catch (err) {
-    console.error("[order] SalesDrive push error:", err);
-  }
-}
+// Перенесено в src/lib/crmPush.ts (14.11.2026): замовлення йде в CRM після
+// оплати або з позначкою «не оплачено» через 30 хв, а не одразу.
 
 // ==================== TurboSMS ====================
 // SMS одразу після оформлення заявки — "Дякуємо, менеджер зателефонує".
@@ -598,8 +522,9 @@ ${paymentLine}
     // --- KeyCRM: no-op, поки немає ключа (див. функцію вище) ---
     await pushOrderToKeyCRM(body, commandCenterOrderId);
 
-    // --- SalesDrive: no-op, поки немає ключа (див. функцію вище) ---
-    await pushOrderToSalesDrive(body, commandCenterOrderId, split);
+    // --- SalesDrive (CRM КЦ): з 14.11.2026 НЕ одразу. Замовлення йде в CRM
+    // після підтвердження оплати (вебхуки) або через 30 хв з позначкою
+    // «НЕ ОПЛАЧЕНО» (крон /api/cron/crm-unpaid) — див. src/lib/crmPush.ts.
 
     // --- TurboSMS: no-op, поки немає ключа (див. функцію вище) ---
     await pushSmsNotification(body, commandCenterOrderId);

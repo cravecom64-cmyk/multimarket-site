@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { pushPaidOrderByRef } from "@/lib/crmPush";
 import { verifyWebhookSignature } from "@/lib/monobank";
 
 // Той самий підхід, що й в api/order/route.ts (КОМАНДНИЙ ЦЕНТР) — окремий
@@ -117,6 +118,8 @@ export async function POST(req: NextRequest) {
 
   if (payload.status === "success") {
     await updatePaymentStatus(orderId, "paid");
+    // оплачене замовлення — одразу в CRM з правильним статусом (lib/crmPush.ts)
+    await pushPaidOrderByRef(orderId).catch((e) => console.error("[webhook] CRM push:", e));
     await sendTelegram(
       `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: Monobank Acquiring${itemLine}${phoneLine}`
     );

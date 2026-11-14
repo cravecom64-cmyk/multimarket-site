@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { pushPaidOrderByRef } from "@/lib/crmPush";
 import { verifyWebhookSignature, buildWebhookResponse, type WebhookPayload } from "@/lib/wayforpay";
 
 // Той самий підхід, що й в api/order/route.ts (КОМАНДНИЙ ЦЕНТР) і у
@@ -87,6 +88,8 @@ export async function POST(req: NextRequest) {
 
   if (payload.transactionStatus === "Approved") {
     await updatePaymentStatus(orderId, "paid");
+    // оплачене замовлення — одразу в CRM з правильним статусом (lib/crmPush.ts)
+    await pushPaidOrderByRef(orderId).catch((e) => console.error("[webhook] CRM push:", e));
     await sendTelegram(
       `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: WayForPay${itemLine}${phoneLine}`
     );

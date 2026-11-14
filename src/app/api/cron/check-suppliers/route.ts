@@ -1330,8 +1330,8 @@ async function handleGet(req: NextRequest) {
 
     // ---- Постачальники "за РРЦ" (LUGI, з 07.11.2026: "по луги мы работаем
     // только по ррц"). РРЦ = ціна на їхньому сайті для гостя (її й так читаємо
-    // як роздрібну). Якщо наша ціна відрізняється від РРЦ (у будь-який бік) —
-    // пропозиція привести до РРЦ; закупка не змінюється.
+    // як роздрібну). Якщо наша ціна НИЖЧА за РРЦ — пропозиція підняти до РРЦ
+    // (з 14.11.2026 продавати дорожче за РРЦ можна); закупка не змінюється.
     const proposedIds = new Set(newProposals.map((p) => String(p.product_id)));
     const rrcByProduct = new Map<string, { rrc: number; supplier: string }>();
     const nonRrcProducts = new Set<string>();
@@ -1353,7 +1353,9 @@ async function handleGet(req: NextRequest) {
       if (nonRrcProducts.has(productId)) continue; // є інший постачальник — ціну не нав'язуємо
       if (pendingIds.has(productId) || proposedIds.has(productId)) continue;
       const product = productsById.get(productId);
-      if (!product || !product.price || Math.abs(product.price - rrc) < 1) continue;
+      // 14.11.2026 (Павел): «на ррц мы только ориентир держим а продавать можем
+      // и дороже» — пропонуємо підняти лише якщо наша ціна НИЖЧА за РРЦ.
+      if (!product || !product.price || product.price >= rrc - 0.5) continue;
       if (rrc < product.price / 3 || rrc > product.price * 3) continue; // підозрілий парсинг
       const ratio = rrc / product.price;
       const newOld = product.oldPrice ? Math.max(Math.round(product.oldPrice * ratio), Math.round(rrc * 1.2)) : null;

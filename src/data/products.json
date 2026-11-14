@@ -3017,7 +3017,7 @@
     "name": "Аварійна акумуляторна LED-лампа Intelligent Emergency Bulb 20W, E27, 2 акумулятори",
     "category": "blackout",
     "categoryName": "Блекаут",
-    "price": 280,
+    "price": 299,
     "oldPrice": 379,
     "buyPrice": 186,
     "emoji": "💡",
@@ -4197,8 +4197,7 @@
           "/products/ny16/zhovtyy-7-e554.jpg"
         ],
         "wire": "Білий",
-        "wireHex": "#F5F5F0",
-        "soldOut": true
+        "wireHex": "#F5F5F0"
       }
     ],
     "price": 139,

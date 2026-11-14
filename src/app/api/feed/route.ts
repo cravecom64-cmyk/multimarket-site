@@ -52,6 +52,15 @@ const HEAVY_IDS = new Set(["g20", "h24", "bk32", "p11"]);
 const HEAVY_SHIPPING_UAH = 135;
 const FREE_SHIPPING_FROM = 2000;
 
+// Автоматична категорія за назвою для нових товарів (щоб не дописувати id вручну).
+function gpcByName(name: string): number | undefined {
+  // Визначаємо за тим, ЩО це за товар (перше слово назви), а не за згадками функцій.
+  const n = name.toLowerCase().trim();
+  if (/^(магнітний\s+)?(повербанк|павербанк)/.test(n)) return 505295; // Power Adapters & Chargers
+  if (/^(акумуляторний\s+)?ліхтар/.test(n)) return 338; // Flashlights & Headlamps
+  return undefined;
+}
+
 // Текстові категорії для Meta Commerce Manager (як було).
 const FB_CATEGORY_MAP: Record<string, string> = {
   home: "Home & Garden",
@@ -78,7 +87,8 @@ export async function GET() {
         ? `${SITE_URL}${p.externalLanding}`
         : `${SITE_URL}/product/${p.slug}`;
       const image = `${SITE_URL}${p.image}`;
-      const gpc = GPC_BY_ID[p.id] ?? GPC_BY_CATEGORY[p.category] ?? 536;
+      const gpc =
+        GPC_BY_ID[p.id] ?? gpcByName(p.name) ?? GPC_BY_CATEGORY[p.category] ?? 536;
       const fbCategory =
         p.id === "bk32"
           ? "Home & Garden > Kitchen & Dining > Kitchen Appliances"

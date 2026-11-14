@@ -963,7 +963,17 @@ async function handleGet(req: NextRequest) {
     const offer = feed.get(normSku(row.supplier_sku));
     if (!offer) return { inStock: false, price: null, error: `артикулу ${row.supplier_sku} немає у вивантаженні` };
     const stockOnly = supplierOf(row)?.feed_mode === "stock";
-    return { inStock: offer.available && (offer.qty === null || offer.qty > 0), price: stockOnly ? null : offer.price };
+    const feedInStock = offer.available && (offer.qty === null || offer.qty > 0);
+    // 14.11.2026: у вивантаженні Aveopt (магазин aveon.net.ua на Prom) наявність
+    // інколи розходиться з aveopt.com.ua (повербанки A-13/A-17 і g12: у
+    // вивантаженні «немає», на сайті «В наявності, багато»). Тож якщо
+    // вивантаження каже інше, ніж у нас записано, — підтверджуємо сторінкою
+    // товару на aveopt.com.ua і віримо їй. Запитів мало: лише на зміни.
+    if (stockOnly && feedInStock !== row.in_stock) {
+      const page = await fetchSupplierStatus(row.url);
+      return { inStock: page.inStock, price: null, error: page.error };
+    }
+    return { inStock: feedInStock, price: stockOnly ? null : offer.price };
   }
 
   async function checkRow(row: SupplierRow) {

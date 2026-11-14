@@ -9,14 +9,12 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 // Раніше заявка йшла одразу при натисканні «Оформити» з текстом
 // «Передоплата ОТРИМАНА», навіть якщо клієнт так і не заплатив.
 //
-// Статус КЦ — поки текстом на початку коментаря. Коли SalesWave дасть ID
-// статусів для API, вписати їх у SALESDRIVE_STATUS_IDS (і поле, як вони
-// скажуть) — нічого іншого міняти не треба.
+// Статус КЦ — текстом на початку коментаря «[СТАТУС: …]»: передати статус
+// через API у SalesWave неможливо (Павел, 14.11.2026), менеджер КЦ ставить
+// його вручну за цим тегом.
 
 export type CrmStatus = "Новий" | "Підтверджено — післяплата" | "Підтверджено - оплатили" | "Переписка viber";
 
-// TODO(SalesWave): ID статусів SalesDrive для /handler/. Поки невідомі.
-const SALESDRIVE_STATUS_IDS: Partial<Record<CrmStatus, number>> = {};
 
 type OrderRow = {
   id: number;
@@ -93,7 +91,6 @@ async function sendToSalesDrive(o: OrderRow, items: ItemRow[], paid: boolean): P
       ? "📩 Клієнт просить НЕ дзвонити — писати повідомленням/SMS"
       : "☎️ Клієнт очікує дзвінок для підтвердження";
   const comment = [`[СТАТУС: ${plan.status}]`, plan.note, callTag, o.order_comment].filter(Boolean).join(" | ");
-  const statusId = SALESDRIVE_STATUS_IDS[plan.status];
 
   try {
     const res = await fetch("https://saleswave.salesdrive.me/handler/", {
@@ -117,7 +114,6 @@ async function sendToSalesDrive(o: OrderRow, items: ItemRow[], paid: boolean): P
         comment,
         sajt: "multi-market.com.ua",
         externalId: String(o.id),
-        ...(statusId ? { status: statusId } : {}),
       }),
     });
     const text = await res.text();

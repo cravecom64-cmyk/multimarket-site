@@ -305,6 +305,9 @@ interface CheckResult {
   inStock: boolean;
   price: number | null;
   error?: string;
+  // 16.11.2026: сторінку товару постачальник видалив (HTTP 404) — це не збій
+  // перевірки, а «товару більше немає»: рахуємо як «немає в наявності».
+  gone?: boolean;
 }
 
 interface FailureInfo {
@@ -457,6 +460,7 @@ async function fetchSupplierStatusOnce(url: string): Promise<CheckResult> {
       signal: AbortSignal.timeout(viaProxy ? 25000 : 15000),
     });
 
+    if (res.status === 404 || res.status === 410) return { inStock: false, price: null, gone: true };
     if (!res.ok) return { inStock: false, price: null, error: `HTTP ${res.status}` };
 
     const html = await res.text();
@@ -1073,7 +1077,7 @@ async function handleGet(req: NextRequest) {
         );
       } else if (stockChanged) {
         changes.push(
-          `${result.inStock ? "✅ Знову в наявності" : "⛔ Закінчився"}: ${rowLabel(row)} у ${supplierName}` +
+          `${result.inStock ? "✅ Знову в наявності" : result.gone ? "⛔ Сторінку товару видалено (404)" : "⛔ Закінчився"}: ${rowLabel(row)} у ${supplierName}` +
             (result.price !== null ? ` (${formatUAH(result.price)})` : "")
         );
       } else if (priceChanged) {

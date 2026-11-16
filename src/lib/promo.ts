@@ -38,7 +38,7 @@ export const HERO_SCENARIOS: HeroScenario[] = [
     endIso: "2026-11-30T23:59:59+02:00",
     countdownTargetIso: "2026-11-30T23:59:59+02:00",
     chipEmoji: "🖤",
-    headlinePrefix: "Black Friday — знижки до ",
+    headlinePrefix: "Black Friday – знижки до ",
     headlineAccent: "-50%",
     tickerMessages: ["🖤 Чорна п'ятниця – знижки до -50%"],
   },

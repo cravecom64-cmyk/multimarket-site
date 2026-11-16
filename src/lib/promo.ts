@@ -40,7 +40,7 @@ export const HERO_SCENARIOS: HeroScenario[] = [
     chipEmoji: "🖤",
     headlinePrefix: "Black Friday — знижки до ",
     headlineAccent: "-50%",
-    tickerMessages: ["🖤 Чорна п'ятниця — знижки до -50%"],
+    tickerMessages: ["🖤 Чорна п'ятниця – знижки до -50%"],
   },
   {
     id: "newyear",
@@ -50,7 +50,7 @@ export const HERO_SCENARIOS: HeroScenario[] = [
     chipEmoji: "🎄",
     headlinePrefix: "Новорічні знижки до ",
     headlineAccent: "-50%",
-    tickerMessages: ["🎄 Новий рік — знижки до -50%"],
+    tickerMessages: ["🎄 Новий рік – знижки до -50%"],
   },
 ];
 

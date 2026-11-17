@@ -54,20 +54,76 @@ export function isInternalVisit(): boolean {
   return navigator.webdriver === true;
 }
 
-function getUtm() {
+// ЗМІНЕНО 17.11.2026: джерело візиту зберігається на 30 днів (остання
+// не-пряма точка входу), а не читається лише з поточного URL. Раніше UTM
+// губились, щойно людина переходила з посадкової сторінки в іншу, і в
+// замовлення джерело не потрапляло взагалі. Google Ads з автотегуванням
+// додає лише gclid без UTM — тоді записуємо google / cpc.
+const ATTR_KEY = "mm_attr";
+const ATTR_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+export type Attribution = {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  term?: string;
+  content?: string;
+};
+
+function readUrlAttribution(): Attribution | null {
+  const params = new URLSearchParams(window.location.search);
+  const utm: Attribution = {
+    source: params.get("utm_source") || undefined,
+    medium: params.get("utm_medium") || undefined,
+    campaign: params.get("utm_campaign") || undefined,
+    term: params.get("utm_term") || undefined,
+    content: params.get("utm_content") || undefined,
+  };
+  if (utm.source || utm.medium || utm.campaign) return utm;
+  const gclid = params.get("gclid") || params.get("gbraid") || params.get("wbraid");
+  if (gclid) return { source: "google", medium: "cpc", campaign: params.get("utm_campaign") || undefined };
+  const fbclid = params.get("fbclid");
+  if (fbclid) return { source: "facebook", medium: "paid_or_social" };
+  // Без міток: дивимось, з якого сайту прийшли (пошук, ChatGPT, агрегатори).
+  try {
+    const ref = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, "") : "";
+    if (ref && ref !== window.location.hostname.replace(/^www\./, "")) {
+      if (/(^|\.)google\./.test(ref)) return { source: "google", medium: "organic" };
+      if (/(^|\.)bing\.com$/.test(ref)) return { source: "bing", medium: "organic" };
+      if (/chatgpt\.com$|openai\.com$/.test(ref)) return { source: "chatgpt", medium: "referral" };
+      return { source: ref.slice(0, 100), medium: "referral" };
+    }
+  } catch {
+    // некоректний referrer — ігноруємо
+  }
+  return null;
+}
+
+export function getAttribution(): Attribution {
   if (typeof window === "undefined") return {};
   try {
-    const params = new URLSearchParams(window.location.search);
-    return {
-      source: params.get("utm_source") || undefined,
-      medium: params.get("utm_medium") || undefined,
-      campaign: params.get("utm_campaign") || undefined,
-      term: params.get("utm_term") || undefined,
-      content: params.get("utm_content") || undefined,
-    };
+    const fromUrl = readUrlAttribution();
+    if (fromUrl) {
+      localStorage.setItem(ATTR_KEY, JSON.stringify({ ...fromUrl, ts: Date.now() }));
+      return fromUrl;
+    }
+    const raw = localStorage.getItem(ATTR_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw) as Attribution & { ts?: number };
+      if (saved.ts && Date.now() - saved.ts < ATTR_TTL_MS) {
+        const { ts: _ts, ...rest } = saved;
+        return rest;
+      }
+      localStorage.removeItem(ATTR_KEY);
+    }
   } catch {
-    return {};
+    // localStorage недоступний — працюємо без збереження
   }
+  return {};
+}
+
+function getUtm() {
+  return getAttribution();
 }
 
 function send(payload: Record<string, unknown>) {

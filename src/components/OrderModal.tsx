@@ -9,7 +9,7 @@ import {
   trackPurchase as trackPurchaseGA4,
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
-import { trackCheckoutEvent } from "@/lib/analytics";
+import { trackCheckoutEvent, getAttribution } from "@/lib/analytics";
 import { COD_MIN_TOTAL, getPaymentSplit, hasViberShopItem, orderMargin } from "@/lib/checkout";
 
 interface OrderModalProps {
@@ -283,6 +283,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
           website: form.website,
           _t: formLoadedAt.current,
           paymentMethod,
+          utm: getAttribution(),
           items: items.map((i) => ({
             id: i.id, // для командного центру (Supabase) — зіставлення з поставщиками
             name: i.name,

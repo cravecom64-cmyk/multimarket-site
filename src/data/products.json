@@ -6155,5 +6155,155 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "гірлянда штора зірки, гирлянда штора звезды, на вікно, 3x0.7, 108 led, 1733053ML, 1733055W, 1733054BL"
+  },
+  {
+    "id": "ny26",
+    "name": "Вулична гірлянда Нитка 30 м, 300 LED, 8 режимів, IP65 — білий або чорний дріт",
+    "slug": "girlyanda-nytka-vulychna-300-led-30m",
+    "emoji": "🌳",
+    "image": "/products/ny26/bilyy-bilyy-1-3fab.jpg",
+    "colors": [
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny26/bilyy-bilyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/bilyy-bilyy-1-3fab.jpg",
+          "/products/ny26/bilyy-bilyy-2-3fab.jpg",
+          "/products/ny26/bilyy-bilyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny26/zhovtyy-bilyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/zhovtyy-bilyy-1-3fab.jpg",
+          "/products/ny26/zhovtyy-bilyy-2-3fab.jpg",
+          "/products/ny26/zhovtyy-bilyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny26/multykolir-bilyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/multykolir-bilyy-1-3fab.jpg",
+          "/products/ny26/multykolir-bilyy-2-3fab.jpg",
+          "/products/ny26/multykolir-bilyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny26/syniy-bilyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/syniy-bilyy-1-3fab.jpg",
+          "/products/ny26/syniy-bilyy-2-3fab.jpg",
+          "/products/ny26/syniy-bilyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny26/bilyy-chornyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/bilyy-chornyy-1-3fab.jpg",
+          "/products/ny26/bilyy-chornyy-2-3fab.jpg",
+          "/products/ny26/bilyy-chornyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny26/zhovtyy-chornyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/zhovtyy-chornyy-1-3fab.jpg",
+          "/products/ny26/zhovtyy-chornyy-2-3fab.jpg",
+          "/products/ny26/zhovtyy-chornyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny26/multykolir-chornyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/multykolir-chornyy-1-3fab.jpg",
+          "/products/ny26/multykolir-chornyy-2-3fab.jpg",
+          "/products/ny26/multykolir-chornyy-3-3fab.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny26/syniy-chornyy-1-3fab.jpg",
+        "images": [
+          "/products/ny26/syniy-chornyy-1-3fab.jpg",
+          "/products/ny26/syniy-chornyy-2-3fab.jpg",
+          "/products/ny26/syniy-chornyy-3-3fab.jpg"
+        ]
+      }
+    ],
+    "price": 1129,
+    "specs": {
+      "Режими": "8",
+      "Довжина": "30 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "Білий або чорний (на вибір)",
+      "Кількість LED": "300 шт",
+      "Кут світіння": "360°",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP65",
+      "Довжина шнура живлення": "≈1,1 м"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 789,
+    "category": "newyear",
+    "features": [
+      "30 м і 300 LED — дерево у дворі, паркан чи тераса",
+      "Захист IP65 — дощ і сніг не страшні",
+      "8 режимів світіння",
+      "Дріт білий або чорний — під фасад чи дерева",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1469,
+    "shortDesc": "Вулична гірлянда-нитка на 30 м: 300 LED, 8 режимів і захист IP65. Для дерева у дворі, паркану, тераси чи фасаду — не боїться дощу й снігу.",
+    "usageTips": [
+      "Дерево обвивайте від стовбура до кінців гілок і назад — так світло буде і всередині крони",
+      "Підключайте через вуличний подовжувач із кришкою"
+    ],
+    "bundleWith": [
+      "ny23",
+      "ny22"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда «Нитка» на 30 метрів — для оформлення двору: обвити дерево чи туї біля будинку, протягнути вздовж паркану, перил тераси або по контуру фасаду. 300 світлодіодів, 8 режимів світіння, а ступінь захисту IP65 означає, що гірлянда не боїться дощу, снігу й пилу.\n\nДріт на вибір: білий — для світлих фасадів і снігу, чорний — для дерев, темних парканів і дахів, де вдень його майже не видно. Живлення від мережі 220 В.\n\nОберіть колір дроту й колір світіння.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не натягуйте дріт занадто сильно між опорами — взимку він стає менш гнучким"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда нитка вулична 30 м, гирлянда нить уличная, 300 led, ip65, на дерево, CF300L30MWW, CF300L30MBW, CF300L30MBY"
   }
 ]

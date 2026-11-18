@@ -18,7 +18,7 @@ type SortMode = "popular" | "cheap" | "expensive";
 
 const categoryMeta: Record<
   string,
-  { subtitle: string; promo: string; promoSub: string }
+  { subtitle: string; promo?: string; promoSub?: string }
 > = {
   home: {
     subtitle: "Нічники, кухня, організація, декор",
@@ -37,8 +37,6 @@ const categoryMeta: Record<
   },
     blackout: {
           subtitle: "Аварійні лампи, ліхтарі, повербанки – готові до відключень",
-          promo: "🔋 2 товари для блекауту = -10%",
-          promoSub: "Павербанк + ліхтар – мінімальний набір на випадок",
     },
   newyear: {
     subtitle: "Прикраси, гірлянди, подарунки — усе до Нового року й Різдва",
@@ -134,8 +132,8 @@ export function CategoryPageClient() {
         </div>
       </div>
 
-      {/* Promo Banner */}
-      {meta && (
+      {/* Promo Banner (лише якщо для категорії задано промо) */}
+      {meta?.promo && (
         <div className="mx-3 mt-3 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl px-4 py-3 flex justify-between items-center">
           <div>
             <div className="text-xs font-extrabold text-white">

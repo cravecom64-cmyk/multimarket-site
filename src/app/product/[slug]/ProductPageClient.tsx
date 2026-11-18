@@ -409,7 +409,7 @@ export function ProductPageClient() {
               >
                 <Image
                   src={img}
-                  alt={`${product.name} — фото ${i + 1}`}
+                  alt={`${product.name} – фото ${i + 1}`}
                   fill
                   priority={i === 0}
                   sizes="(max-width: 640px) 100vw, 480px"
@@ -789,7 +789,7 @@ export function ProductPageClient() {
           <div className="mx-4 mt-5 border-2 border-emerald-200 rounded-2xl overflow-hidden">
             <div className="bg-emerald-500 px-4 py-2.5 flex items-center gap-2">
               <span className="text-white text-xs font-bold">🛒 Часто купують разом</span>
-              <span className="ml-auto text-white/80 text-[10px]">Одна доставка — менша ціна</span>
+              <span className="ml-auto text-white/80 text-[10px]">Одна доставка – менша ціна</span>
             </div>
             <div className="px-4 py-3 space-y-2.5 bg-emerald-50/50">
               {/* Current product */}
@@ -1013,7 +1013,7 @@ export function ProductPageClient() {
                 <div className="relative w-full h-full max-w-[820px] mx-auto">
                   <Image
                     src={img}
-                    alt={`${product.name} — фото ${i + 1}`}
+                    alt={`${product.name} – фото ${i + 1}`}
                     fill
                     sizes="(max-width: 820px) 100vw, 820px"
                     className="object-contain"

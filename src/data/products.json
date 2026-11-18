@@ -4024,7 +4024,9 @@
       "bk29",
       "bk42"
     ],
-    "categoryName": "Блекаут"
+    "categoryName": "Блекаут",
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "bk45",

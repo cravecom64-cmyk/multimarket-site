@@ -4321,7 +4321,9 @@
       "bk42",
       "bk43"
     ],
-    "categoryName": "Блекаут"
+    "categoryName": "Блекаут",
+    "isHidden": true,
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "h24",
@@ -5291,7 +5293,8 @@
           "/products/ny16/zhovtyy-7-e554.jpg"
         ],
         "wire": "Білий",
-        "wireHex": "#F5F5F0"
+        "wireHex": "#F5F5F0",
+        "soldOut": true
       }
     ],
     "price": 139,

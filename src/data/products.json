@@ -5442,7 +5442,8 @@
           "/products/ny15/zhovtyy-9-90e5.jpg"
         ],
         "wire": "Зелений",
-        "wireHex": "#2E7D32"
+        "wireHex": "#2E7D32",
+        "soldOut": true
       },
       {
         "name": "Білий",

@@ -8,6 +8,7 @@ export type Article = {
   updated: string;
   intro: string;
   sections: { title: string; body: string }[];
+  cta?: { href: string; label: string };
 };
 
 export const articles = articlesData as Article[];

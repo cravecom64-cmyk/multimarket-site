@@ -108,8 +108,8 @@ export default async function ArticlePage({ params }: Props) {
           </section>
         ))}
         <div className="mt-6 rounded-xl bg-emerald-50 px-4 py-3">
-          <Link href="/category/blackout" className="text-[13px] font-extrabold text-emerald-700">
-            🔋 Усі товари для відключень світла →
+          <Link href={a.cta?.href ?? "/catalog"} className="text-[13px] font-extrabold text-emerald-700">
+            {a.cta?.label ?? "Перейти до каталогу"} →
           </Link>
         </div>
       </article>

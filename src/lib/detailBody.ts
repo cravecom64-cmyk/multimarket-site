@@ -4,7 +4,39 @@ import { getAllProducts } from "@/lib/products";
 // [текст](/внутрішній-шлях) — тільки внутрішні посилання, "• " = список.
 const VISIBLE_SLUGS = new Set(getAllProducts().map((p) => p.slug));
 
+const HIDDEN_LINK = /\[([^\]]+)\]\(\/product\/([^)\s]+)\)/g;
+const CONNECTOR = "(?:,\\s*|\\s+(?:або|і|й|та)\\s+)";
+
+// Товари ховаються автоматично, коли їх немає в наявності. Щоб тексти не
+// радили те, що не можна купити: рядок списку, де всі посилання ведуть на
+// приховані товари, прибираємо; у змішаному рядку прибираємо лише приховане
+// посилання разом зі сполучником ("A або [B]" -> "A").
+export function pruneHidden(src: string): string {
+  const isHidden = (slug: string) => !VISIBLE_SLUGS.has(slug);
+  return src
+    .split("\n")
+    .filter((line) => {
+      if (!line.trim().startsWith("• ")) return true;
+      const slugs = [...line.matchAll(HIDDEN_LINK)].map((m) => m[2]);
+      return slugs.length === 0 || slugs.some((s) => !isHidden(s));
+    })
+    .map((line) => {
+      for (const m of [...line.matchAll(HIDDEN_LINK)]) {
+        if (!isHidden(m[2])) continue;
+        const link = m[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const before = new RegExp(CONNECTOR + link);
+        const after = new RegExp(link + CONNECTOR);
+        if (before.test(line)) line = line.replace(before, "");
+        else if (after.test(line)) line = line.replace(after, "");
+        else line = line.replace(m[0], m[1]);
+      }
+      return line;
+    })
+    .join("\n");
+}
+
 export function renderDetailBody(src: string): string {
+  src = pruneHidden(src);
   const esc = (t: string) =>
     t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const inline = (t: string) =>
@@ -31,7 +63,7 @@ export function renderDetailBody(src: string): string {
 
 // Пари "питання – відповідь" з розділу "Часті запитання" (для FAQPage JSON-LD).
 export function parseFaq(body: string): { q: string; a: string }[] {
-  return body
+  return pruneHidden(body)
     .split(/\n\s*\n/)
     .map((block) => {
       const m = block.trim().match(/^\*\*(.+?)\*\*\s*\n([\s\S]+)$/);

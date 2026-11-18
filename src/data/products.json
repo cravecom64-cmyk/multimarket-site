@@ -5829,5 +5829,155 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "гірлянда роса 100 м, гирлянда роса 100 метров, роса 1000 led, з пультом, нитка, 1000L100MGW, 1000L100MWW, 1000L100MWY"
+  },
+  {
+    "id": "ny23",
+    "name": "Вулична гірлянда Бахрома 12 м, 200 LED, від мережі — білий або чорний дріт",
+    "slug": "girlyanda-bahroma-vulychna-200-led-12m",
+    "emoji": "🏠",
+    "image": "/products/ny23/bilyy-bilyy-1-182f.jpg",
+    "colors": [
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny23/bilyy-bilyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/bilyy-bilyy-1-182f.jpg",
+          "/products/ny23/bilyy-bilyy-2-182f.jpg",
+          "/products/ny23/bilyy-bilyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny23/zhovtyy-bilyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/zhovtyy-bilyy-1-182f.jpg",
+          "/products/ny23/zhovtyy-bilyy-2-182f.jpg",
+          "/products/ny23/zhovtyy-bilyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny23/multykolir-bilyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/multykolir-bilyy-1-182f.jpg",
+          "/products/ny23/multykolir-bilyy-2-182f.jpg",
+          "/products/ny23/multykolir-bilyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny23/syniy-bilyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/syniy-bilyy-1-182f.jpg",
+          "/products/ny23/syniy-bilyy-2-182f.jpg",
+          "/products/ny23/syniy-bilyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny23/bilyy-chornyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/bilyy-chornyy-1-182f.jpg",
+          "/products/ny23/bilyy-chornyy-2-182f.jpg",
+          "/products/ny23/bilyy-chornyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny23/zhovtyy-chornyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/zhovtyy-chornyy-1-182f.jpg",
+          "/products/ny23/zhovtyy-chornyy-2-182f.jpg",
+          "/products/ny23/zhovtyy-chornyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny23/multykolir-chornyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/multykolir-chornyy-1-182f.jpg",
+          "/products/ny23/multykolir-chornyy-2-182f.jpg",
+          "/products/ny23/multykolir-chornyy-3-182f.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny23/syniy-chornyy-1-182f.jpg",
+        "images": [
+          "/products/ny23/syniy-chornyy-1-182f.jpg",
+          "/products/ny23/syniy-chornyy-2-182f.jpg",
+          "/products/ny23/syniy-chornyy-3-182f.jpg"
+        ]
+      }
+    ],
+    "price": 839,
+    "specs": {
+      "Тип": "бахрома (звисаючі нитки)",
+      "Вага": "≈700 г",
+      "Довжина": "12 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "Білий або чорний (на вибір)",
+      "Кількість LED": "200 шт",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP44",
+      "Довжина шнура живлення": "≈1 м"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 581,
+    "category": "newyear",
+    "features": [
+      "Ефект світних бурульок — класика для фасаду й даху",
+      "12 м, 200 LED — карниз, ганок, паркан чи балкон",
+      "Дріт білий або чорний — під колір фасаду",
+      "Захист IP44 — для вулиці, сніг і дощ не страшні",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1099,
+    "shortDesc": "Вулична гірлянда-бахрома на 12 м: 200 LED на звисаючих нитках, як бурульки. Для карниза будинку, даху, паркану чи балкона, захист IP44.",
+    "usageTips": [
+      "Кріпіть основний дріт кліпсами до карниза чи жолоба з кроком 30–50 см — нитки рівно звисатимуть",
+      "Підключайте через вуличний подовжувач із кришкою, а місце з'єднання ховайте від прямого дощу"
+    ],
+    "bundleWith": [
+      "ny26",
+      "ny22"
+    ],
+    "orderCount": 0,
+    "description": "Бахрома — найпопулярніша гірлянда для фасадів: від основного дроту звисають короткі нитки зі світлодіодами, і край даху чи балкона виглядає як ряд світних бурульок. Довжина 12 м і 200 LED — вистачає на фасад невеликого будинку, карниз, ганок, паркан або балконне перило.\n\nДріт на вибір: білий непомітний на світлих фасадах, водостоках і снігу, чорний — на темних дахах, деревині й металевих парканах. Ступінь захисту IP44 — гірлянда розрахована на вулицю й не боїться снігу та дощу. Живлення від мережі 220 В.\n\nОберіть колір дроту й колір світіння.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вішайте гірлянду на гострі краї металу, щоб не пошкодити дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "бахрома вулична, гірлянда бахрома 12 м, гирлянда бахрома уличная, бурульки, для фасаду, 12MWW, 12MBW, 12MWY, 12MBY"
   }
 ]

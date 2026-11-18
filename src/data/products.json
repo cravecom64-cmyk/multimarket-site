@@ -4468,11 +4468,12 @@
     "badges": [
       "🎄 Новинка"
     ],
-    "isHidden": false,
+    "isHidden": true,
     "bundleWith": [
       "ny07",
       "ny06"
-    ]
+    ],
+    "hiddenReason": "out_of_stock"
   },
   {
     "id": "ny03",

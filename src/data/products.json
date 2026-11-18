@@ -5703,5 +5703,131 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "гірлянда роса 50 м, гирлянда роса 50 метров, роса з пультом, 500 led, нитка, крапля, 500L50MGW, 500L50MWW, 500L50MGY, 500L50MWY"
+  },
+  {
+    "id": "ny22",
+    "name": "Гірлянда Роса-нитка 100 м, 1000 LED з пультом, від мережі — зелений або білий дріт",
+    "slug": "girlyanda-rosa-100m-1000-led-z-pultom",
+    "emoji": "✨",
+    "image": "/products/ny22/bilyy-zelenyy-1-349a.jpg",
+    "colors": [
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny22/bilyy-zelenyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/bilyy-zelenyy-1-349a.jpg",
+          "/products/ny22/bilyy-zelenyy-2-349a.jpg",
+          "/products/ny22/bilyy-zelenyy-3-349a.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny22/syniy-zelenyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/syniy-zelenyy-1-349a.jpg",
+          "/products/ny22/syniy-zelenyy-2-349a.jpg",
+          "/products/ny22/syniy-zelenyy-3-349a.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny22/multykolir-zelenyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/multykolir-zelenyy-1-349a.jpg",
+          "/products/ny22/multykolir-zelenyy-2-349a.jpg",
+          "/products/ny22/multykolir-zelenyy-3-349a.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny22/bilyy-bilyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/bilyy-bilyy-1-349a.jpg",
+          "/products/ny22/bilyy-bilyy-2-349a.jpg",
+          "/products/ny22/bilyy-bilyy-3-349a.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny22/zhovtyy-bilyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/zhovtyy-bilyy-1-349a.jpg",
+          "/products/ny22/zhovtyy-bilyy-2-349a.jpg",
+          "/products/ny22/zhovtyy-bilyy-3-349a.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny22/syniy-bilyy-1-349a.jpg",
+        "images": [
+          "/products/ny22/syniy-bilyy-1-349a.jpg",
+          "/products/ny22/syniy-bilyy-2-349a.jpg",
+          "/products/ny22/syniy-bilyy-3-349a.jpg"
+        ]
+      }
+    ],
+    "price": 699,
+    "specs": {
+      "Довжина": "100 м",
+      "Живлення": "мережа 220 В",
+      "Керування": "пульт ДУ, 8 режимів",
+      "Колір дроту": "Зелений або білий (на вибір)",
+      "Кількість LED": "1000 шт",
+      "Кут світіння": "360°",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP44",
+      "Форма світлодіода": "крапля"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 487,
+    "category": "newyear",
+    "features": [
+      "100 м і 1000 LED — на велику ялинку, вікна, стелю чи терасу",
+      "Пульт: 8 режимів світіння",
+      "Тонкий дріт-роса: зелений або білий на вибір",
+      "Від мережі 220 В — світить усі свята без батарейок",
+      "Світлодіоди не нагріваються, захист IP44"
+    ],
+    "oldPrice": 909,
+    "shortDesc": "100 метрів світла: 1000 світлодіодів-крапельок на тонкому дроті, пульт і 8 режимів. Для великої ялинки, фасаду вікон, тераси чи оформлення всієї кімнати.",
+    "usageTips": [
+      "Плануйте маршрут заздалегідь і розмотуйте котушку по ходу — 100 м легше розкладати поступово",
+      "Для «зоряної стелі» кріпіть дріт прозорими гачками з кроком 30–40 см"
+    ],
+    "bundleWith": [
+      "ny21",
+      "ny03"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда «Роса» на 100 метрів і 1000 світлодіодів — для тих, хто прикрашає з розмахом. Однієї котушки вистачить на ялинку 3 м і вище, кілька вікон разом із карнизами, стелю кімнати «зоряним небом» або перила тераси. Світлодіоди-крапельки на тонкому гнучкому дроті: зелений дріт ховається в хвої, білий — непомітний на світлих поверхнях.\n\nПульт дає 8 режимів світіння й вмикання на відстані. Живлення від мережі 220 В, світлодіоди не нагріваються, захист IP44 від бризок і вологи.\n\nОберіть колір дроту й колір світіння — від теплого жовтого до мультиколору.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Блок живлення — лише для приміщень або сухих місць під навісом",
+      "Не вмикайте гірлянду, змотану в котушку: розмотайте її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда роса 100 м, гирлянда роса 100 метров, роса 1000 led, з пультом, нитка, 1000L100MGW, 1000L100MWW, 1000L100MWY"
   }
 ]

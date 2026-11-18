@@ -12,34 +12,7 @@ import { trackViewContent } from "@/lib/pixel";
 import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
 import { PROMO, isPromoActive } from "@/lib/promo";
 
-// Міні-markdown для розділів details: екранування HTML, **жирний**,
-// [текст](/внутрішній-шлях) — тільки внутрішні посилання, "• " = список.
-const VISIBLE_SLUGS = new Set(getAllProducts().map((p) => p.slug));
-
-function renderDetailBody(src: string): string {
-  const esc = (t: string) =>
-    t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const inline = (t: string) =>
-    esc(t)
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\[([^\]]+)\]\((\/[^)\s]*)\)/g, (_m, label: string, href: string) => {
-        // Посилання на товар, який приховали чи видалили, показуємо як звичайний текст.
-        const slug = href.startsWith("/product/") ? href.slice("/product/".length) : null;
-        if (slug && !VISIBLE_SLUGS.has(slug)) return label;
-        return `<a href="${href}">${label}</a>`;
-      });
-  return src
-    .trim()
-    .split(/\n\s*\n/)
-    .map((block) => {
-      const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
-      if (lines.every((l) => l.startsWith("• "))) {
-        return `<ul>${lines.map((l) => `<li>• ${inline(l.slice(2))}</li>`).join("")}</ul>`;
-      }
-      return `<p>${lines.map(inline).join("<br>")}</p>`;
-    })
-    .join("");
-}
+import { renderDetailBody } from "@/lib/detailBody";
 import {
   getAllProducts,
   getProductBySlug,

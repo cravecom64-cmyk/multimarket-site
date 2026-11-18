@@ -58,5 +58,160 @@
     "source": "/product/girlyanda-bahroma-vulychna-105-led-6m-bila-nytka",
     "destination": "/product/girlyanda-bahroma-vulychna-105-led-6m",
     "permanent": true
+  },
+  {
+    "source": "/product/sushrka-dlya-vzuttya-shoes-dryer",
+    "destination": "/category/home",
+    "permanent": true
+  },
+  {
+    "source": "/product/nashaynyk-led-sobaky",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/powerbank-10000-usams-pb7",
+    "destination": "/product/poverbank-hoco-j164-sonyachna-panel",
+    "permanent": true
+  },
+  {
+    "source": "/product/solar-lихtar-kulbaba",
+    "destination": "/product/sadovi-led-lihtari-solar-31sm",
+    "permanent": true
+  },
+  {
+    "source": "/product/solar-l%D0%B8%D1%85tar-kulbaba",
+    "destination": "/product/sadovi-led-lihtari-solar-31sm",
+    "permanent": true
+  },
+  {
+    "source": "/product/zaryadna-stantsiya-300w-yobolife-lm9300",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/zaryadna-stantsiya-100w-yobolife-lm9019",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/kempingoviy-lihtar-jy-978c",
+    "destination": "/product/lampa-kemping-bl588",
+    "permanent": true
+  },
+  {
+    "source": "/product/tumanoutvoryuvach-dlya-altanky-mist-cooling",
+    "destination": "/category/garden",
+    "permanent": true
+  },
+  {
+    "source": "/product/pistolet-dlya-polyvu-8-rezymiv",
+    "destination": "/product/nasadka-ez-jet-water-cannon",
+    "permanent": true
+  },
+  {
+    "source": "/product/meteoradio-solar-cclamp-cl823",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/led-svichky-nabir-ledart",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/nochnyk-sylikonovyy-ks602",
+    "destination": "/category/home",
+    "permanent": true
+  },
+  {
+    "source": "/product/irygator-oral-irrigator-portable",
+    "destination": "/category/home",
+    "permanent": true
+  },
+  {
+    "source": "/product/shchitka-dush-dlya-sobak-pet-bathing-tool",
+    "destination": "/product/lapomyyka-elektrychna",
+    "permanent": true
+  },
+  {
+    "source": "/product/igrashka-wobble-wag-giggle",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/avtoinvertor-300w-s-link-sl300w",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/godynnyk-nichnyk-bluetooth-kolonka-rgb",
+    "destination": "/product/zaryadka-nichnyk-md088",
+    "permanent": true
+  },
+  {
+    "source": "/product/poyilka-dexas-snack-duo",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/ryukzak-perenoska-illyuminator",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/budynochok-pet-hut-leopard",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/dyspenser-paketiv-dlya-vygulu-sobak",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/nalobnyy-lihtar-byudzhetnyy-ipx4",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/mini-dbzh-router-wgp-posylenyy",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/soniachna-stantsiya-at-9078a",
+    "destination": "/category/blackout",
+    "permanent": true
+  },
+  {
+    "source": "/product/nichnyk-silikonovyi-krolyk-yednorog",
+    "destination": "/category/home",
+    "permanent": true
+  },
+  {
+    "source": "/product/shlang-expandable-15m",
+    "destination": "/category/garden",
+    "permanent": true
+  },
+  {
+    "source": "/product/citi-kitty-systema-pryvchannya",
+    "destination": "/category/pets",
+    "permanent": true
+  },
+  {
+    "source": "/product/nichnyk-proektor-zoryane-nebo-astronavt",
+    "destination": "/category/home",
+    "permanent": true
+  },
+  {
+    "source": "/product/gazovyy-palnyk-flame-gun-920",
+    "destination": "/product/gazova-plyta-happy-home-bdz-155a",
+    "permanent": true
+  },
+  {
+    "source": "/product/lampa-avariyna-y6920",
+    "destination": "/product/lampa-e27-akumulyatorna-y6920",
+    "permanent": true
   }
 ]

@@ -5835,18 +5835,18 @@
     "name": "Вулична гірлянда Бахрома 12 м, 200 LED, від мережі — білий або чорний дріт",
     "slug": "girlyanda-bahroma-vulychna-200-led-12m",
     "emoji": "🏠",
-    "image": "/products/ny23/bilyy-bilyy-1-182f.jpg",
+    "image": "/products/ny23/bilyy-bilyy-2-182f.jpg",
     "colors": [
       {
         "name": "Білий",
         "hex": "#F5F5F0",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny23/bilyy-bilyy-1-182f.jpg",
+        "image": "/products/ny23/bilyy-bilyy-2-182f.jpg",
         "images": [
-          "/products/ny23/bilyy-bilyy-1-182f.jpg",
           "/products/ny23/bilyy-bilyy-2-182f.jpg",
-          "/products/ny23/bilyy-bilyy-3-182f.jpg"
+          "/products/ny23/bilyy-bilyy-3-182f.jpg",
+          "/products/ny23/bilyy-bilyy-1-182f.jpg"
         ]
       },
       {
@@ -5854,11 +5854,11 @@
         "hex": "#FFC107",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny23/zhovtyy-bilyy-1-182f.jpg",
+        "image": "/products/ny23/zhovtyy-bilyy-2-182f.jpg",
         "images": [
-          "/products/ny23/zhovtyy-bilyy-1-182f.jpg",
           "/products/ny23/zhovtyy-bilyy-2-182f.jpg",
-          "/products/ny23/zhovtyy-bilyy-3-182f.jpg"
+          "/products/ny23/zhovtyy-bilyy-3-182f.jpg",
+          "/products/ny23/zhovtyy-bilyy-1-182f.jpg"
         ]
       },
       {
@@ -5866,11 +5866,11 @@
         "hex": "#8B5CF6",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny23/multykolir-bilyy-1-182f.jpg",
+        "image": "/products/ny23/multykolir-bilyy-2-182f.jpg",
         "images": [
-          "/products/ny23/multykolir-bilyy-1-182f.jpg",
           "/products/ny23/multykolir-bilyy-2-182f.jpg",
-          "/products/ny23/multykolir-bilyy-3-182f.jpg"
+          "/products/ny23/multykolir-bilyy-3-182f.jpg",
+          "/products/ny23/multykolir-bilyy-1-182f.jpg"
         ]
       },
       {
@@ -5878,11 +5878,11 @@
         "hex": "#2563EB",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny23/syniy-bilyy-1-182f.jpg",
+        "image": "/products/ny23/syniy-bilyy-2-182f.jpg",
         "images": [
-          "/products/ny23/syniy-bilyy-1-182f.jpg",
           "/products/ny23/syniy-bilyy-2-182f.jpg",
-          "/products/ny23/syniy-bilyy-3-182f.jpg"
+          "/products/ny23/syniy-bilyy-3-182f.jpg",
+          "/products/ny23/syniy-bilyy-1-182f.jpg"
         ]
       },
       {
@@ -5890,11 +5890,11 @@
         "hex": "#F5F5F0",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny23/bilyy-chornyy-1-182f.jpg",
+        "image": "/products/ny23/bilyy-chornyy-2-182f.jpg",
         "images": [
-          "/products/ny23/bilyy-chornyy-1-182f.jpg",
           "/products/ny23/bilyy-chornyy-2-182f.jpg",
-          "/products/ny23/bilyy-chornyy-3-182f.jpg"
+          "/products/ny23/bilyy-chornyy-3-182f.jpg",
+          "/products/ny23/bilyy-chornyy-1-182f.jpg"
         ]
       },
       {
@@ -5902,11 +5902,11 @@
         "hex": "#FFC107",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny23/zhovtyy-chornyy-1-182f.jpg",
+        "image": "/products/ny23/zhovtyy-chornyy-2-182f.jpg",
         "images": [
-          "/products/ny23/zhovtyy-chornyy-1-182f.jpg",
           "/products/ny23/zhovtyy-chornyy-2-182f.jpg",
-          "/products/ny23/zhovtyy-chornyy-3-182f.jpg"
+          "/products/ny23/zhovtyy-chornyy-3-182f.jpg",
+          "/products/ny23/zhovtyy-chornyy-1-182f.jpg"
         ]
       },
       {
@@ -5914,11 +5914,11 @@
         "hex": "#8B5CF6",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny23/multykolir-chornyy-1-182f.jpg",
+        "image": "/products/ny23/multykolir-chornyy-2-182f.jpg",
         "images": [
-          "/products/ny23/multykolir-chornyy-1-182f.jpg",
           "/products/ny23/multykolir-chornyy-2-182f.jpg",
-          "/products/ny23/multykolir-chornyy-3-182f.jpg"
+          "/products/ny23/multykolir-chornyy-3-182f.jpg",
+          "/products/ny23/multykolir-chornyy-1-182f.jpg"
         ]
       },
       {
@@ -5926,11 +5926,11 @@
         "hex": "#2563EB",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny23/syniy-chornyy-1-182f.jpg",
+        "image": "/products/ny23/syniy-chornyy-2-182f.jpg",
         "images": [
-          "/products/ny23/syniy-chornyy-1-182f.jpg",
           "/products/ny23/syniy-chornyy-2-182f.jpg",
-          "/products/ny23/syniy-chornyy-3-182f.jpg"
+          "/products/ny23/syniy-chornyy-3-182f.jpg",
+          "/products/ny23/syniy-chornyy-1-182f.jpg"
         ]
       }
     ],
@@ -6161,18 +6161,18 @@
     "name": "Вулична гірлянда Нитка 30 м, 300 LED, 8 режимів, IP65 — білий або чорний дріт",
     "slug": "girlyanda-nytka-vulychna-300-led-30m",
     "emoji": "🌳",
-    "image": "/products/ny26/bilyy-bilyy-1-3fab.jpg",
+    "image": "/products/ny26/bilyy-bilyy-2-3fab.jpg",
     "colors": [
       {
         "name": "Білий",
         "hex": "#F5F5F0",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny26/bilyy-bilyy-1-3fab.jpg",
+        "image": "/products/ny26/bilyy-bilyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/bilyy-bilyy-1-3fab.jpg",
           "/products/ny26/bilyy-bilyy-2-3fab.jpg",
-          "/products/ny26/bilyy-bilyy-3-3fab.jpg"
+          "/products/ny26/bilyy-bilyy-3-3fab.jpg",
+          "/products/ny26/bilyy-bilyy-1-3fab.jpg"
         ]
       },
       {
@@ -6180,11 +6180,11 @@
         "hex": "#FFC107",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny26/zhovtyy-bilyy-1-3fab.jpg",
+        "image": "/products/ny26/zhovtyy-bilyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/zhovtyy-bilyy-1-3fab.jpg",
           "/products/ny26/zhovtyy-bilyy-2-3fab.jpg",
-          "/products/ny26/zhovtyy-bilyy-3-3fab.jpg"
+          "/products/ny26/zhovtyy-bilyy-3-3fab.jpg",
+          "/products/ny26/zhovtyy-bilyy-1-3fab.jpg"
         ]
       },
       {
@@ -6192,11 +6192,11 @@
         "hex": "#8B5CF6",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny26/multykolir-bilyy-1-3fab.jpg",
+        "image": "/products/ny26/multykolir-bilyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/multykolir-bilyy-1-3fab.jpg",
           "/products/ny26/multykolir-bilyy-2-3fab.jpg",
-          "/products/ny26/multykolir-bilyy-3-3fab.jpg"
+          "/products/ny26/multykolir-bilyy-3-3fab.jpg",
+          "/products/ny26/multykolir-bilyy-1-3fab.jpg"
         ]
       },
       {
@@ -6204,11 +6204,11 @@
         "hex": "#2563EB",
         "wire": "Білий",
         "wireHex": "#F5F5F0",
-        "image": "/products/ny26/syniy-bilyy-1-3fab.jpg",
+        "image": "/products/ny26/syniy-bilyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/syniy-bilyy-1-3fab.jpg",
           "/products/ny26/syniy-bilyy-2-3fab.jpg",
-          "/products/ny26/syniy-bilyy-3-3fab.jpg"
+          "/products/ny26/syniy-bilyy-3-3fab.jpg",
+          "/products/ny26/syniy-bilyy-1-3fab.jpg"
         ]
       },
       {
@@ -6216,11 +6216,11 @@
         "hex": "#F5F5F0",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny26/bilyy-chornyy-1-3fab.jpg",
+        "image": "/products/ny26/bilyy-chornyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/bilyy-chornyy-1-3fab.jpg",
           "/products/ny26/bilyy-chornyy-2-3fab.jpg",
-          "/products/ny26/bilyy-chornyy-3-3fab.jpg"
+          "/products/ny26/bilyy-chornyy-3-3fab.jpg",
+          "/products/ny26/bilyy-chornyy-1-3fab.jpg"
         ]
       },
       {
@@ -6228,11 +6228,11 @@
         "hex": "#FFC107",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny26/zhovtyy-chornyy-1-3fab.jpg",
+        "image": "/products/ny26/zhovtyy-chornyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/zhovtyy-chornyy-1-3fab.jpg",
           "/products/ny26/zhovtyy-chornyy-2-3fab.jpg",
-          "/products/ny26/zhovtyy-chornyy-3-3fab.jpg"
+          "/products/ny26/zhovtyy-chornyy-3-3fab.jpg",
+          "/products/ny26/zhovtyy-chornyy-1-3fab.jpg"
         ]
       },
       {
@@ -6240,11 +6240,11 @@
         "hex": "#8B5CF6",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny26/multykolir-chornyy-1-3fab.jpg",
+        "image": "/products/ny26/multykolir-chornyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/multykolir-chornyy-1-3fab.jpg",
           "/products/ny26/multykolir-chornyy-2-3fab.jpg",
-          "/products/ny26/multykolir-chornyy-3-3fab.jpg"
+          "/products/ny26/multykolir-chornyy-3-3fab.jpg",
+          "/products/ny26/multykolir-chornyy-1-3fab.jpg"
         ]
       },
       {
@@ -6252,11 +6252,11 @@
         "hex": "#2563EB",
         "wire": "Чорний",
         "wireHex": "#1F1F1F",
-        "image": "/products/ny26/syniy-chornyy-1-3fab.jpg",
+        "image": "/products/ny26/syniy-chornyy-2-3fab.jpg",
         "images": [
-          "/products/ny26/syniy-chornyy-1-3fab.jpg",
           "/products/ny26/syniy-chornyy-2-3fab.jpg",
-          "/products/ny26/syniy-chornyy-3-3fab.jpg"
+          "/products/ny26/syniy-chornyy-3-3fab.jpg",
+          "/products/ny26/syniy-chornyy-1-3fab.jpg"
         ]
       }
     ],

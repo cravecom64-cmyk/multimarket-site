@@ -18,8 +18,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = `${product.name} купити за ${product.price}₴ в Україні`;
-  const description = buildMetaDescription(product.shortDesc || product.name);
+  // Прихований товар (немає в наявності) не обіцяє "купити за ...₴":
+  // чесний заголовок, а на сторінці – схожі товари з наявності.
+  // Індексацію не вимикаємо: наявність змінюється автоматично й часто.
+  const title = product.isHidden
+    ? `${product.name} – тимчасово немає в наявності`
+    : `${product.name} купити за ${product.price}₴ в Україні`;
+  const description = product.isHidden
+    ? `${product.name} тимчасово немає в наявності. На сторінці – схожі товари, які можна замовити зараз.`
+    : buildMetaDescription(product.shortDesc || product.name);
   const url = `https://www.multi-market.com.ua/product/${product.slug}`;
 
   return {

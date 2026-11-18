@@ -13,14 +13,16 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.multi-market.com.ua"),
   title: {
     default:
-      "Multimarket — товари для дому, саду і тварин з TikTok | Купити в Україні",
+      "Multimarket – товари для дому, саду та на випадок відключень світла | Купити в Україні",
     template: "%s | Multimarket",
   },
   description:
-    "Товари для дому, саду і тварин, перевірені в TikTok. Оплата при отриманні, доставка Новою Поштою по всій Україні, безкоштовна доставка від 2000₴. Відправка 1-3 дні.",
+    "Товари для дому, саду та на випадок відключень світла: аварійні LED-лампи, повербанки, ліхтарі. Відправка Новою поштою за 1-3 дні, безкоштовна доставка від 2000₴.",
   keywords: [
     "товари для дому купити",
     "товари з тік ток купити",
+    "аварійна лампа з акумулятором купити",
+    "товари для блекауту",
     "інтернет магазин товарів для дому",
     "товари для тварин купити Україна",
     "садовий інвентар купити",
@@ -31,9 +33,9 @@ export const metadata: Metadata = {
     canonical: "https://www.multi-market.com.ua",
   },
   openGraph: {
-    title: "Multimarket — товари для дому, саду і тварин з TikTok",
+    title: "Multimarket – товари для дому, саду та на випадок відключень світла",
     description:
-      "Знайшли в TikTok. Перевірили. Відправка 1-3 дні. Оплата при отриманні, доставка по всій Україні.",
+      "Знайшли в TikTok. Перевірили. Відправка 1-3 дні, доставка Новою поштою по всій Україні.",
     type: "website",
     locale: "uk_UA",
     url: "https://www.multi-market.com.ua",
@@ -51,6 +53,8 @@ export const metadata: Metadata = {
   verification: {
     // Google Search Console — підтвердження власності сайту (2026-08-03)
     google: "wOJayGkxAUsqIJZgRFD5ctTYULnA3ny3axYZU1Xhmjw",
+    // Bing Webmaster Tools (2026-11-18) – ChatGPT шукає через індекс Bing
+    other: { "msvalidate.01": "17E31766D7877E8FB802BBD445AB3713" },
   },
 };
 

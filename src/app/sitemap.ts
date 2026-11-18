@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllProducts, categories } from "@/lib/products";
+import { articles } from "@/lib/articles";
 
 const BASE_URL = "https://www.multi-market.com.ua";
 
@@ -79,5 +80,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     }));
 
-  return [...staticRoutes, ...categoryRoutes, ...productRoutes];
+  const articleRoutes: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/porady`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.5 },
+    ...articles.map((a) => ({
+      url: `${BASE_URL}/porady/${a.slug}`,
+      lastModified: new Date(a.updated),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  ];
+
+  return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...articleRoutes];
 }

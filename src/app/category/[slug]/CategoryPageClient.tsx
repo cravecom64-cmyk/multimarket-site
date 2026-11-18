@@ -8,37 +8,32 @@ import { Footer } from "@/components/Footer";
 import { InfiniteScrollRow } from "@/components/InfiniteScrollRow";
 import { getProductsByCategory, categories, getCrossSellProducts } from "@/lib/products";
 import { usePopularityMap, rankProducts } from "@/lib/popularityClient";
+import { renderDetailBody } from "@/lib/detailBody";
+import categoryGuides from "@/data/category-guides.json";
+
+type CategoryGuide = { title: string; sections: { title: string; body: string }[] };
+const guides = categoryGuides as Record<string, CategoryGuide>;
 
 type SortMode = "popular" | "cheap" | "expensive";
 
 const categoryMeta: Record<
   string,
-  { subtitle: string; promo: string; promoSub: string }
+  { subtitle: string; promo?: string; promoSub?: string }
 > = {
   home: {
     subtitle: "Нічники, кухня, організація, декор",
-    promo: "🎁 3 нічники = знижка -20%",
-    promoSub: "Ідеально для дитячої + спальня + коридор",
   },
   garden: {
     subtitle: "Solar фонарі, декор, антимоскітне, меблі",
-    promo: "☀️ Solar комплект — знижка -15%",
-    promoSub: "Фонарі + фонтан = подвір'я мрії",
   },
   pets: {
     subtitle: "Грумінг, іграшки, гігієна, прогулянки",
-    promo: "🐾 2 товари для улюбленця = -10%",
-    promoSub: "Обирай будь-які 2 і економ",
   },
     blackout: {
-          subtitle: "Павербанки, ліхтарі, зарядні станції — готові до відключень",
-          promo: "🔋 2 товари для блекауту = -10%",
-          promoSub: "Павербанк + ліхтар — мінімальний набір на випадок",
+          subtitle: "Аварійні лампи, ліхтарі, повербанки – готові до відключень",
     },
   newyear: {
-    subtitle: "Прикраси, гірлянди, подарунки — усе до Нового року й Різдва",
-    promo: "🎄 3 новорічні товари = -15%",
-    promoSub: "Прикрась дім і підбери подарунки одразу",
+    subtitle: "Прикраси, гірлянди, подарунки – усе до Нового року й Різдва",
   },
 };
 
@@ -129,8 +124,8 @@ export function CategoryPageClient() {
         </div>
       </div>
 
-      {/* Promo Banner */}
-      {meta && (
+      {/* Promo Banner (лише якщо для категорії задано промо) */}
+      {meta?.promo && (
         <div className="mx-3 mt-3 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl px-4 py-3 flex justify-between items-center">
           <div>
             <div className="text-xs font-extrabold text-white">
@@ -185,6 +180,28 @@ export function CategoryPageClient() {
           />
         ))}
       </div>
+
+      {/* Гайд "Як обрати": під товарами, всі розділи згорнуті (<details>),
+          щоб не заважати покупці, але текст завжди є в HTML для Google та ІІ. */}
+      {guides[slug] && (
+        <div className="px-4 mt-6">
+          <h2 className="text-[13px] font-extrabold">{guides[slug].title}</h2>
+          <div className="mt-2 space-y-2">
+            {guides[slug].sections.map((sec, i) => (
+              <details key={i} className="group border border-gray-200 rounded-xl overflow-hidden">
+                <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer px-3.5 py-3 flex justify-between items-center">
+                  <h3 className="text-[12px] font-bold">{sec.title}</h3>
+                  <span className="text-sm text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <div
+                  className="px-3.5 pb-3 text-[11px] text-gray-700 leading-relaxed [&_strong]:font-bold [&_p]:mt-1.5 [&_ul]:mt-1.5 [&_li]:mt-1 [&_a]:text-emerald-600 [&_a]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: renderDetailBody(sec.body) }}
+                />
+              </details>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Cross-sell from other categories */}
       {crossSell.length > 0 && (

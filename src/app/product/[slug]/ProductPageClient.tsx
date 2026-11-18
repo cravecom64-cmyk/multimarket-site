@@ -12,34 +12,7 @@ import { trackViewContent } from "@/lib/pixel";
 import { trackViewContent as trackViewContentGA4 } from "@/lib/ga4";
 import { PROMO, isPromoActive } from "@/lib/promo";
 
-// Міні-markdown для розділів details: екранування HTML, **жирний**,
-// [текст](/внутрішній-шлях) — тільки внутрішні посилання, "• " = список.
-const VISIBLE_SLUGS = new Set(getAllProducts().map((p) => p.slug));
-
-function renderDetailBody(src: string): string {
-  const esc = (t: string) =>
-    t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const inline = (t: string) =>
-    esc(t)
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\[([^\]]+)\]\((\/[^)\s]*)\)/g, (_m, label: string, href: string) => {
-        // Посилання на товар, який приховали чи видалили, показуємо як звичайний текст.
-        const slug = href.startsWith("/product/") ? href.slice("/product/".length) : null;
-        if (slug && !VISIBLE_SLUGS.has(slug)) return label;
-        return `<a href="${href}">${label}</a>`;
-      });
-  return src
-    .trim()
-    .split(/\n\s*\n/)
-    .map((block) => {
-      const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
-      if (lines.every((l) => l.startsWith("• "))) {
-        return `<ul>${lines.map((l) => `<li>• ${inline(l.slice(2))}</li>`).join("")}</ul>`;
-      }
-      return `<p>${lines.map(inline).join("<br>")}</p>`;
-    })
-    .join("");
-}
+import { renderDetailBody } from "@/lib/detailBody";
 import {
   getAllProducts,
   getProductBySlug,
@@ -98,6 +71,12 @@ export function ProductPageClient() {
   // купівлі. (Інцидент 03.11.2026, див. order/route.ts — там те саме
   // перевіряється ще раз на сервері, це лише для UX.)
   if (product.isHidden) {
+    // Сам прихований товар не продаємо (кнопки купівлі немає), але людина,
+    // що прийшла за старим посиланням (Google, ChatGPT), бачить схожі
+    // товари з наявності замість глухого кута.
+    const hiddenAlternatives = getRelatedProducts(product, 4).filter(
+      (p) => p.inStock !== false
+    );
     return (
       <div className="px-4 py-20 text-center">
         <div className="text-4xl mb-4">😕</div>
@@ -105,11 +84,36 @@ export function ProductPageClient() {
         <div className="text-sm text-gray-500 mt-2">
           Можливо, він закінчився у постачальника або ми його оновлюємо.
         </div>
+        {hiddenAlternatives.length > 0 && (
+          <div className="mt-6 text-left">
+            <div className="text-[13px] font-extrabold">👀 Схожі товари в наявності</div>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              {hiddenAlternatives.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  id={p.id}
+                  slug={p.slug}
+                  name={p.name}
+                  price={p.price}
+                  oldPrice={p.oldPrice}
+                  emoji={p.emoji}
+                  image={p.image}
+                  rating={p.rating}
+                  reviewCount={p.reviewCount}
+                  orderCount={p.orderCount}
+                  badges={p.badges}
+                  externalLanding={p.externalLanding}
+                  inStock={p.inStock}
+                />
+              ))}
+            </div>
+          </div>
+        )}
         <Link
-          href="/"
+          href={`/category/${product.category}`}
           className="inline-block mt-4 text-emerald-500 font-semibold text-sm"
         >
-          ← Переглянути інші товари
+          ← {product.categoryName}: усі товари
         </Link>
       </div>
     );
@@ -266,6 +270,16 @@ export function ProductPageClient() {
     // No brand: "Multimarket" is the store, not the manufacturer (Google
     // misrepresentation policy). Add a real brand only when known.
     category: product.categoryName,
+    // Характеристики з картки – щоб пошук і ІІ-асистенти брали точні факти.
+    ...(product.specs && Object.keys(product.specs).length > 0
+      ? {
+          additionalProperty: Object.entries(product.specs).map(([name, value]) => ({
+            "@type": "PropertyValue",
+            name,
+            value: String(value),
+          })),
+        }
+      : {}),
     offers: {
       "@type": "Offer",
       url: `https://www.multi-market.com.ua/product/${product.slug}`,
@@ -291,6 +305,36 @@ export function ProductPageClient() {
         }
       : {}),
   };
+
+  // FAQPage з розділу "Часті запитання" (той самий текст, що видно на сторінці).
+  const faqItems = (product.details ?? [])
+    .filter((d) => /Часті запитання/i.test(d.title))
+    .flatMap((d) =>
+      d.body
+        .split(/\n\s*\n/)
+        .map((block) => {
+          const m = block.trim().match(/^\*\*(.+?)\*\*\s*\n([\s\S]+)$/);
+          if (!m) return null;
+          const answer = m[2]
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+            .replace(/\*\*/g, "")
+            .trim();
+          return { q: m[1].trim(), a: answer };
+        })
+        .filter((x): x is { q: string; a: string } => !!x)
+    );
+  const faqJsonLd =
+    faqItems.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -329,6 +373,13 @@ export function ProductPageClient() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Sub-header with breadcrumb */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
@@ -358,7 +409,7 @@ export function ProductPageClient() {
               >
                 <Image
                   src={img}
-                  alt={`${product.name} — фото ${i + 1}`}
+                  alt={`${product.name} – фото ${i + 1}`}
                   fill
                   priority={i === 0}
                   sizes="(max-width: 640px) 100vw, 480px"
@@ -738,7 +789,7 @@ export function ProductPageClient() {
           <div className="mx-4 mt-5 border-2 border-emerald-200 rounded-2xl overflow-hidden">
             <div className="bg-emerald-500 px-4 py-2.5 flex items-center gap-2">
               <span className="text-white text-xs font-bold">🛒 Часто купують разом</span>
-              <span className="ml-auto text-white/80 text-[10px]">Одна доставка — менша ціна</span>
+              <span className="ml-auto text-white/80 text-[10px]">Одна доставка – менша ціна</span>
             </div>
             <div className="px-4 py-3 space-y-2.5 bg-emerald-50/50">
               {/* Current product */}
@@ -962,7 +1013,7 @@ export function ProductPageClient() {
                 <div className="relative w-full h-full max-w-[820px] mx-auto">
                   <Image
                     src={img}
-                    alt={`${product.name} — фото ${i + 1}`}
+                    alt={`${product.name} – фото ${i + 1}`}
                     fill
                     sizes="(max-width: 820px) 100vw, 820px"
                     className="object-contain"

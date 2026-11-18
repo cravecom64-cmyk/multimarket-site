@@ -48,6 +48,12 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, spl
         confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
         // коментар клієнта — для CRM, яка тепер отримує замовлення пізніше (lib/crmPush.ts)
         order_comment: body.comment?.trim() || null,
+        // Джерело замовлення (17.11.2026): реклама / органіка / прямий захід.
+        utm_source: body.utm?.source ? sanitize(String(body.utm.source)).slice(0, 100) : null,
+        utm_medium: body.utm?.medium ? sanitize(String(body.utm.medium)).slice(0, 100) : null,
+        utm_campaign: body.utm?.campaign ? sanitize(String(body.utm.campaign)).slice(0, 200) : null,
+        utm_term: body.utm?.term ? sanitize(String(body.utm.term)).slice(0, 200) : null,
+        utm_content: body.utm?.content ? sanitize(String(body.utm.content)).slice(0, 200) : null,
       })
       .select("id")
       .single();
@@ -310,6 +316,8 @@ interface OrderBody {
   // Чекбокс "зв'язатися для підтвердження замовлення" на формі оформлення.
   // Відсутнє поле (старі клієнти/кеш) трактуємо як true — дефолтна поведінка.
   confirmCall?: boolean;
+  // Джерело візиту (UTM / gclid), збережене на клієнті — lib/analytics.ts
+  utm?: { source?: string; medium?: string; campaign?: string; term?: string; content?: string };
   // Honeypot field — must be empty
   website?: string;
   // Timing check — timestamp when form was loaded

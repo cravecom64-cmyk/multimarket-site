@@ -11,6 +11,13 @@ function loadRedirects(): { source: string; destination: string; permanent: bool
   try {
     const raw = JSON.parse(readFileSync(join(process.cwd(), "src", "data", "redirects.json"), "utf8"));
     if (!Array.isArray(raw)) return [];
+    // Якщо товар повернули в каталог під старим slug — редирект вимикається
+    // автоматично, щоб картка знову відкривалась.
+    let live = new Set<string>();
+    try {
+      const products = JSON.parse(readFileSync(join(process.cwd(), "src", "data", "products.json"), "utf8"));
+      if (Array.isArray(products)) live = new Set(products.map((p: { slug?: string }) => `/product/${p?.slug}`));
+    } catch {}
     return raw
       .filter(
         (r) =>
@@ -19,7 +26,8 @@ function loadRedirects(): { source: string; destination: string; permanent: bool
           r.source.startsWith("/") &&
           typeof r.destination === "string" &&
           r.destination.startsWith("/") &&
-          r.source !== r.destination
+          r.source !== r.destination &&
+          !live.has(r.source)
       )
       .map((r) => ({ source: r.source, destination: r.destination, permanent: r.permanent !== false }));
   } catch {

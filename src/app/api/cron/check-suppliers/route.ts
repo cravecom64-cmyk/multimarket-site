@@ -626,6 +626,9 @@ function feedUrlOf(row: SupplierRow, feedRun = true): string | null {
   const sup = supplierOf(row);
   if (!sup?.feed_url) return null;
   if (sup.feed_mode === "stock" && !feedRun) return null;
+  // 17.11.2026: товар, якого немає у вивантаженні-шаблоні (не знайдено id
+  // пропозиції), перевіряємо як раніше — сторінкою, а не «помилкою артикулу».
+  if (sup.feed_url.includes("{ids}") && !row.supplier_sku) return null;
   return sup.feed_url;
 }
 

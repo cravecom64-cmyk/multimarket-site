@@ -21,6 +21,9 @@ export function Footer() {
               <Link href="/category/blackout" className="block hover:text-white transition-colors">
                 Блекаут
               </Link>
+              <Link href="/category/newyear" className="block hover:text-white transition-colors">
+                Новорічні товари
+              </Link>
             </div>
           </div>
           <div>
@@ -37,6 +40,9 @@ export function Footer() {
               </Link>
               <Link href="/faq" className="block hover:text-white transition-colors">
                 FAQ
+              </Link>
+              <Link href="/porady" className="block hover:text-white transition-colors">
+                Поради
               </Link>
             </div>
           </div>

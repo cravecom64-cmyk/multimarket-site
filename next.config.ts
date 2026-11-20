@@ -37,6 +37,10 @@ function loadRedirects(): { source: string; destination: string; permanent: bool
 
 const nextConfig: NextConfig = {
     images: {
+      // 20.11.2026: ліміт Vercel Image Optimization (безкоштовний план) вичерпано —
+      // /_next/image віддає 402, нові фото не показуються. Роздаємо фото напряму:
+      // вони й так уже стиснені в JPEG при імпорті з командного центру.
+      unoptimized: true,
           // Локальні фото товарів у /public/products оптимізуються нативно.
       // Частина фото (AI-генеровані) роздаються з CloudFront — дозволяємо
       // цей хост, інакше next/image кине помилку "hostname not configured".

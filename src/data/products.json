@@ -4746,7 +4746,8 @@
           "/products/ny03/label-specs.jpg"
         ],
         "wire": "Чорний",
-        "wireHex": "#1F2937"
+        "wireHex": "#1F2937",
+        "soldOut": true
       },
       {
         "name": "Білий",

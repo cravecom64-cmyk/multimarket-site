@@ -213,5 +213,10 @@
     "source": "/product/lampa-avariyna-y6920",
     "destination": "/product/lampa-e27-akumulyatorna-y6920",
     "permanent": true
+  },
+  {
+    "source": "/product/gazova-plytka-nurgaz-ng156",
+    "destination": "/product/gazova-plyta-happy-home-bdz-155a",
+    "permanent": true
   }
 ]

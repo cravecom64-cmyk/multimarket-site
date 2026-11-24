@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SearchPageClient } from "./SearchPageClient";
 
 export const metadata: Metadata = {
@@ -11,5 +12,13 @@ export const metadata: Metadata = {
 };
 
 export default function SearchPage() {
-  return <SearchPageClient />;
+  // Suspense потрібен Next.js для useSearchParams() всередині SearchPageClient
+  // (читання ?q=... з посилання "Переглянути всі результати" у Header) —
+  // без цього білд падає з "useSearchParams() should be wrapped in a suspense
+  // boundary". Фолбек порожній — сторінка статична, рендериться миттєво.
+  return (
+    <Suspense fallback={null}>
+      <SearchPageClient />
+    </Suspense>
+  );
 }

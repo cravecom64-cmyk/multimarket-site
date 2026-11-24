@@ -21,6 +21,7 @@ import {
   getBundleProducts,
   variantLabel,
 } from "@/lib/products";
+import { getPaymentSplit, orderMargin, hasViberShopItem } from "@/lib/checkout";
 
 export function ProductPageClient() {
   const params = useParams();
@@ -137,6 +138,20 @@ export function ProductPageClient() {
   const effectivePrice = activeSize ? activeSize.price : product.price;
   const effectiveOldPrice = activeSize ? activeSize.oldPrice : product.oldPrice;
   const cartItemId = activeSize ? `${product.id}__${activeSize.slug}` : product.id;
+
+  // ДОДАНО 24.11.2026 (запит Павла, гіпотеза #2 контекстолога): прозорість
+  // передоплати — показуємо умову оплати вже на картці товару, а не тільки
+  // в момент оформлення. Рахуємо через getPaymentSplit() (те саме джерело
+  // правди, що й на чекауті), а не через окремий хардкод "від 300₴" — так
+  // текст автоматично лишається правильним і для VIBER-SHOP товарів
+  // (forceFullPayment) і для рідкісного випадку, коли маржа обмежує депозит
+  // нижче стандартних 200₴.
+  const singleItemForPayment = [{ id: cartItemId, price: effectivePrice, quantity: 1 }];
+  const paymentSplit = getPaymentSplit(
+    effectivePrice,
+    orderMargin(singleItemForPayment),
+    hasViberShopItem(singleItemForPayment),
+  );
 
   const discount = effectiveOldPrice
     ? Math.round(((effectiveOldPrice - effectivePrice) / effectiveOldPrice) * 100)
@@ -597,6 +612,11 @@ export function ProductPageClient() {
               )}
             </>
           )}
+        </div>
+        <div className="text-[10px] text-gray-400 mt-1">
+          {paymentSplit.isDeposit
+            ? `💳 Передоплата ${paymentSplit.onlineAmount}₴ онлайн, решта при отриманні на Новій Пошті`
+            : "💳 Оплата повністю онлайн при оформленні"}
         </div>
       </div>
 

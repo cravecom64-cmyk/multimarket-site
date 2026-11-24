@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
+import { getPaymentSplit, orderMargin, hasViberShopItem } from "@/lib/checkout";
 
 export function CartDrawer() {
   const {
@@ -20,6 +21,13 @@ export function CartDrawer() {
 
   const FREE_SHIPPING = 2000;
   const remaining = Math.max(0, FREE_SHIPPING - totalPrice);
+
+  // ДОДАНО 24.11.2026 (запит Павла, гіпотеза #2 контекстолога): та сама умова
+  // оплати, що й на картці товару — показуємо її ще й тут, у кошику, перед
+  // кнопкою "Оформити замовлення", рахуючи через getPaymentSplit() на
+  // реальних items кошика (враховує VIBER-SHOP і маржу замовлення, а не
+  // просто поріг 300₴).
+  const paymentSplit = getPaymentSplit(totalPrice, orderMargin(items), hasViberShopItem(items));
 
   if (!isCartOpen && !showOrder) return null;
 
@@ -197,6 +205,11 @@ export function CartDrawer() {
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm text-gray-500">Разом:</span>
                   <span className="text-xl font-extrabold">{totalPrice}₴</span>
+                </div>
+                <div className="text-[10px] text-gray-400 mb-2 -mt-1">
+                  {paymentSplit.isDeposit
+                    ? `💳 Передоплата ${paymentSplit.onlineAmount}₴ онлайн, решта при отриманні на Новій Пошті`
+                    : "💳 Оплата повністю онлайн при оформленні"}
                 </div>
                 <button
                   onClick={() => {

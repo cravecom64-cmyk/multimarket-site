@@ -6892,5 +6892,117 @@
         "body": "**Чи можна залишити на вулиці на всю зиму?**\nЗахист IP65 від дощу, снігу й пилу розрахований на вулицю.\n\n**Скільки режимів?**\n8 режимів світіння.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
       }
     ]
+  },
+  {
+    "id": "ny27",
+    "name": "Вулична гірлянда Бахрома 25 м, 405 LED, від мережі — чорний або білий дріт",
+    "slug": "girlyanda-bahroma-vulychna-405-led-25m",
+    "emoji": "🏠",
+    "image": "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-2-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-3-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-4-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-5-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-6-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny27/bilyy-chornyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/bilyy-chornyy-1-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-2-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-3-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-4-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-5-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-6-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny27/zhovtyy-bilyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/zhovtyy-bilyy-1-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-2-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-3-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-4-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny27/bilyy-bilyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/bilyy-bilyy-1-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-2-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-3-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-4-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-5-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-6-c5f9.jpg"
+        ]
+      }
+    ],
+    "price": 1439,
+    "specs": {
+      "Тип": "бахрома (звисаючі нитки)",
+      "Довжина": "25 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "405 шт",
+      "Кут світіння": "360°",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44",
+      "Довжина шнура живлення": "≈1 м"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1006,
+    "category": "newyear",
+    "features": [
+      "Ефект світних бурульок — класика для фасаду й даху",
+      "25 м і 405 LED — на карниз цілого будинку",
+      "Дріт чорний або білий — під колір фасаду",
+      "Захист IP44 — для вулиці",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1869,
+    "shortDesc": "Бахрома на 25 м: 405 LED на звисаючих нитках, як ряд світних бурульок. Вистачає на карниз усього будинку, захист IP44 для вулиці.",
+    "usageTips": [
+      "Кріпіть основний дріт кліпсами до карниза чи жолоба з кроком 30–50 см — нитки звисатимуть рівно",
+      "Підключайте через вуличний подовжувач із кришкою"
+    ],
+    "bundleWith": [
+      "ny28",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Бахрома — найпопулярніша гірлянда для фасадів: від основного дроту звисають короткі нитки зі світлодіодами, і край даху виглядає як ряд світних бурульок. 25 метрів і 405 LED — вистачає на карниз приватного будинку по всьому периметру фасаду, довгий паркан, терасу чи кілька балконів.\n\nДріт на вибір: чорний майже непомітний на темних дахах, деревині й металевих парканах, білий — на світлих фасадах, водостоках і снігу. Захист IP44: гірлянда розрахована на вулицю, сніг і дощ їй не страшні. Живлення від мережі 220 В.\n\nОберіть колір дроту і колір світіння: теплий жовтий для затишку чи холодний білий для «зимового» фасаду.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикайте гірлянду, змотану в котушку: розмотайте її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "бахрома вулична 25 м, гірлянда бахрома, гирлянда бахрома уличная 25 метров, бурульки, для фасаду, 405 led, 25MBY, 25MBW, 25MWY, 25MWW"
   }
 ]

@@ -5972,7 +5972,8 @@
           "/products/ny19/multykolir-9-b986.jpg"
         ],
         "wire": "Білий",
-        "wireHex": "#F5F5F0"
+        "wireHex": "#F5F5F0",
+        "soldOut": true
       }
     ],
     "price": 229,

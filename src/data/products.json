@@ -7004,5 +7004,118 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "бахрома вулична 25 м, гірлянда бахрома, гирлянда бахрома уличная 25 метров, бурульки, для фасаду, 405 led, 25MBY, 25MBW, 25MWY, 25MWW"
+  },
+  {
+    "id": "ny28",
+    "name": "Вулична гірлянда Бахрома 50 м, 840 LED, від мережі — чорний або білий дріт",
+    "slug": "girlyanda-bahroma-vulychna-840-led-50m",
+    "emoji": "🏠",
+    "image": "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-2-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-3-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-4-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-5-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny28/bilyy-chornyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/bilyy-chornyy-1-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-2-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-3-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-4-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-5-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny28/zhovtyy-bilyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/zhovtyy-bilyy-1-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-2-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-3-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-4-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-5-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny28/bilyy-bilyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/bilyy-bilyy-1-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-2-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-3-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-4-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-5-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-6-6c5a.jpg"
+        ]
+      }
+    ],
+    "price": 2509,
+    "specs": {
+      "Тип": "бахрома (звисаючі нитки)",
+      "Вага": "≈2,3 кг",
+      "Довжина": "50 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "840 шт",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1751,
+    "category": "newyear",
+    "features": [
+      "50 м і 840 LED — на великий будинок чи довгий паркан",
+      "Суцільний ряд світних бурульок",
+      "Дріт чорний або білий — під колір фасаду",
+      "Захист IP44 — для вулиці",
+      "Одна вилка 220 В на всю довжину"
+    ],
+    "oldPrice": 3259,
+    "shortDesc": "Найдовша бахрома: 50 м і 840 LED на звисаючих нитках. Для великого будинку, довгого паркану чи комерційного фасаду, захист IP44.",
+    "usageTips": [
+      "Розмотуйте гірлянду поступово вздовж карниза — 50 м зручніше вішати вдвох",
+      "Кріпіть кліпсами з кроком 30–50 см"
+    ],
+    "bundleWith": [
+      "ny27",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Бахрома на 50 метрів — для тих, кому потрібно прикрасити великий будинок або кілька поверхів: карнизи по всьому периметру, балкони, довгий паркан чи вітрину магазину. 840 світлодіодів на звисаючих нитках створюють ефект суцільного ряду світних бурульок без проміжків.\n\nДріт на вибір: чорний для темних дахів і деревини, білий для світлих фасадів. Захист IP44 — гірлянда розрахована на вулицю. Живлення від мережі 220 В, одна вилка на всі 50 метрів.\n\nОберіть колір дроту і колір світіння.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикайте гірлянду, змотану в котушку: розмотайте її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "бахрома 50 м, гірлянда бахрома вулична 50 метрів, гирлянда бахрома уличная, 840 led, для будинку, 50MBY, 50MBW, 50MWY, 50MWW"
   }
 ]

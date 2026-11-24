@@ -2931,7 +2931,7 @@
     "name": "Аварійна LED-лампа E27 Y6920 20Вт з 2 акумуляторами та Type-C",
     "category": "blackout",
     "categoryName": "Блекаут",
-    "price": 329,
+    "price": 349,
     "oldPrice": 449,
     "buyPrice": 233,
     "emoji": "💡",
@@ -3916,7 +3916,7 @@
         "title": "📦 Що в комплекті"
       },
       {
-        "body": "• **Великий запас за розумну ціну** – UPFULL SZ-31.\n• **Вбудовані кабелі, дисплей, сонячна панель або бездротова зарядка** – [повербанк M30Pro / PG-430](/product/poverbank-30000-36000-mah-4-vbudovani-kabeli-dysplei).\n• **Маленький магнітний, щоб носити з собою** – [Smart X X105 на 5000 мА·год](/product/poverbank-smartx-x105-5000-mah-mahnitnyi).",
+        "body": "• **Великий запас за розумну ціну** – UPFULL SZ-31.\n• **Вбудовані кабелі, дисплей, сонячна панель або бездротова зарядка** – [повербанк M30Pro / PG-430](/product/poverbank-30000-36000-mah-4-vbudovani-kabeli-dysplei).\n• **Маленький магнітний, щоб носити з собою** – [Smart X X105 на 5000 мА·год](/product/poverbank-smartx-x105-5000-mah-mahnitnyi).\n• **Максимальний запас, 50 000 мА·год** – [LEVINO 50 000 з ліхтарем і дисплеєм](/product/poverbank-levino-50000-mah-22-5w-z-lihtarykom).",
         "title": "🔁 Що обрати під твоє завдання"
       },
       {
@@ -4222,7 +4222,7 @@
         "title": "📦 Що в комплекті"
       },
       {
-        "body": "• **30 000 мА·год зі швидкою зарядкою 22,5 Вт** – HP-N56.\n• **Ще один на 30 000 мА·год** – [UPFULL SZ-31](/product/poverbank-upfull-sz-31-30000-mah).\n• **Дешевше, з сонячною панеллю або бездротовою зарядкою** – [M30Pro / PG-430 з 4 кабелями](/product/poverbank-30000-36000-mah-4-vbudovani-kabeli-dysplei).",
+        "body": "• **30 000 мА·год зі швидкою зарядкою 22,5 Вт** – HP-N56.\n• **Ще один на 30 000 мА·год** – [UPFULL SZ-31](/product/poverbank-upfull-sz-31-30000-mah).\n• **Дешевше, з сонячною панеллю або бездротовою зарядкою** – [M30Pro / PG-430 з 4 кабелями](/product/poverbank-30000-36000-mah-4-vbudovani-kabeli-dysplei).\n• **Максимальний запас, 50 000 мА·год** – [LEVINO 50 000 з ліхтарем і дисплеєм](/product/poverbank-levino-50000-mah-22-5w-z-lihtarykom).",
         "title": "🔁 Що обрати під твоє завдання"
       },
       {
@@ -4332,6 +4332,166 @@
     "categoryName": "Блекаут",
     "isHidden": true,
     "hiddenReason": "out_of_stock"
+  },
+  {
+    "id": "bk49",
+    "name": "Налобний ліхтар LED 5 Вт, 3 режими, на батарейках АА",
+    "slug": "nalobnyi-lihtar-led-3-rezhymy-hp-jg-4",
+    "emoji": "🔦",
+    "image": "/products/bk49/hero-cc90.jpg",
+    "images": [
+      "/products/bk49/photo-2-cc90.jpg",
+      "/products/bk49/photo-3-cc90.jpg",
+      "/products/bk49/photo-4-cc90.jpg",
+      "/products/bk49/photo-5-cc90.jpg",
+      "/products/bk49/photo-6-cc90.jpg",
+      "/products/bk49/photo-7-cc90.jpg"
+    ],
+    "price": 289,
+    "specs": {
+      "Тип": "налобний ліхтар",
+      "Лампа": "LED, 5 Вт",
+      "Режими": "3",
+      "Розмір": "8 × 8 × 5,5 см",
+      "Живлення": "3 × АА (1,5 В), у комплект не входять",
+      "Кріплення": "регульований ремінець"
+    },
+    "badges": [
+      "new"
+    ],
+    "rating": 0,
+    "season": "Весь рік",
+    "buyPrice": 198,
+    "category": "blackout",
+    "features": [
+      "Руки вільні – світло там, куди дивишся",
+      "LED 5 Вт, 3 режими",
+      "Головка нахиляється",
+      "Регульований ремінець",
+      "Працює від 3 батарейок/акумуляторів АА – не залежить від розетки"
+    ],
+    "oldPrice": 379,
+    "shortDesc": "Яскравий налобний ліхтар 5 Вт: руки вільні, світло туди, куди дивишся. 3 режими, регульований ремінець, живлення від 3 батарейок чи акумуляторів АА.",
+    "usageTips": [
+      "Тримай запасний комплект батарейок АА поруч – заміна займає хвилину",
+      "Для читання чи роботи зблизька нахили головку вниз"
+    ],
+    "orderCount": 0,
+    "description": "Налобний ліхтар – найзручніше світло під час відключень: руки залишаються вільними, щоб готувати, шукати речі, робити уроки з дитиною чи лагодити щось у щитку. Світло завжди падає туди, куди ви дивишся.\n\nСвітлодіод потужністю 5 Вт і 3 режими роботи. Головку ліхтаря можна нахиляти, а м'який регульований ремінець підходить і дорослим, і дітям. Живлення – 3 батарейки або акумулятори типу АА, тож ліхтар не залежить від розетки й павербанка.\n\nКомпактний (8×8×5,5 см), стане в пригоді також у гаражі, на риболовлі, в поході чи на дачі.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Не світи ліхтарем в очі людям і тваринам",
+      "Виймай батарейки, якщо довго не користуєшся ліхтарем"
+    ],
+    "categoryName": "Блекаут",
+    "searchKeywords": "налобний ліхтар, налобный фонарь, ліхтар на голову, для блекауту, led, HP-JG-4",
+    "details": [
+      {
+        "title": "💡 Що він дає, коли зникає світло",
+        "body": "Світло завжди падає туди, куди дивишся, а руки вільні: готувати, шукати речі в шафі, робити уроки з дитиною, лагодити щось у щитку чи в машині.\n\n• **LED 5 Вт, 3 режими.**\n• **Головка нахиляється**, щоб світити під ноги чи на стіл.\n• **М'який регульований ремінець** підходить і дорослим, і дітям.\n• **Компактний:** 8×8×5,5 см."
+      },
+      {
+        "title": "🔋 Живлення",
+        "body": "3 батарейки або акумулятори АА (1,5 В), у комплект не входять. Ліхтар не залежить ні від розетки, ні від павербанка.\n\n**Порада:** тримай поруч запасний комплект АА, а якщо користуєшся ліхтарем часто, вигідніше взяти акумулятори АА з зарядкою."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Руки вільні, на батарейках** – [налобний ліхтар 5 Вт](/product/nalobnyi-lihtar-led-3-rezhymy-hp-jg-4).\n• **Компактний ручний, з акумулятором** – [ліхтарик 5866](/product/lihtaryk-akumulyatornyj-5866-led-cob).\n• **Світло на всю кімнату й заряджання телефона** – [кемпінгова лампа JH-5800T](/product/lampa-kemping-bl588).\n• **Сам вмикається в люстрі при відключенні** – [лампа AY-914](/product/lampa-e27-akumulyatorna-ay-914)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Чи є батарейки в комплекті?**\nНі, потрібні 3 батарейки або акумулятори АА.\n\n**Чи підійде дитині?**\nТак, ремінець регулюється й підходить і дорослим, і дітям.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "bk50",
+    "name": "Повербанк LEVINO 50 000 mAh 22,5 Вт з ліхтарем і дисплеєм – білий або чорний",
+    "slug": "poverbank-levino-50000-mah-22-5w-z-lihtarykom",
+    "emoji": "🔋",
+    "image": "/products/bk50/bilyy-1-3120.jpg",
+    "colors": [
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/bk50/bilyy-1-3120.jpg",
+        "images": [
+          "/products/bk50/bilyy-1-3120.jpg",
+          "/products/bk50/bilyy-2-3120.jpg",
+          "/products/bk50/bilyy-3-3120.jpg",
+          "/products/bk50/bilyy-4-3120.jpg",
+          "/products/bk50/bilyy-5-3120.jpg",
+          "/products/bk50/bilyy-6-3120.jpg",
+          "/products/bk50/bilyy-7-3120.jpg"
+        ]
+      },
+      {
+        "name": "Чорний",
+        "hex": "#1F1F1F",
+        "image": "/products/bk50/chornyy-1-3120.jpg",
+        "images": [
+          "/products/bk50/chornyy-1-3120.jpg"
+        ]
+      }
+    ],
+    "price": 3199,
+    "specs": {
+      "Вага": "≈1,1 кг",
+      "Колір": "білий або чорний (на вибір)",
+      "Ліхтар": "так",
+      "Роз'єми": "USB-C, USB-A, microUSB",
+      "Ємність": "50 000 mAh",
+      "Індикація": "цифровий дисплей",
+      "Потужність": "до 22,5 Вт",
+      "Тип акумулятора": "Li-Pol"
+    },
+    "badges": [
+      "new"
+    ],
+    "rating": 0,
+    "season": "Весь рік",
+    "buyPrice": 2233,
+    "category": "blackout",
+    "features": [
+      "50 000 mAh – запас на довгі відключення",
+      "Швидка зарядка 22,5 Вт (QC 3.0 / PD)",
+      "Вбудований ліхтар",
+      "Дисплей із відсотком заряду",
+      "USB-C, USB-A, microUSB; захист від перегріву й КЗ"
+    ],
+    "oldPrice": 4159,
+    "shortDesc": "Великий павербанк на 50 000 mAh: швидка зарядка 22,5 Вт, вбудований ліхтар і дисплей заряду. Для довгих відключень.",
+    "usageTips": [
+      "Заряджай павербанк повністю, поки є світло – від потужного адаптера це швидше",
+      "Якщо довго не користуєшся, підзаряджай його раз на 2-3 місяці"
+    ],
+    "orderCount": 0,
+    "description": "LEVINO на 50 000 mAh – павербанк для довгих відключень і великої родини: великий запас енергії, і можна заряджати кілька пристроїв одночасно.\n\nШвидка зарядка 22,5 Вт (сумісність із QC 3.0 і PD) швидко повертає заряд телефону. Цифровий дисплей показує точний відсоток заряду, а вбудований ліхтар стане в пригоді, коли світло вимкнули ввечері. Входи й виходи USB-C, USB-A і microUSB, ремінець для перенесення.\n\nЗахист від перегріву, короткого замикання й перезаряду. Колір на вибір: білий або чорний.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Не залишай павербанк на сонці чи біля обігрівача",
+      "Не накривай його під час заряджання"
+    ],
+    "categoryName": "Блекаут",
+    "searchKeywords": "павербанк 50000, повербанк 50000 mah, levino, power bank з ліхтарем, для блекауту, HP-N51, HP-N51B",
+    "details": [
+      {
+        "title": "💡 Для кого він",
+        "body": "Для довгих відключень і великої родини: 50 000 мА·год – найбільша ємність серед наших повербанків. Можна заряджати кілька пристроїв одночасно.\n\n• **Швидка зарядка 22,5 Вт** (QC 3.0 і PD) для сумісних телефонів.\n• **Цифровий дисплей** показує точний відсоток заряду.\n• **Вбудований ліхтар** – коли світло зникло ввечері.\n• **Роз'єми** USB-C, USB-A і microUSB, ремінець для перенесення.\n• **Захист** від перегріву, короткого замикання й перезаряду."
+      },
+      {
+        "title": "🔌 Як заряджати, щоб служив довше",
+        "body": "Ставити на заряджання найкраще одразу, щойно дали світло: велику ємність швидше заряджати від потужного адаптера.\n\n• **Не заряджай на дивані, подушці чи ліжку:** під час заряджання повербанк нагрівається, і йому потрібне повітря.\n• **Узимку з морозу** спершу дай йому зігрітися до кімнатної температури.\n• **Не залишай на сонці чи біля обігрівача.**\n\nВага ≈1,1 кг – це домашній запас енергії, а не кишеньковий повербанк."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Максимальний запас, 50 000 мА·год** – [LEVINO 50 000](/product/poverbank-levino-50000-mah-22-5w-z-lihtarykom).\n• **30 000 мА·год із сонячною панеллю й ліхтариком** – [LEVINO HP-N56](/product/poverbank-levino-hp-n56-30000-mah-sonyachna-panel).\n• **30 000 мА·год, легший** – [UPFULL SZ-31](/product/poverbank-upfull-sz-31-30000-mah).\n• **Компактний на кожен день** – [Smart X X104 на 10 000 мА·год](/product/poverbank-smartx-x104-10000-mah-bezdrotova-zaryadka)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Які кольори є?**\nБілий або чорний, на вибір.\n\n**Чи можна заряджати кілька пристроїв одночасно?**\nТак.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
   },
   {
     "id": "h24",
@@ -4585,7 +4745,7 @@
     "name": "Новорічна гірлянда хвойна лита 1м – зелена",
     "category": "newyear",
     "categoryName": "Новорічні товари",
-    "price": 629,
+    "price": 739,
     "oldPrice": 844,
     "buyPrice": 493,
     "emoji": "🎄",
@@ -4643,7 +4803,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Живий вигляд хвої на камін чи сходи** – [лита хвойна гірлянда 1 м](/product/girlyanda-hvoyna-shtuchna-1m-zelena).\n• **Банка, ваза, подарунок** – [роса 3 м, 30 LED](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah).\n• **Вінок, рамка, невелика ялинка** – [роса 5 м, 50 LED](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah)."
+        "body": "• **Живий вигляд хвої на камін чи сходи** – [лита хвойна гірлянда 1 м](/product/girlyanda-hvoyna-shtuchna-1m-zelena).\n• **Банка, ваза, подарунок** – [роса 3 м, 30 LED](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah).\n• **Вінок, рамка, невелика ялинка** – [роса 5 м, 50 LED](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -4860,7 +5020,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Фасад невеликого будинку, ганок, паркан** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Дерево у дворі чи перила тераси** – [вулична нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m)."
+        "body": "• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Фасад невеликого будинку, ганок, паркан** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Дерево у дворі чи перила тераси** – [вулична нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m).\n• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m) або [50 м](/product/girlyanda-bahroma-vulychna-840-led-50m).\n• **Кілька дерев чи весь паркан, IP65** – [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led)."
       },
       {
         "title": "❓ Часті запитання",
@@ -4928,7 +5088,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm)."
+        "body": "• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5001,7 +5161,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm)."
+        "body": "• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5015,7 +5175,7 @@
     "name": "Новорічна фігурка з підсвіткою «Сніговик з пряничним будиночком» 14×9×20 см",
     "category": "newyear",
     "categoryName": "Новорічні товари",
-    "price": 519,
+    "price": 609,
     "oldPrice": 699,
     "buyPrice": 403,
     "emoji": "⛄",
@@ -5068,7 +5228,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm)."
+        "body": "• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5139,7 +5299,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm)."
+        "body": "• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5211,7 +5371,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm)."
+        "body": "• **Світле дерево для вітальні** – [дерево з ягодами 120 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-88-led-120-sm).\n• **Затишок без справжнього вогню** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Сніг, що падає сам, і мелодії** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu).\n• **Акцент на підвіконня** – [фігурка «Сніговик з пряничним будиночком»](/product/novorichna-figurka-z-pidsvitkoyu-snigovyk-z-pryanychnym-budynochkom-14-9-20-sm).\n• **Світле дерево на стіл чи комод** – [дерево з ягодами 60 см](/product/svitlodiodne-derevo-dekoratyvne-z-yahodamy-34-led-60-sm).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5292,7 +5452,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Суцільна світлова стіна, від USB** – [штора Роса 200 LED 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки» 3×0,7 м](/product/girlyanda-shtora-zirky-3x0-7m-108-led).\n• **Обвити раму чи штору** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb)."
+        "body": "• **Суцільна світлова стіна, від USB** – [штора Роса 200 LED 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки» 3×0,7 м](/product/girlyanda-shtora-zirky-3x0-7m-108-led).\n• **Обвити раму чи штору** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Вікно в кімнаті, з пультом** – [«Хвойна лапа» 3×2 м](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led), для великого вікна – [3×3 м](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Простіше, кнопкою на блоці** – штори [1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led), [2×2 м](/product/girlyanda-shtora-2x2m-80-led) чи [3×3 м](/product/girlyanda-shtora-3x3m-192-led)."
       },
       {
         "title": "❓ Часті запитання",
@@ -5751,7 +5911,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
+        "body": "• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка 3-4 м, кілька дерев, фасад** – [роса 200 м](/product/girlyanda-rosa-200m-2000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6036,7 +6196,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
+        "body": "• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка 3-4 м, кілька дерев, фасад** – [роса 200 м](/product/girlyanda-rosa-200m-2000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6184,7 +6344,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
+        "body": "• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка 3-4 м, кілька дерев, фасад** – [роса 200 м](/product/girlyanda-rosa-200m-2000-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6332,7 +6492,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
+        "body": "• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Ялинка 3-4 м, кілька дерев, фасад** – [роса 200 м](/product/girlyanda-rosa-200m-2000-led-z-pultom).\n• **Подарунок, банка, вінок** – [роса 3 м на батарейках](/product/girlyanda-rosa-nytka-30-led-3m-na-batareykah) або [5 м на батарейках](/product/girlyanda-rosa-nytka-50-led-5m-na-batareykah).\n• **Ялинка середня, вікно, штора** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Велика ялинка чи кілька вікон** – [роса 20 м від USB](/product/girlyanda-rosa-nytka-200-led-20m-usb).\n• **Ялинка 2-2,5 м щільно, з пультом** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка за хвилину** – [«Кінський хвіст»](/product/girlyanda-kinskyi-khvist-mishura-640-led-2m)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6501,7 +6661,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Фасад невеликого будинку, ганок, паркан** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Дерево у дворі чи перила тераси** – [вулична нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m)."
+        "body": "• **Фасад невеликого будинку, ганок, паркан** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Дерево у дворі чи перила тераси** – [вулична нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m).\n• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m) або [50 м](/product/girlyanda-bahroma-vulychna-840-led-50m).\n• **Кілька дерев чи весь паркан, IP65** – [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6717,7 +6877,7 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Зірки, які видно з вулиці** – [штора «Зірки» 3×0,7 м](/product/girlyanda-shtora-zirky-3x0-7m-108-led).\n• **Суцільна світлова стіна, від USB** – [штора Роса 200 LED 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Обвити раму чи штору** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb)."
+        "body": "• **Зірки, які видно з вулиці** – [штора «Зірки» 3×0,7 м](/product/girlyanda-shtora-zirky-3x0-7m-108-led).\n• **Суцільна світлова стіна, від USB** – [штора Роса 200 LED 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Обвити раму чи штору** – [роса 10 м від USB](/product/girlyanda-rosa-nytka-100-led-10m-usb).\n• **Вікно в кімнаті, з пультом** – [«Хвойна лапа» 3×2 м](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led), для великого вікна – [3×3 м](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Простіше, кнопкою на блоці** – штори [1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led), [2×2 м](/product/girlyanda-shtora-2x2m-80-led) чи [3×3 м](/product/girlyanda-shtora-3x3m-192-led)."
       },
       {
         "title": "❓ Часті запитання",
@@ -6885,11 +7045,1273 @@
       },
       {
         "title": "🔁 Що обрати під твоє завдання",
-        "body": "• **Дерево, паркан, тераса** – [ця нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m).\n• **Карниз чи балкон, ефект бурульок** – бахрома [6 м](/product/girlyanda-bahroma-vulychna-105-led-6m) або [12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Вікно, видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+        "body": "• **Дерево, паркан, тераса** – [ця нитка 30 м](/product/girlyanda-nytka-vulychna-300-led-30m).\n• **Карниз чи балкон, ефект бурульок** – бахрома [6 м](/product/girlyanda-bahroma-vulychna-105-led-6m) або [12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Вікно, видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led).\n• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m) або [50 м](/product/girlyanda-bahroma-vulychna-840-led-50m).\n• **Кілька дерев чи весь паркан, IP65** – [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led)."
       },
       {
         "title": "❓ Часті запитання",
         "body": "**Чи можна залишити на вулиці на всю зиму?**\nЗахист IP65 від дощу, снігу й пилу розрахований на вулицю.\n\n**Скільки режимів?**\n8 режимів світіння.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny27",
+    "name": "Вулична гірлянда Бахрома 25 м, 405 LED, від мережі – чорний або білий дріт",
+    "slug": "girlyanda-bahroma-vulychna-405-led-25m",
+    "emoji": "🏠",
+    "image": "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/zhovtyy-chornyy-1-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-2-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-3-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-4-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-5-c5f9.jpg",
+          "/products/ny27/zhovtyy-chornyy-6-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny27/bilyy-chornyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/bilyy-chornyy-1-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-2-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-3-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-4-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-5-c5f9.jpg",
+          "/products/ny27/bilyy-chornyy-6-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny27/zhovtyy-bilyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/zhovtyy-bilyy-1-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-2-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-3-c5f9.jpg",
+          "/products/ny27/zhovtyy-bilyy-4-c5f9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny27/bilyy-bilyy-1-c5f9.jpg",
+        "images": [
+          "/products/ny27/bilyy-bilyy-1-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-2-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-3-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-4-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-5-c5f9.jpg",
+          "/products/ny27/bilyy-bilyy-6-c5f9.jpg"
+        ]
+      }
+    ],
+    "price": 1439,
+    "specs": {
+      "Тип": "бахрома (звисаючі нитки)",
+      "Довжина": "25 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "405 шт",
+      "Кут світіння": "360°",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44",
+      "Довжина шнура живлення": "≈1 м"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1006,
+    "category": "newyear",
+    "features": [
+      "Ефект світних бурульок – класика для фасаду й даху",
+      "25 м і 405 LED – на карниз цілого будинку",
+      "Дріт чорний або білий – під колір фасаду",
+      "Захист IP44 – для вулиці",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1869,
+    "shortDesc": "Бахрома на 25 м: 405 LED на звисаючих нитках, як ряд світних бурульок. Вистачає на карниз усього будинку, захист IP44 для вулиці.",
+    "usageTips": [
+      "Кріпи основний дріт кліпсами до карниза чи жолоба з кроком 30-50 см – нитки звисатимуть рівно",
+      "Підключай через вуличний подовжувач із кришкою"
+    ],
+    "bundleWith": [
+      "ny28",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Бахрома – найпопулярніша гірлянда для фасадів: від основного дроту звисають короткі нитки зі світлодіодами, і край даху виглядає як ряд світних бурульок. 25 метрів і 405 LED – вистачає на карниз приватного будинку по всьому периметру фасаду, довгий паркан, терасу чи кілька балконів.\n\nДріт на вибір: чорний майже непомітний на темних дахах, деревині й металевих парканах, білий – на світлих фасадах, водостоках і снігу. Захист IP44: гірлянда розрахована на вулицю, сніг і дощ їй не страшні. Живлення від мережі 220 В.\n\nОбери колір дроту і колір світіння: теплий жовтий для затишку чи холодний білий для «зимового» фасаду.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикай гірлянду, змотану в котушку: розмотай її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "бахрома вулична 25 м, гірлянда бахрома, гирлянда бахрома уличная 25 метров, бурульки, для фасаду, 405 led, 25MBY, 25MBW, 25MWY, 25MWW",
+    "details": [
+      {
+        "title": "✨ Ефект бурульок",
+        "body": "Від основного дроту звисають нитки зі світлодіодами, і край даху виглядає як ряд світних бурульок. 25 метрів і 405 LED – на карниз приватного будинку по периметру фасаду, довгий паркан, терасу чи кілька балконів.\n\n• **Чорний дріт** майже непомітний на темних дахах, деревині й металевих парканах.\n• **Білий дріт** – на світлих фасадах, водостоках і снігу.\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🌧️ Для вулиці",
+        "body": "Захист IP44, розрахована на вулицю: сніг і дощ їй не страшні. Живлення від мережі 220 В, одна вилка на всю довжину.\n\n**Порада:** кріпи основний дріт кліпсами до карниза чи жолоба з кроком 30-50 см – нитки звисатимуть рівно.\n\n**Безпека:** підключай через вуличний подовжувач, а місце з'єднання вилки ховай від дощу й снігу: вологозахист гірлянди не поширюється на розетку. Не вмикай гірлянду, змотану в котушку, – розмотай її повністю."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m).\n• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Фасад невеликого будинку, ганок** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Великий будинок, кілька поверхів, вітрина** – [бахрома 50 м](/product/girlyanda-bahroma-vulychna-840-led-50m).\n• **Дерево, туї, паркан, IP65** – вулична нитка [30 м](/product/girlyanda-nytka-vulychna-300-led-30m) або [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**На який будинок вистачить?**\nНа карниз приватного будинку по периметру фасаду, довгий паркан, терасу чи кілька балконів.\n\n**Чи можна на вулицю?**\nТак, захист IP44 розрахований на вулицю.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny28",
+    "name": "Вулична гірлянда Бахрома 50 м, 840 LED, від мережі – чорний або білий дріт",
+    "slug": "girlyanda-bahroma-vulychna-840-led-50m",
+    "emoji": "🏠",
+    "image": "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/zhovtyy-chornyy-1-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-2-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-3-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-4-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-5-6c5a.jpg",
+          "/products/ny28/zhovtyy-chornyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny28/bilyy-chornyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/bilyy-chornyy-1-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-2-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-3-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-4-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-5-6c5a.jpg",
+          "/products/ny28/bilyy-chornyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny28/zhovtyy-bilyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/zhovtyy-bilyy-1-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-2-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-3-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-4-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-5-6c5a.jpg",
+          "/products/ny28/zhovtyy-bilyy-6-6c5a.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny28/bilyy-bilyy-1-6c5a.jpg",
+        "images": [
+          "/products/ny28/bilyy-bilyy-1-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-2-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-3-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-4-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-5-6c5a.jpg",
+          "/products/ny28/bilyy-bilyy-6-6c5a.jpg"
+        ]
+      }
+    ],
+    "price": 2509,
+    "specs": {
+      "Тип": "бахрома (звисаючі нитки)",
+      "Вага": "≈2,3 кг",
+      "Довжина": "50 м",
+      "Живлення": "мережа 220 В",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "840 шт",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1751,
+    "category": "newyear",
+    "features": [
+      "50 м і 840 LED – на великий будинок чи довгий паркан",
+      "Суцільний ряд світних бурульок",
+      "Дріт чорний або білий – під колір фасаду",
+      "Захист IP44 – для вулиці",
+      "Одна вилка 220 В на всю довжину"
+    ],
+    "oldPrice": 3259,
+    "shortDesc": "Найдовша бахрома: 50 м і 840 LED на звисаючих нитках. Для великого будинку, довгого паркану чи комерційного фасаду, захист IP44.",
+    "usageTips": [
+      "Розмотуй гірлянду поступово вздовж карниза – 50 м зручніше вішати вдвох",
+      "Кріпи кліпсами з кроком 30-50 см"
+    ],
+    "bundleWith": [
+      "ny27",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Бахрома на 50 метрів – для тих, кому потрібно прикрасити великий будинок або кілька поверхів: карнизи по всьому периметру, балкони, довгий паркан чи вітрину магазину. 840 світлодіодів на звисаючих нитках створюють ефект суцільного ряду світних бурульок без проміжків.\n\nДріт на вибір: чорний для темних дахів і деревини, білий для світлих фасадів. Захист IP44 – гірлянда розрахована на вулицю. Живлення від мережі 220 В, одна вилка на всі 50 метрів.\n\nОбери колір дроту і колір світіння.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикай гірлянду, змотану в котушку: розмотай її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "бахрома 50 м, гірлянда бахрома вулична 50 метрів, гирлянда бахрома уличная, 840 led, для будинку, 50MBY, 50MBW, 50MWY, 50MWW",
+    "details": [
+      {
+        "title": "✨ Ефект бурульок",
+        "body": "Від основного дроту звисають нитки зі світлодіодами, і край даху виглядає як ряд світних бурульок. 50 метрів і 840 LED – на великий будинок чи кілька поверхів, довгий паркан або вітрину магазину.\n\n• **Чорний дріт** майже непомітний на темних дахах, деревині й металевих парканах.\n• **Білий дріт** – на світлих фасадах, водостоках і снігу.\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🌧️ Для вулиці",
+        "body": "Захист IP44, розрахована на вулицю: сніг і дощ їй не страшні. Живлення від мережі 220 В, одна вилка на всю довжину.\n\n**Порада:** кріпи основний дріт кліпсами до карниза чи жолоба з кроком 30-50 см – нитки звисатимуть рівно. 50 метрів зручніше вішати вдвох, розмотуючи поступово вздовж карниза.\n\n**Безпека:** підключай через вуличний подовжувач, а місце з'єднання вилки ховай від дощу й снігу: вологозахист гірлянди не поширюється на розетку. Не вмикай гірлянду, змотану в котушку, – розмотай її повністю."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Великий будинок, кілька поверхів, вітрина** – [бахрома 50 м](/product/girlyanda-bahroma-vulychna-840-led-50m).\n• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Фасад невеликого будинку, ганок** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m).\n• **Дерево, туї, паркан, IP65** – вулична нитка [30 м](/product/girlyanda-nytka-vulychna-300-led-30m) або [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**На який будинок вистачить?**\nНа великий будинок чи кілька поверхів, довгий паркан або вітрину магазину.\n\n**Чи можна на вулицю?**\nТак, захист IP44 розрахований на вулицю.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny29",
+    "name": "Гірлянда Роса-нитка 200 м, 2000 LED з пультом, від мережі – зелений або білий дріт",
+    "slug": "girlyanda-rosa-200m-2000-led-z-pultom",
+    "emoji": "✨",
+    "image": "/products/ny29/zhovtyy-zelenyy-5-13d9.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/zhovtyy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/zhovtyy-zelenyy-5-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-2-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-3-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-4-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-6-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-1-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/bilyy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/bilyy-zelenyy-1-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-2-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-3-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-4-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-5-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/syniy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/syniy-zelenyy-1-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-2-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-3-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-4-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-5-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/multykolir-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/multykolir-zelenyy-1-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-2-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-3-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-4-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-5-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/zhovtyy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/zhovtyy-bilyy-1-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-2-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-3-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-4-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-5-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/bilyy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/bilyy-bilyy-1-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-2-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-3-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-4-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-5-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/syniy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/syniy-bilyy-1-13d9.jpg",
+          "/products/ny29/syniy-bilyy-2-13d9.jpg",
+          "/products/ny29/syniy-bilyy-3-13d9.jpg",
+          "/products/ny29/syniy-bilyy-4-13d9.jpg",
+          "/products/ny29/syniy-bilyy-5-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/multykolir-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/multykolir-bilyy-1-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-2-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-3-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-4-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-5-13d9.jpg"
+        ]
+      }
+    ],
+    "price": 1239,
+    "specs": {
+      "Довжина": "200 м",
+      "Живлення": "мережа 220 В",
+      "Керування": "пульт ДУ, 8 режимів",
+      "Колір дроту": "зелений або білий (на вибір)",
+      "Кількість LED": "2000 шт",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP44",
+      "Форма світлодіода": "крапля"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 865,
+    "category": "newyear",
+    "features": [
+      "200 м і 2000 LED – на велику ялинку, дерево чи фасад",
+      "Пульт: 8 режимів і вмикання на відстані",
+      "Тонкий дріт-роса: зелений або білий",
+      "Від мережі 220 В",
+      "Захист IP44"
+    ],
+    "oldPrice": 1609,
+    "shortDesc": "200 метрів «роси»: 2000 світлодіодів-крапельок на тонкому дроті, пульт і 8 режимів. Для великої ялинки, дерева у дворі чи оформлення цілого будинку.",
+    "usageTips": [
+      "Розмотуй котушку поступово по ходу монтажу – так 200 м не заплутаються",
+      "Дерево обвивай від стовбура до кінців гілок і назад"
+    ],
+    "bundleWith": [
+      "ny22",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда «Роса» на 200 метрів і 2000 світлодіодів – для великих задач: ялинка 3-4 м на подвір'ї, кілька дерев у саду, фасад будинку чи зал для свята. Світлодіоди-крапельки на тонкому гнучкому дроті майже непомітні вдень, а ввечері створюють щільне світло без темних проміжків.\n\nПульт дає 8 режимів світіння і вмикання на відстані. Живлення від мережі 220 В, захист IP44 від бризок і вологи.\n\nДріт на вибір: зелений для ялинок і дерев, білий для світлих стін і фасадів. Колір світіння – теплий жовтий, білий, синій або мультиколір.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Блок живлення ховай від прямого дощу та снігу",
+      "Не вмикай гірлянду, змотану в котушку: розмотай її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда роса 200 м, гирлянда роса 200 метров, 2000 led, з пультом, на дерево, 2000L200MGY, 2000L200MWY, 2000L200MGW",
+    "details": [
+      {
+        "title": "✨ Для великих задач",
+        "body": "200 метрів і 2000 світлодіодів-крапельок: ялинка 3-4 м на подвір'ї, кілька дерев у саду, фасад будинку чи зал для свята. Тонкий дріт майже непомітний удень, а ввечері світло щільне, без темних проміжків.\n\n• **Зелений дріт** – для ялинок і дерев, **білий** – для світлих стін і фасадів.\n• **Колір світіння** на вибір: теплий жовтий, білий, синій або мультиколір."
+      },
+      {
+        "title": "🎛️ Пульт і живлення",
+        "body": "8 режимів світіння й вмикання на відстані з пульта. Живлення від мережі 220 В.\n\n**Порада:** розмотуй котушку поступово по ходу монтажу, а дерево обвивай від стовбура до кінців гілок і назад – тоді світиться вся крона."
+      },
+      {
+        "title": "🌧️ Де можна використовувати",
+        "body": "Захист IP44 – від бризок і вологи. Блок живлення ховай від прямого дощу й снігу, а на вулиці підключай через вуличний подовжувач. Для місць, де гірлянда постійно під дощем і снігом, надійніша [«Різдвяна фея» з IP65](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led).\n\nНе вмикай гірлянду, змотану в котушку, – розмотай її повністю."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Ялинка 3-4 м, кілька дерев, фасад** – [роса 200 м](/product/girlyanda-rosa-200m-2000-led-z-pultom).\n• **Ялинка 2-2,5 м щільно** – [роса 50 м](/product/girlyanda-rosa-50m-500-led-z-pultom).\n• **Ялинка від 3 м, тераса, стеля** – [роса 100 м](/product/girlyanda-rosa-100m-1000-led-z-pultom).\n• **Вулиця під дощем і снігом, IP65** – [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led).\n• **Від USB чи павербанка** – [роса 10 м](/product/girlyanda-rosa-nytka-100-led-10m-usb)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**На яку ялинку вистачить?**\nНа ялинку 3-4 м, кілька дерев у саду чи фасад будинку.\n\n**Як перемикати режими?**\nПультом: 8 режимів і вмикання на відстані.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny30",
+    "name": "Гірлянда-штора Роса «Хвойна лапа» 3×3 м, 600 LED з пультом, 8 режимів",
+    "slug": "girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led",
+    "emoji": "🪟",
+    "image": "/products/ny30/zhovtyy-1-ccc3.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny30/zhovtyy-1-ccc3.jpg",
+        "images": [
+          "/products/ny30/zhovtyy-1-ccc3.jpg",
+          "/products/ny30/zhovtyy-2-ccc3.jpg",
+          "/products/ny30/zhovtyy-3-ccc3.jpg",
+          "/products/ny30/zhovtyy-4-ccc3.jpg",
+          "/products/ny30/zhovtyy-5-ccc3.jpg",
+          "/products/ny30/zhovtyy-6-ccc3.jpg",
+          "/products/ny30/zhovtyy-7-ccc3.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny30/bilyy-1-ccc3.jpg",
+        "images": [
+          "/products/ny30/bilyy-1-ccc3.jpg",
+          "/products/ny30/bilyy-2-ccc3.jpg",
+          "/products/ny30/bilyy-3-ccc3.jpg",
+          "/products/ny30/bilyy-4-ccc3.jpg",
+          "/products/ny30/bilyy-5-ccc3.jpg",
+          "/products/ny30/bilyy-6-ccc3.jpg"
+        ]
+      }
+    ],
+    "price": 1039,
+    "specs": {
+      "Розмір": "3 × 3 м",
+      "Живлення": "мережа 220 В",
+      "Керування": "пульт ДУ, 8 режимів",
+      "Кількість LED": "600 шт",
+      "Довжина шнура": "≈2,8 м",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44",
+      "Форма світлодіода": "крапля"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 725,
+    "category": "newyear",
+    "features": [
+      "Розмір 3×3 м – на велике вікно чи стіну",
+      "600 LED-крапельок – щільне світло без проміжків",
+      "Пульт: 8 режимів",
+      "Шнур живлення ≈2,8 м",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1349,
+    "shortDesc": "Велика світлова штора 3×3 м: 600 світлодіодів-крапельок на вертикальних нитках, пульт і 8 режимів. Закриває вікно чи цілу стіну.",
+    "usageTips": [
+      "Кріпи верхній дріт на карниз або гардину прозорими кліпсами",
+      "Пультом перемикай режими, не підходячи до розетки"
+    ],
+    "bundleWith": [
+      "ny31",
+      "ny34"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда-штора 3×3 метри перетворює вікно, стіну чи дверний проріз на водоспад світла. 600 світлодіодів-крапельок розташовані на вертикальних нитках по всій ширині, тож штора світиться рівно, без темних проміжків. Розміру вистачає на панорамне вікно, стіну за диваном чи фотозону на свято.\n\nПульт дає 8 режимів (рівне світло, мерехтіння, хвилі, плавне згасання) і вмикання на відстані. Живлення від мережі 220 В, довгий шнур ≈2,8 м – зручно дотягнутися до розетки.\n\nОбери колір світіння: теплий жовтий чи холодний білий.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Для використання в приміщенні",
+      "Не тягни за нитки – тримай за верхній дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда штора 3х3, штора роса, хвойна лапа, гирлянда штора 3x3 600 led, на вікно, D600LED3MY, D600LED3MW",
+    "details": [
+      {
+        "title": "✨ Що вона дає",
+        "body": "Світловий водоспад на вікні, стіні чи в дверному прорізі: 600 світлодіодів-крапельок на вертикальних нитках по всій ширині, тож штора світиться рівно, без темних проміжків. Розмір 3×3 м – на панорамне вікно, стіну за диваном чи фотозону на свято.\n\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🎛️ Пульт і живлення",
+        "body": "8 режимів (рівне світло, мерехтіння, хвилі, плавне згасання) і вмикання на відстані з пульта. Живлення від мережі 220 В, шнур ≈2,8 м – зручно дотягнутися до розетки.\n\n**Як повісити:** верхній дріт кріпи на карниз або гардину прозорими кліпсами. Не тягни за нитки – тримай за верхній дріт."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Панорамне вікно, стіна, фотозона** – [штора 3×3 м](/product/girlyanda-shtora-3x3m-192-led) або щільніша [«Хвойна лапа» 3×3 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Невелике вікно, дзеркало, двері** – [штора 1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led).\n• **Вікно в кімнаті, балконні двері** – [штора 2×2 м](/product/girlyanda-shtora-2x2m-80-led) або [«Хвойна лапа» 3×2 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led).\n• **Від USB чи павербанка** – [штора Роса 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Який розмір?**\n3×3 м, 600 LED.\n\n**Чи можна на вулицю?**\nНі, штора для приміщень.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny31",
+    "name": "Гірлянда-штора Роса «Хвойна лапа» 3×2 м, 400 LED з пультом, 8 режимів",
+    "slug": "girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led",
+    "emoji": "🪟",
+    "image": "/products/ny31/zhovtyy-1-5ed2.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny31/zhovtyy-1-5ed2.jpg",
+        "images": [
+          "/products/ny31/zhovtyy-1-5ed2.jpg",
+          "/products/ny31/zhovtyy-2-5ed2.jpg",
+          "/products/ny31/zhovtyy-3-5ed2.jpg",
+          "/products/ny31/zhovtyy-4-5ed2.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny31/bilyy-1-5ed2.jpg",
+        "images": [
+          "/products/ny31/bilyy-1-5ed2.jpg",
+          "/products/ny31/bilyy-2-5ed2.jpg",
+          "/products/ny31/bilyy-3-5ed2.jpg",
+          "/products/ny31/bilyy-4-5ed2.jpg"
+        ]
+      }
+    ],
+    "price": 929,
+    "specs": {
+      "Розмір": "3 × 2 м",
+      "Живлення": "мережа 220 В",
+      "Керування": "пульт ДУ, 8 режимів",
+      "Кількість LED": "400 шт",
+      "Довжина шнура": "≈2,8 м",
+      "Колір світіння": "жовтий або білий (на вибір)",
+      "Ступінь захисту": "IP44",
+      "Форма світлодіода": "крапля"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 647,
+    "category": "newyear",
+    "features": [
+      "Розмір 3×2 м – під стандартне вікно",
+      "400 LED-крапельок",
+      "Пульт: 8 режимів",
+      "Шнур живлення ≈2,8 м",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 1209,
+    "shortDesc": "Світлова штора 3×2 м: 400 світлодіодів-крапельок на вертикальних нитках, пульт і 8 режимів. Для вікна в кімнаті чи стіни за ліжком.",
+    "usageTips": [
+      "Кріпи верхній дріт на карниз або гардину прозорими кліпсами",
+      "Пультом перемикай режими, не підходячи до розетки"
+    ],
+    "bundleWith": [
+      "ny30",
+      "ny33"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда-штора 3×2 метри – оптимальний розмір для звичайного вікна в квартирі: широка, щоб закрити віконний проріз, і не надто довга, щоб не лягати на підвіконня. 400 світлодіодів-крапельок на вертикальних нитках світяться рівномірно, створюючи ефект світлового водоспаду.\n\nПульт дає 8 режимів і вмикання на відстані. Живлення від мережі 220 В, шнур ≈2,8 м.\n\nОбери колір світіння: теплий жовтий чи холодний білий.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Для використання в приміщенні",
+      "Не тягни за нитки – тримай за верхній дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда штора 3х2, штора роса, хвойна лапа, гирлянда штора 3x2 400 led, на вікно, D400LED2MY, D400LED2MW",
+    "details": [
+      {
+        "title": "✨ Що вона дає",
+        "body": "Світловий водоспад на вікні, стіні чи в дверному прорізі: 400 світлодіодів-крапельок на вертикальних нитках по всій ширині, тож штора світиться рівно, без темних проміжків. Розмір 3×2 м – оптимальний для звичайного вікна в квартирі: закриває віконний проріз і не лягає на підвіконня.\n\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🎛️ Пульт і живлення",
+        "body": "8 режимів (рівне світло, мерехтіння, хвилі, плавне згасання) і вмикання на відстані з пульта. Живлення від мережі 220 В, шнур ≈2,8 м – зручно дотягнутися до розетки.\n\n**Як повісити:** верхній дріт кріпи на карниз або гардину прозорими кліпсами. Не тягни за нитки – тримай за верхній дріт."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Вікно в кімнаті, балконні двері** – [штора 2×2 м](/product/girlyanda-shtora-2x2m-80-led) або [«Хвойна лапа» 3×2 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led).\n• **Невелике вікно, дзеркало, двері** – [штора 1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led).\n• **Панорамне вікно, стіна, фотозона** – [штора 3×3 м](/product/girlyanda-shtora-3x3m-192-led) або щільніша [«Хвойна лапа» 3×3 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Від USB чи павербанка** – [штора Роса 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Який розмір?**\n3×2 м, 400 LED.\n\n**Чи можна на вулицю?**\nНі, штора для приміщень.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny32",
+    "name": "Гірлянда-штора 1,5×1,5 м, 64 LED, білий дріт, 8 режимів",
+    "slug": "girlyanda-shtora-1-5x1-5m-64-led",
+    "emoji": "🪟",
+    "image": "/products/ny32/zhovtyy-2-fee0.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny32/zhovtyy-1-fee0.jpg",
+        "images": [
+          "/products/ny32/zhovtyy-2-fee0.jpg",
+          "/products/ny32/zhovtyy-1-fee0.jpg",
+          "/products/ny32/zhovtyy-6-fee0.jpg",
+          "/products/ny32/zhovtyy-3-fee0.jpg",
+          "/products/ny32/zhovtyy-4-fee0.jpg",
+          "/products/ny32/zhovtyy-5-fee0.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny32/bilyy-1-fee0.jpg",
+        "images": [
+          "/products/ny32/bilyy-1-fee0.jpg",
+          "/products/ny32/bilyy-2-fee0.jpg",
+          "/products/ny32/bilyy-3-fee0.jpg",
+          "/products/ny32/bilyy-4-fee0.jpg",
+          "/products/ny32/bilyy-5-fee0.jpg"
+        ]
+      }
+    ],
+    "price": 269,
+    "specs": {
+      "Режими": "8 (кнопка на блоці)",
+      "Розмір": "1,5×1,5 м",
+      "Живлення": "мережа 220 В",
+      "Потужність": "≈8 Вт",
+      "Колір дроту": "білий",
+      "Кількість LED": "64 шт",
+      "Колір світіння": "жовтий або білий (на вибір)"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 182,
+    "category": "newyear",
+    "features": [
+      "Розмір 1,5×1,5 м",
+      "64 LED на вертикальних нитках",
+      "Білий дріт – непомітний на світлих шторах",
+      "8 режимів світіння",
+      "Від мережі 220 В, ≈8 Вт"
+    ],
+    "oldPrice": 349,
+    "shortDesc": "Кімнатна гірлянда-штора 1,5×1,5 м: 64 LED на вертикальних нитках і 8 режимів. Підходить на невелике вікно, дзеркало, двері чи узголів'я ліжка.",
+    "usageTips": [
+      "Почепи штору на карниз чи гардину прозорими кліпсами",
+      "Режими перемикаються кнопкою на блоці керування"
+    ],
+    "bundleWith": [
+      "ny33",
+      "ny25"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда-штора 1,5×1,5 метри – простий спосіб створити святкову атмосферу: вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір підходить на невелике вікно, дзеркало, двері чи узголів'я ліжка.\n\n64 світлодіоди на білому дроті, який майже не видно на світлих шторах і стінах. 8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання – близько 8 Вт.\n\nОбери колір світіння: теплий жовтий чи холодний білий.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Для використання в приміщенні",
+      "Не тягни за нитки – тримай за верхній дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда штора 1,5×1,5 м, гирлянда штора, на вікно, кімнатна, 64 led, ZWM1564LEDY, ZWM1564LEDW",
+    "details": [
+      {
+        "title": "✨ Що вона дає",
+        "body": "Вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір 1,5×1,5 м – на невелике вікно, дзеркало, двері чи узголів'я ліжка.\n\n• **Білий дріт** майже не видно на світлих шторах і стінах.\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🔌 Режими й живлення",
+        "body": "8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання ≈8 Вт.\n\n**Як повісити:** почепи штору на карниз чи гардину прозорими кліпсами, а за нитки не тягни – тримай за верхній дріт."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Невелике вікно, дзеркало, двері** – [штора 1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led).\n• **Вікно в кімнаті, балконні двері** – [штора 2×2 м](/product/girlyanda-shtora-2x2m-80-led) або [«Хвойна лапа» 3×2 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led).\n• **Панорамне вікно, стіна, фотозона** – [штора 3×3 м](/product/girlyanda-shtora-3x3m-192-led) або щільніша [«Хвойна лапа» 3×3 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Від USB чи павербанка** – [штора Роса 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Скільки світлодіодів?**\n64, на вертикальних нитках.\n\n**Чи можна на вулицю?**\nНі, штора для приміщень.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny33",
+    "name": "Гірлянда-штора 2×2 м, 80 LED, білий дріт, 8 режимів",
+    "slug": "girlyanda-shtora-2x2m-80-led",
+    "emoji": "🪟",
+    "image": "/products/ny33/zhovtyy-2-3bc3.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny33/zhovtyy-1-3bc3.jpg",
+        "images": [
+          "/products/ny33/zhovtyy-2-3bc3.jpg",
+          "/products/ny33/zhovtyy-1-3bc3.jpg",
+          "/products/ny33/zhovtyy-5-3bc3.jpg",
+          "/products/ny33/zhovtyy-3-3bc3.jpg",
+          "/products/ny33/zhovtyy-6-3bc3.jpg",
+          "/products/ny33/zhovtyy-4-3bc3.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny33/bilyy-1-3bc3.jpg",
+        "images": [
+          "/products/ny33/bilyy-1-3bc3.jpg",
+          "/products/ny33/bilyy-2-3bc3.jpg",
+          "/products/ny33/bilyy-3-3bc3.jpg",
+          "/products/ny33/bilyy-4-3bc3.jpg",
+          "/products/ny33/bilyy-5-3bc3.jpg"
+        ]
+      }
+    ],
+    "price": 299,
+    "specs": {
+      "Режими": "8 (кнопка на блоці)",
+      "Розмір": "2×2 м",
+      "Живлення": "мережа 220 В",
+      "Потужність": "≈8 Вт",
+      "Колір дроту": "білий",
+      "Кількість LED": "80 шт",
+      "Колір світіння": "жовтий або білий (на вибір)"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 208,
+    "category": "newyear",
+    "features": [
+      "Розмір 2×2 м",
+      "80 LED на вертикальних нитках",
+      "Білий дріт – непомітний на світлих шторах",
+      "8 режимів світіння",
+      "Від мережі 220 В, ≈8 Вт"
+    ],
+    "oldPrice": 389,
+    "shortDesc": "Кімнатна гірлянда-штора 2×2 м: 80 LED на вертикальних нитках і 8 режимів. Підходить на вікно в кімнаті, балконні двері чи стіну над диваном.",
+    "usageTips": [
+      "Почепи штору на карниз чи гардину прозорими кліпсами",
+      "Режими перемикаються кнопкою на блоці керування"
+    ],
+    "bundleWith": [
+      "ny34",
+      "ny32"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда-штора 2×2 метри – простий спосіб створити святкову атмосферу: вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір підходить на вікно в кімнаті, балконні двері чи стіну над диваном.\n\n80 світлодіодів на білому дроті, який майже не видно на світлих шторах і стінах. 8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання – близько 8 Вт.\n\nОбери колір світіння: теплий жовтий чи холодний білий.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Для використання в приміщенні",
+      "Не тягни за нитки – тримай за верхній дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда штора 2×2 м, гирлянда штора, на вікно, кімнатна, 80 led, ZWM2280LEDY, ZWM2280LEDW",
+    "details": [
+      {
+        "title": "✨ Що вона дає",
+        "body": "Вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір 2×2 м – на вікно в кімнаті, балконні двері чи стіну над диваном.\n\n• **Білий дріт** майже не видно на світлих шторах і стінах.\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🔌 Режими й живлення",
+        "body": "8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання ≈8 Вт.\n\n**Як повісити:** почепи штору на карниз чи гардину прозорими кліпсами, а за нитки не тягни – тримай за верхній дріт."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Вікно в кімнаті, балконні двері** – [штора 2×2 м](/product/girlyanda-shtora-2x2m-80-led) або [«Хвойна лапа» 3×2 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led).\n• **Невелике вікно, дзеркало, двері** – [штора 1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led).\n• **Панорамне вікно, стіна, фотозона** – [штора 3×3 м](/product/girlyanda-shtora-3x3m-192-led) або щільніша [«Хвойна лапа» 3×3 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Від USB чи павербанка** – [штора Роса 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Скільки світлодіодів?**\n80, на вертикальних нитках.\n\n**Чи можна на вулицю?**\nНі, штора для приміщень.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny34",
+    "name": "Гірлянда-штора 3×3 м, 192 LED, білий дріт, 8 режимів",
+    "slug": "girlyanda-shtora-3x3m-192-led",
+    "emoji": "🪟",
+    "image": "/products/ny34/zhovtyy-4-49a2.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "image": "/products/ny34/zhovtyy-1-49a2.jpg",
+        "images": [
+          "/products/ny34/zhovtyy-4-49a2.jpg",
+          "/products/ny34/zhovtyy-5-49a2.jpg",
+          "/products/ny34/zhovtyy-3-49a2.jpg",
+          "/products/ny34/zhovtyy-2-49a2.jpg",
+          "/products/ny34/zhovtyy-1-49a2.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny34/bilyy-1-49a2.jpg",
+        "images": [
+          "/products/ny34/bilyy-1-49a2.jpg",
+          "/products/ny34/bilyy-2-49a2.jpg",
+          "/products/ny34/bilyy-3-49a2.jpg",
+          "/products/ny34/bilyy-4-49a2.jpg",
+          "/products/ny34/bilyy-5-49a2.jpg"
+        ]
+      }
+    ],
+    "price": 499,
+    "specs": {
+      "Режими": "8 (кнопка на блоці)",
+      "Розмір": "3×3 м",
+      "Живлення": "мережа 220 В",
+      "Потужність": "≈8 Вт",
+      "Колір дроту": "білий",
+      "Кількість LED": "192 шт",
+      "Колір світіння": "жовтий або білий (на вибір)"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 345,
+    "category": "newyear",
+    "features": [
+      "Розмір 3×3 м",
+      "192 LED на вертикальних нитках",
+      "Білий дріт – непомітний на світлих шторах",
+      "8 режимів світіння",
+      "Від мережі 220 В, ≈8 Вт"
+    ],
+    "oldPrice": 649,
+    "shortDesc": "Кімнатна гірлянда-штора 3×3 м: 192 LED на вертикальних нитках і 8 режимів. Підходить на велике вікно, стіну чи фотозону.",
+    "usageTips": [
+      "Почепи штору на карниз чи гардину прозорими кліпсами",
+      "Режими перемикаються кнопкою на блоці керування"
+    ],
+    "bundleWith": [
+      "ny30",
+      "ny33"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда-штора 3×3 метри – простий спосіб створити святкову атмосферу: вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір підходить на велике вікно, стіну чи фотозону.\n\n192 світлодіоди на білому дроті, який майже не видно на світлих шторах і стінах. 8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання – близько 8 Вт.\n\nОбери колір світіння: теплий жовтий чи холодний білий.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Для використання в приміщенні",
+      "Не тягни за нитки – тримай за верхній дріт"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда штора 3×3 м, гирлянда штора, на вікно, кімнатна, 192 led, ZWM33192LEDY, ZWM33192LEDW",
+    "details": [
+      {
+        "title": "✨ Що вона дає",
+        "body": "Вертикальні нитки зі світлодіодами звисають з верхнього дроту, і вікно чи стіна світяться, як завіса зі світла. Розмір 3×3 м – на велике вікно, стіну чи фотозону.\n\n• **Білий дріт** майже не видно на світлих шторах і стінах.\n• **Колір світіння** на вибір: теплий жовтий або холодний білий."
+      },
+      {
+        "title": "🔌 Режими й живлення",
+        "body": "8 режимів світіння перемикаються кнопкою на блоці керування. Живлення від мережі 220 В, споживання ≈8 Вт.\n\n**Як повісити:** почепи штору на карниз чи гардину прозорими кліпсами, а за нитки не тягни – тримай за верхній дріт."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Панорамне вікно, стіна, фотозона** – [штора 3×3 м](/product/girlyanda-shtora-3x3m-192-led) або щільніша [«Хвойна лапа» 3×3 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x3m-600-led).\n• **Невелике вікно, дзеркало, двері** – [штора 1,5×1,5 м](/product/girlyanda-shtora-1-5x1-5m-64-led).\n• **Вікно в кімнаті, балконні двері** – [штора 2×2 м](/product/girlyanda-shtora-2x2m-80-led) або [«Хвойна лапа» 3×2 м з пультом](/product/girlyanda-shtora-rosa-khvoina-lapa-3x2m-400-led).\n• **Від USB чи павербанка** – [штора Роса 3×2 м](/product/girlyanda-shtora-svitlodiodna-rosa-200-led-10-nytok-3x2-m-usb).\n• **Зірки, які видно з вулиці** – [штора «Зірки»](/product/girlyanda-shtora-zirky-3x0-7m-108-led)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Скільки світлодіодів?**\n192, на вертикальних нитках.\n\n**Чи можна на вулицю?**\nНі, штора для приміщень.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny35",
+    "name": "Вулична гірлянда «Різдвяна фея» 100 м, 1000 LED, 8 режимів, IP65 – чорний або білий дріт",
+    "slug": "girlyanda-rizdviana-feia-vulychna-100m-1000-led",
+    "emoji": "🌳",
+    "image": "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-2-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-3-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-4-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-5-5564.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/bilyy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/bilyy-chornyy-1-5564.jpg",
+          "/products/ny35/bilyy-chornyy-2-5564.jpg",
+          "/products/ny35/bilyy-chornyy-3-5564.jpg",
+          "/products/ny35/bilyy-chornyy-4-5564.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/syniy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/syniy-chornyy-1-5564.jpg",
+          "/products/ny35/syniy-chornyy-2-5564.jpg",
+          "/products/ny35/syniy-chornyy-3-5564.jpg",
+          "/products/ny35/syniy-chornyy-4-5564.jpg",
+          "/products/ny35/syniy-chornyy-5-5564.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/multykolir-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/multykolir-chornyy-1-5564.jpg",
+          "/products/ny35/multykolir-chornyy-2-5564.jpg",
+          "/products/ny35/multykolir-chornyy-3-5564.jpg",
+          "/products/ny35/multykolir-chornyy-4-5564.jpg",
+          "/products/ny35/multykolir-chornyy-5-5564.jpg",
+          "/products/ny35/multykolir-chornyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/bilyy-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/bilyy-bilyy-1-5564.jpg",
+          "/products/ny35/bilyy-bilyy-2-5564.jpg",
+          "/products/ny35/bilyy-bilyy-3-5564.jpg",
+          "/products/ny35/bilyy-bilyy-4-5564.jpg",
+          "/products/ny35/bilyy-bilyy-5-5564.jpg",
+          "/products/ny35/bilyy-bilyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/syniy-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/syniy-bilyy-1-5564.jpg",
+          "/products/ny35/syniy-bilyy-2-5564.jpg",
+          "/products/ny35/syniy-bilyy-3-5564.jpg",
+          "/products/ny35/syniy-bilyy-4-5564.jpg",
+          "/products/ny35/syniy-bilyy-5-5564.jpg",
+          "/products/ny35/syniy-bilyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/multykolir-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/multykolir-bilyy-1-5564.jpg",
+          "/products/ny35/multykolir-bilyy-2-5564.jpg",
+          "/products/ny35/multykolir-bilyy-3-5564.jpg",
+          "/products/ny35/multykolir-bilyy-4-5564.jpg",
+          "/products/ny35/multykolir-bilyy-5-5564.jpg",
+          "/products/ny35/multykolir-bilyy-6-5564.jpg"
+        ]
+      }
+    ],
+    "price": 2199,
+    "specs": {
+      "Режими": "8",
+      "Довжина": "100 м",
+      "Живлення": "мережа 220 В",
+      "Матеріал": "ПВХ",
+      "Крок між LED": "≈9 см",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "1000 шт",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP65"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1537,
+    "category": "newyear",
+    "features": [
+      "100 м і 1000 LED – на кілька дерев або весь паркан",
+      "Захист IP65 – дощ і сніг не страшні",
+      "8 режимів світіння",
+      "Дріт чорний або білий",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 2859,
+    "shortDesc": "Вулична нитка на 100 м: 1000 LED, 8 режимів і захист IP65. Для великих дерев у дворі, фасаду чи паркану – не боїться дощу й снігу.",
+    "usageTips": [
+      "Дерево обвивай від стовбура до кінців гілок і назад – так світиться вся крона",
+      "Підключай через вуличний подовжувач із кришкою"
+    ],
+    "bundleWith": [
+      "ny27",
+      "ny29"
+    ],
+    "orderCount": 0,
+    "description": "«Різдвяна фея» – вулична гірлянда-нитка на 100 метрів для серйозного оформлення двору: обвити кілька дерев чи високу тую, протягнути вздовж паркану й перил, прикрасити фасад або альтанку. 1000 світлодіодів з кроком ≈9 см дають рівне світло без темних ділянок.\n\nЗахист IP65 – гірлянда не боїться дощу, снігу й пилу. 8 режимів світіння, живлення від мережі 220 В.\n\nДріт на вибір: чорний для дерев і темних парканів (вдень його майже не видно), білий для світлих фасадів. Колір світіння – жовтий, білий, синій або мультиколір.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикай гірлянду, змотану в котушку"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда різдвяна фея, вулична нитка 100 м, гирлянда нить уличная 100 метров, 1000 led, ip65, на дерево, CF1000L100MBY, CF1000L100MBW",
+    "details": [
+      {
+        "title": "✨ Де вона виглядає найкраще",
+        "body": "100 метрів і 1000 світлодіодів з кроком ≈9 см для серйозного оформлення двору: обвити кілька дерев чи високу тую, протягнути вздовж паркану й перил, прикрасити фасад або альтанку.\n\n• **Чорний дріт** – для дерев і темних парканів, удень його майже не видно.\n• **Білий дріт** – для світлих фасадів.\n• **Колір світіння** на вибір: жовтий, білий, синій або мультиколір."
+      },
+      {
+        "title": "🌧️ Захист IP65",
+        "body": "Не боїться дощу, снігу й пилу. 8 режимів світіння, живлення від мережі 220 В.\n\n**Порада:** дерево обвивай від стовбура до кінців гілок і назад – так світиться вся крона.\n\n**Безпека:** підключай через вуличний подовжувач, а місце з'єднання вилки ховай від дощу й снігу: вологозахист гірлянди не поширюється на розетку. Не вмикай гірлянду, змотану в котушку, – розмотай її повністю."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Дерево, туї, паркан, IP65** – вулична нитка [30 м](/product/girlyanda-nytka-vulychna-300-led-30m) або [«Різдвяна фея» 100 м](/product/girlyanda-rizdviana-feia-vulychna-100m-1000-led).\n• **Карниз невеликого вікна чи балкон** – [бахрома 6 м](/product/girlyanda-bahroma-vulychna-105-led-6m).\n• **Фасад невеликого будинку, ганок** – [бахрома 12 м](/product/girlyanda-bahroma-vulychna-200-led-12m).\n• **Карниз цілого будинку, довгий паркан** – [бахрома 25 м](/product/girlyanda-bahroma-vulychna-405-led-25m).\n• **Великий будинок, кілька поверхів, вітрина** – [бахрома 50 м](/product/girlyanda-bahroma-vulychna-840-led-50m)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Чи можна залишити на вулиці на всю зиму?**\nЗахист IP65 від дощу, снігу й пилу розрахований на вулицю.\n\n**Скільки режимів?**\n8 режимів світіння.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny36",
+    "name": "Бант новорічний оксамитовий червоний 30×100 см",
+    "slug": "bant-novorichnyi-oksamytovyi-chervonyi-30x100",
+    "emoji": "🎀",
+    "image": "/products/ny36/hero-ab6d.jpg",
+    "images": [
+      "/products/ny36/photo-2-ab6d.jpg",
+      "/products/ny36/photo-3-ab6d.jpg",
+      "/products/ny36/photo-4-ab6d.jpg"
+    ],
+    "price": 579,
+    "specs": {
+      "Колір": "червоний",
+      "Розмір": "30 × 100 см",
+      "Матеріал": "оксамит (тканина)",
+      "Кількість": "1 шт"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 403,
+    "category": "newyear",
+    "features": [
+      "Великий розмір 30×100 см",
+      "Оксамит насиченого червоного кольору",
+      "Довгі стрічки, що красиво спадають",
+      "Для дверей, ялинки, сходів чи каміна",
+      "Підходить для фотозони"
+    ],
+    "oldPrice": 749,
+    "shortDesc": "Великий червоний оксамитовий бант 30×100 см з довгими стрічками: для вхідних дверей, ялинки, сходів, каміна чи подарунка.",
+    "usageTips": [
+      "Кріпи бант на двері за допомогою гачка-вішачка на дверне полотно – без цвяхів",
+      "Стрічки розправ й злегка закрути – виглядатимуть об'ємніше"
+    ],
+    "bundleWith": [
+      "ny37",
+      "ny06"
+    ],
+    "orderCount": 0,
+    "description": "Великий оксамитовий бант – простий спосіб зробити дім святковим з першого погляду. Розмір 30×100 см: сам бант ефектно виглядає на вхідних дверях, воротах, перилах сходів, над каміном або на верхівці ялинки замість зірки, а довгі стрічки красиво спадають донизу.\n\nНасичений червоний оксамит виглядає дорого й поєднується з хвоєю, золотими та білими прикрасами. Можна використати й для фотозони чи упаковки великого подарунка.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Не розміщуй бант впритул до свічок і відкритого вогню"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "новорічний бант, бант на двері, бант на ялинку, оксамитовий бант, червоний бант, 2026-CR-2-16",
+    "details": [
+      {
+        "title": "✨ Де він виглядає найкраще",
+        "body": "Великий бант 30×100 см з довгими стрічками: на вхідних дверях, воротах, перилах сходів, над каміном або на верхівці ялинки замість зірки. Насичений червоний оксамит поєднується з хвоєю, золотими й білими прикрасами, підходить і для фотозони чи упаковки великого подарунка.\n\n**Порада:** на двері зручно кріпити гачком-вішачком на дверне полотно – без цвяхів. Стрічки розправ і злегка закрути, щоб виглядали об'ємніше."
+      },
+      {
+        "title": "⚠️ Безпека",
+        "body": "Тканина горить: не розміщуй бант впритул до свічок і відкритого вогню. Поруч із бантом безпечніше світло від LED-гірлянди."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Святковий акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100).\n• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Компактний камін на поличку** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Жива хвоя для каміна й сходів** – [лита хвойна гірлянда 1 м](/product/girlyanda-hvoyna-shtuchna-1m-zelena).\n• **Сніг, що падає сам** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Який розмір?**\n30×100 см разом зі стрічками.\n\n**З чого зроблений?**\nЗ оксамиту насиченого червоного кольору.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
+      }
+    ]
+  },
+  {
+    "id": "ny37",
+    "name": "Декоративний камін з LED-підсвіткою та ефектом полум'я 101 см – бронзовий або білий",
+    "slug": "dekoratyvnyi-kamin-z-led-polumiam-101-sm",
+    "emoji": "🔥",
+    "image": "/products/ny37/bronzovyy-1-3cba.jpg",
+    "colors": [
+      {
+        "name": "Бронзовий",
+        "hex": "#8C6239",
+        "image": "/products/ny37/bronzovyy-1-3cba.jpg",
+        "images": [
+          "/products/ny37/bronzovyy-1-3cba.jpg",
+          "/products/ny37/bronzovyy-2-3cba.jpg",
+          "/products/ny37/bronzovyy-3-3cba.jpg",
+          "/products/ny37/bronzovyy-4-3cba.jpg",
+          "/products/ny37/bronzovyy-5-3cba.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "image": "/products/ny37/bilyy-1-3cba.jpg",
+        "images": [
+          "/products/ny37/bilyy-1-3cba.jpg",
+          "/products/ny37/bilyy-2-3cba.jpg",
+          "/products/ny37/bilyy-3-3cba.jpg",
+          "/products/ny37/bilyy-4-3cba.jpg",
+          "/products/ny37/bilyy-5-3cba.jpg"
+        ]
+      }
+    ],
+    "price": 4529,
+    "specs": {
+      "Вага": "3,9 кг",
+      "Колір": "бронзовий або білий (на вибір)",
+      "Розмір": "101 × 14 × 28 см",
+      "Матеріал": "пластик",
+      "Підсвітка": "LED з ефектом полум'я"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 3166,
+    "category": "newyear",
+    "features": [
+      "LED-ефект живого полум'я – без вогню й диму",
+      "101 × 28 см, глибина лише 14 см",
+      "Не нагрівається",
+      "Бронзовий або білий корпус",
+      "Легкий – 3,9 кг, легко переставити"
+    ],
+    "oldPrice": 5889,
+    "shortDesc": "Декоративний камін 101×28 см з LED-ефектом живого полум'я: затишок справжнього каміна без димаря, дров і жару. Бронзовий або білий корпус.",
+    "usageTips": [
+      "Постав поруч ялинові гілки, свічки-LED і гірлянду – вийде затишна фотозона",
+      "Найкраще ефект полум'я видно ввечері при приглушеному світлі"
+    ],
+    "bundleWith": [
+      "ny36",
+      "ny06"
+    ],
+    "orderCount": 0,
+    "description": "Декоративний камін додає кімнаті атмосферу зимового вечора без димаря, дров і ремонту. Усередині – LED-підсвітка з ефектом полум'я за склом, яка створює теплу картинку живого вогню, але не нагрівається.\n\nДовжина 101 см, висота 28 см, глибина лише 14 см: камін можна поставити на комод, консоль, тумбу під телевізор, підлогу біля стіни або в нішу. Корпус на вибір – бронзовий у класичному стилі або білий для світлих сучасних інтер'єрів. Вага 3,9 кг, тож його легко переставляти.\n\nЕфектно виглядає з новорічним декором, гірляндами й ялиновими гілками – готова фотозона вдома.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Це декоративний виріб, він не обігріває приміщення",
+      "Не став на камін важкі предмети"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "декоративний камін, электрокамин декоративный, камін з led полум'ям, фальшкамін, камін 101 см, SP-47BR, SP-47W",
+    "details": [
+      {
+        "title": "✨ Що він дає",
+        "body": "Атмосфера зимового вечора без димаря, дров і ремонту: за склом LED-підсвітка з ефектом живого полум'я, яка не нагрівається.\n\n• **Розмір** 101×14×28 см: глибина лише 14 см, тож камін стане на комод, консоль, тумбу під телевізор, підлогу біля стіни чи в нішу.\n• **Корпус** на вибір: бронзовий у класичному стилі або білий для світлих сучасних інтер'єрів.\n• **Вага** 3,9 кг – легко переставити."
+      },
+      {
+        "title": "🎄 Як обіграти",
+        "body": "Ефект полум'я найкраще видно ввечері при приглушеному світлі. Додай поруч ялинові гілки, [хвойну гірлянду](/product/girlyanda-hvoyna-shtuchna-1m-zelena) чи [оксамитовий бант](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100) – і вийде готова фотозона вдома.\n\n**Важливо:** це декоративний виріб, він не обігріває приміщення. Не став на камін важкі предмети."
+      },
+      {
+        "title": "🔁 Що обрати під твоє завдання",
+        "body": "• **Великий камін для вітальні** – [LED-камін 101 см](/product/dekoratyvnyi-kamin-z-led-polumiam-101-sm).\n• **Святковий акцент на дверях, сходах, ялинці** – [оксамитовий бант 30×100 см](/product/bant-novorichnyi-oksamytovyi-chervonyi-30x100).\n• **Компактний камін на поличку** – [LED-камін 60 см](/product/kamin-dekoratyvnyj-led-pidsvitka-60-10-20-bronzovyj).\n• **Жива хвоя для каміна й сходів** – [лита хвойна гірлянда 1 м](/product/girlyanda-hvoyna-shtuchna-1m-zelena).\n• **Сніг, що падає сам** – [нічник-панорама «Упряжка Санти»](/product/nichnyk-panorama-muzychnyj-upryazhka-santy-efekt-snihu)."
+      },
+      {
+        "title": "❓ Часті запитання",
+        "body": "**Чи гріє камін?**\nНі, це декоративний камін: LED-ефект полум'я без нагріву, диму й запаху.\n\n**Які кольори є?**\nБронзовий або білий корпус.\n\n**Коли відправите?**\nВідправка Новою поштою за 1-3 дні. Повернути товар можна протягом 14 днів."
       }
     ]
   }

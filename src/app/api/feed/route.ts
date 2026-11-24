@@ -57,7 +57,7 @@ function gpcByName(name: string): number | undefined {
   // Визначаємо за тим, ЩО це за товар (перше слово назви), а не за згадками функцій.
   const n = name.toLowerCase().trim();
   if (/^(магнітний\s+)?(повербанк|павербанк)/.test(n)) return 505295; // Power Adapters & Chargers
-  if (/^(акумуляторний\s+)?ліхтар/.test(n)) return 338; // Flashlights & Headlamps
+  if (/^(акумуляторний\s+|налобний\s+)?ліхтар/.test(n)) return 338; // Flashlights & Headlamps
   return undefined;
 }
 

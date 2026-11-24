@@ -40,21 +40,57 @@ function tokenize(text: string, dropStopwords = false): string[] {
   return dropStopwords ? words.filter((w) => !SEARCH_STOPWORDS.has(w)) : words;
 }
 
+// ДОДАНО 24.11.2026 (запит Павла — "а якщо люди пишуть з помилкою?"):
+// wordMatch() вище ловить лише відмінювання в КІНЦІ слова (спільний
+// префікс) — одрук посередині чи на початку слова ("гилянда" замість
+// "гірлянда", "лмапа" замість "лампа") він не впіймає. Для цього — відстань
+// Дамерау-Левенштейна (OSA-варіант): мінімальна кількість вставок/видалень/
+// замін ОДНІЄЇ літери чи переставлення двох сусідніх літер, щоб перетворити
+// одне слово на інше. Без зовнішніх бібліотек — каталог невеликий (сотня
+// товарів × кілька слів у описі), рахувати це на кожен символ запиту
+// недорого навіть у браузері.
+function osaDistance(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  const d: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) d[i][0] = i;
+  for (let j = 0; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+      }
+    }
+  }
+  return d[m][n];
+}
+
 // Два слова вважаються збігом, якщо одне містить інше підрядком (типовий
 // випадок — "лампа" входить у "лампочка"), або — для слів від 4 літер — якщо
 // в них спільний префікс довжиною "довжина мінус 2 літери" (щонайменше 4):
 // так "гірлянди" і "гірлянда" (різняться лише останньою літерою) чи "лампи" і
-// "лампа" визнаються тим самим словом, не потребуючи точного відмінка.
-// Короткі слова (менше 4 літер) порівнюються лише точним підрядком — без
-// цього захисту фрагмент на кшталт "мА" (од. виміру, мАг) в описі товару міг
-// би випадково "зійтись" з початком геть не пов'язаного слова.
+// "лампа" визнаються тим самим словом, не потребуючи точного відмінка. Якщо
+// й це не збіглось — для слів від 5 літер пробуємо допустиму кількість
+// одруків (1 для слів 5-7 літер, 2 для довших — довші слова "витримують"
+// більше випадкових відмінностей, не стаючи схожими на щось зовсім інше).
+// Короткі слова (менше 4-5 літер) лишаються точним підрядком без жодної
+// нечіткості — інакше короткі непов'язані слова (напр. "пила"/"вила")
+// почнуть випадково збігатись між собою.
 function wordMatch(queryWord: string, haystackWord: string): boolean {
   if (queryWord.length < 2 || haystackWord.length < 2) return false;
   if (haystackWord.includes(queryWord)) return true;
   const minLen = Math.min(queryWord.length, haystackWord.length);
-  if (minLen < 4) return false;
-  const prefixLen = Math.max(4, minLen - 2);
-  return queryWord.slice(0, prefixLen) === haystackWord.slice(0, prefixLen);
+  if (minLen >= 4) {
+    const prefixLen = Math.max(4, minLen - 2);
+    if (queryWord.slice(0, prefixLen) === haystackWord.slice(0, prefixLen)) return true;
+  }
+  if (minLen >= 5) {
+    const maxTypos = minLen <= 7 ? 1 : 2;
+    if (osaDistance(queryWord, haystackWord) <= maxTypos) return true;
+  }
+  return false;
 }
 
 function searchProducts(query: string): Product[] {

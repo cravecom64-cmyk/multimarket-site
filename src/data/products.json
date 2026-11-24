@@ -7117,5 +7117,175 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "бахрома 50 м, гірлянда бахрома вулична 50 метрів, гирлянда бахрома уличная, 840 led, для будинку, 50MBY, 50MBW, 50MWY, 50MWW"
+  },
+  {
+    "id": "ny29",
+    "name": "Гірлянда Роса-нитка 200 м, 2000 LED з пультом, від мережі — зелений або білий дріт",
+    "slug": "girlyanda-rosa-200m-2000-led-z-pultom",
+    "emoji": "✨",
+    "image": "/products/ny29/zhovtyy-zelenyy-1-13d9.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/zhovtyy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/zhovtyy-zelenyy-1-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-2-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-3-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-4-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-5-13d9.jpg",
+          "/products/ny29/zhovtyy-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/bilyy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/bilyy-zelenyy-1-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-2-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-3-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-4-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-5-13d9.jpg",
+          "/products/ny29/bilyy-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/syniy-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/syniy-zelenyy-1-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-2-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-3-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-4-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-5-13d9.jpg",
+          "/products/ny29/syniy-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Зелений",
+        "wireHex": "#2E7D32",
+        "image": "/products/ny29/multykolir-zelenyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/multykolir-zelenyy-1-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-2-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-3-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-4-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-5-13d9.jpg",
+          "/products/ny29/multykolir-zelenyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/zhovtyy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/zhovtyy-bilyy-1-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-2-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-3-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-4-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-5-13d9.jpg",
+          "/products/ny29/zhovtyy-bilyy-6-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/bilyy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/bilyy-bilyy-1-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-2-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-3-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-4-13d9.jpg",
+          "/products/ny29/bilyy-bilyy-5-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/syniy-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/syniy-bilyy-1-13d9.jpg",
+          "/products/ny29/syniy-bilyy-2-13d9.jpg",
+          "/products/ny29/syniy-bilyy-3-13d9.jpg",
+          "/products/ny29/syniy-bilyy-4-13d9.jpg",
+          "/products/ny29/syniy-bilyy-5-13d9.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny29/multykolir-bilyy-1-13d9.jpg",
+        "images": [
+          "/products/ny29/multykolir-bilyy-1-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-2-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-3-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-4-13d9.jpg",
+          "/products/ny29/multykolir-bilyy-5-13d9.jpg"
+        ]
+      }
+    ],
+    "price": 1239,
+    "specs": {
+      "Довжина": "200 м",
+      "Живлення": "мережа 220 В",
+      "Керування": "пульт ДУ, 8 режимів",
+      "Колір дроту": "зелений або білий (на вибір)",
+      "Кількість LED": "2000 шт",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP44",
+      "Форма світлодіода": "крапля"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 865,
+    "category": "newyear",
+    "features": [
+      "200 м і 2000 LED — на велику ялинку, дерево чи фасад",
+      "Пульт: 8 режимів і вмикання на відстані",
+      "Тонкий дріт-роса: зелений або білий",
+      "Від мережі 220 В",
+      "Захист IP44"
+    ],
+    "oldPrice": 1609,
+    "shortDesc": "200 метрів «роси»: 2000 світлодіодів-крапельок на тонкому дроті, пульт і 8 режимів. Для великої ялинки, дерева у дворі чи оформлення цілого будинку.",
+    "usageTips": [
+      "Розмотуйте котушку поступово по ходу монтажу — так 200 м не заплутаються",
+      "Дерево обвивайте від стовбура до кінців гілок і назад"
+    ],
+    "bundleWith": [
+      "ny22",
+      "ny35"
+    ],
+    "orderCount": 0,
+    "description": "Гірлянда «Роса» на 200 метрів і 2000 світлодіодів — для великих задач: ялинка 3–4 м на подвір'ї, кілька дерев у саду, фасад будинку чи зал для свята. Світлодіоди-крапельки на тонкому гнучкому дроті майже непомітні вдень, а ввечері створюють щільне світло без темних проміжків.\n\nПульт дає 8 режимів світіння і вмикання на відстані. Живлення від мережі 220 В, захист IP44 від бризок і вологи.\n\nДріт на вибір: зелений для ялинок і дерев, білий для світлих стін і фасадів. Колір світіння — теплий жовтий, білий, синій або мультиколір.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Блок живлення ховайте від прямого дощу та снігу",
+      "Не вмикайте гірлянду, змотану в котушку: розмотайте її повністю"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда роса 200 м, гирлянда роса 200 метров, 2000 led, з пультом, на дерево, 2000L200MGY, 2000L200MWY, 2000L200MGW"
   }
 ]

@@ -7672,5 +7672,160 @@
     ],
     "categoryName": "Новорічні товари",
     "searchKeywords": "гірлянда штора 3×3 м, гирлянда штора, на вікно, кімнатна, 192 led, ZWM33192LEDY, ZWM33192LEDW"
+  },
+  {
+    "id": "ny35",
+    "name": "Вулична гірлянда «Різдвяна фея» 100 м, 1000 LED, 8 режимів, IP65 — чорний або білий дріт",
+    "slug": "girlyanda-rizdviana-feia-vulychna-100m-1000-led",
+    "emoji": "🌳",
+    "image": "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+    "colors": [
+      {
+        "name": "Жовтий",
+        "hex": "#FFC107",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/zhovtyy-chornyy-1-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-2-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-3-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-4-5564.jpg",
+          "/products/ny35/zhovtyy-chornyy-5-5564.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/bilyy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/bilyy-chornyy-1-5564.jpg",
+          "/products/ny35/bilyy-chornyy-2-5564.jpg",
+          "/products/ny35/bilyy-chornyy-3-5564.jpg",
+          "/products/ny35/bilyy-chornyy-4-5564.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/syniy-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/syniy-chornyy-1-5564.jpg",
+          "/products/ny35/syniy-chornyy-2-5564.jpg",
+          "/products/ny35/syniy-chornyy-3-5564.jpg",
+          "/products/ny35/syniy-chornyy-4-5564.jpg",
+          "/products/ny35/syniy-chornyy-5-5564.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Чорний",
+        "wireHex": "#1F1F1F",
+        "image": "/products/ny35/multykolir-chornyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/multykolir-chornyy-1-5564.jpg",
+          "/products/ny35/multykolir-chornyy-2-5564.jpg",
+          "/products/ny35/multykolir-chornyy-3-5564.jpg",
+          "/products/ny35/multykolir-chornyy-4-5564.jpg",
+          "/products/ny35/multykolir-chornyy-5-5564.jpg",
+          "/products/ny35/multykolir-chornyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Білий",
+        "hex": "#F5F5F0",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/bilyy-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/bilyy-bilyy-1-5564.jpg",
+          "/products/ny35/bilyy-bilyy-2-5564.jpg",
+          "/products/ny35/bilyy-bilyy-3-5564.jpg",
+          "/products/ny35/bilyy-bilyy-4-5564.jpg",
+          "/products/ny35/bilyy-bilyy-5-5564.jpg",
+          "/products/ny35/bilyy-bilyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Синій",
+        "hex": "#2563EB",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/syniy-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/syniy-bilyy-1-5564.jpg",
+          "/products/ny35/syniy-bilyy-2-5564.jpg",
+          "/products/ny35/syniy-bilyy-3-5564.jpg",
+          "/products/ny35/syniy-bilyy-4-5564.jpg",
+          "/products/ny35/syniy-bilyy-5-5564.jpg",
+          "/products/ny35/syniy-bilyy-6-5564.jpg"
+        ]
+      },
+      {
+        "name": "Мультиколір",
+        "hex": "#8B5CF6",
+        "wire": "Білий",
+        "wireHex": "#F5F5F0",
+        "image": "/products/ny35/multykolir-bilyy-1-5564.jpg",
+        "images": [
+          "/products/ny35/multykolir-bilyy-1-5564.jpg",
+          "/products/ny35/multykolir-bilyy-2-5564.jpg",
+          "/products/ny35/multykolir-bilyy-3-5564.jpg",
+          "/products/ny35/multykolir-bilyy-4-5564.jpg",
+          "/products/ny35/multykolir-bilyy-5-5564.jpg",
+          "/products/ny35/multykolir-bilyy-6-5564.jpg"
+        ]
+      }
+    ],
+    "price": 2199,
+    "specs": {
+      "Режими": "8",
+      "Довжина": "100 м",
+      "Живлення": "мережа 220 В",
+      "Матеріал": "ПВХ",
+      "Крок між LED": "≈9 см",
+      "Колір дроту": "чорний або білий (на вибір)",
+      "Кількість LED": "1000 шт",
+      "Колір світіння": "на вибір",
+      "Ступінь захисту": "IP65"
+    },
+    "badges": [
+      "🎄 Новинка"
+    ],
+    "rating": 0,
+    "season": "Осінь-Зима",
+    "buyPrice": 1537,
+    "category": "newyear",
+    "features": [
+      "100 м і 1000 LED — на кілька дерев або весь паркан",
+      "Захист IP65 — дощ і сніг не страшні",
+      "8 режимів світіння",
+      "Дріт чорний або білий",
+      "Від мережі 220 В"
+    ],
+    "oldPrice": 2859,
+    "shortDesc": "Вулична нитка на 100 м: 1000 LED, 8 режимів і захист IP65. Для великих дерев у дворі, фасаду чи паркану — не боїться дощу й снігу.",
+    "usageTips": [
+      "Дерево обвивайте від стовбура до кінців гілок і назад — так світиться вся крона",
+      "Підключайте через вуличний подовжувач із кришкою"
+    ],
+    "bundleWith": [
+      "ny27",
+      "ny29"
+    ],
+    "orderCount": 0,
+    "description": "«Різдвяна фея» — вулична гірлянда-нитка на 100 метрів для серйозного оформлення двору: обвити кілька дерев чи високу туя, протягнути вздовж паркану й перил, прикрасити фасад або альтанку. 1000 світлодіодів з кроком ≈9 см дають рівне світло без темних ділянок.\n\nЗахист IP65 — гірлянда не боїться дощу, снігу й пилу. 8 режимів світіння, живлення від мережі 220 В.\n\nДріт на вибір: чорний для дерев і темних парканів (вдень його майже не видно), білий для світлих фасадів. Колір світіння — жовтий, білий, синій або мультиколір.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Місце підключення до розетки має бути захищене від води",
+      "Не вмикайте гірлянду, змотану в котушку"
+    ],
+    "categoryName": "Новорічні товари",
+    "searchKeywords": "гірлянда різдвяна фея, вулична нитка 100 м, гирлянда нить уличная 100 метров, 1000 led, ip65, на дерево, CF1000L100MBY, CF1000L100MBW"
   }
 ]

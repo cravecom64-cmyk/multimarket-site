@@ -87,23 +87,34 @@ export function trackSearch(searchString: string, resultsCount?: number) {
   });
 }
 
-// Оплата при отриманні (COD) — Purchase шлемо в момент прийняття
-// замовлення на сайті (заявка підтверджена формою), не в момент реальної
-// оплати. Коли підключимо онлайн-оплату — просто перенесемо цей виклик
-// на сторінку "оплата пройшла успішно", решта коду не зміниться.
+// Purchase шлемо на сторінці "оплата пройшла успішно" (момент реального
+// підтвердження оплати, не заповнення форми).
+//
+// ДОДАНО 24.11.2026 (аудит сайту п.2): eventId (= orderId) — для
+// дедуплікації з тією самою Purchase-подією, яку тепер МОЖЕ надіслати і
+// сервер (Meta Conversions API, src/lib/serverConversions.ts) по сигналу
+// вебхука оплати — якщо людина закрила вкладку, не дочекавшись цієї
+// клієнтської події. Meta дедуплікує Pixel+CAPI самостійно, якщо event_id
+// співпадає (офіційно задокументована поведінка).
 export function trackPurchase(
   items: { id: string; name: string; price: number; quantity: number; category?: string }[],
-  value: number
+  value: number,
+  eventId?: string
 ) {
   if (!pixelReady()) return;
-  window.fbq!("track", "Purchase", {
-    content_ids: items.map((i) => i.id),
-    contents: items.map((i) => ({ id: i.id, quantity: i.quantity })),
-    content_name: items.map((i) => i.name).join(", "),
-    content_category: items[0]?.category,
-    content_type: "product",
-    value,
-    currency: CURRENCY,
-    num_items: items.reduce((s, i) => s + i.quantity, 0),
-  });
+  window.fbq!(
+    "track",
+    "Purchase",
+    {
+      content_ids: items.map((i) => i.id),
+      contents: items.map((i) => ({ id: i.id, quantity: i.quantity })),
+      content_name: items.map((i) => i.name).join(", "),
+      content_category: items[0]?.category,
+      content_type: "product",
+      value,
+      currency: CURRENCY,
+      num_items: items.reduce((s, i) => s + i.quantity, 0),
+    },
+    eventId ? { eventID: eventId } : undefined
+  );
 }

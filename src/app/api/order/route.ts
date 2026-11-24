@@ -23,7 +23,13 @@ function supabaseServer() {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, split: PaymentSplit): Promise<number | null> {
+async function saveOrderToSupabase(
+  body: OrderBody,
+  calculatedTotal: number,
+  split: PaymentSplit,
+  clientIp: string,
+  userAgent: string | null
+): Promise<number | null> {
   const supabase = supabaseServer();
   if (!supabase) return null;
 
@@ -54,6 +60,13 @@ async function saveOrderToSupabase(body: OrderBody, calculatedTotal: number, spl
         utm_campaign: body.utm?.campaign ? sanitize(String(body.utm.campaign)).slice(0, 200) : null,
         utm_term: body.utm?.term ? sanitize(String(body.utm.term)).slice(0, 200) : null,
         utm_content: body.utm?.content ? sanitize(String(body.utm.content)).slice(0, 200) : null,
+        // Для server-side Purchase по вебхуку оплати (п.2+п.3 аудиту,
+        // 24.11.2026) — див. коментар на OrderBody.clientIdentifiers вище.
+        fbp: body.clientIdentifiers?.fbp ?? null,
+        fbc: body.clientIdentifiers?.fbc ?? null,
+        ga_client_id: body.clientIdentifiers?.gaClientId ?? null,
+        client_user_agent: userAgent ? userAgent.slice(0, 500) : null,
+        client_ip: clientIp !== "unknown" ? clientIp : null,
       })
       .select("id")
       .single();
@@ -308,6 +321,12 @@ interface OrderBody {
   // існує — відсутнє/некоректне поле трактуємо як "card_mono" (Рішення
   // Павла 12.11.2026).
   paymentMethod?: "card_mono" | "card_wfp";
+  // ДОДАНО 24.11.2026 (аудит сайту п.2+п.3): кукі/ідентифікатори браузера,
+  // зняті клієнтом у момент оформлення — щоб вебхук оплати (який бачить лише
+  // сервер платіжки, без кукі клієнта) міг пізніше надіслати якісну
+  // server-side Purchase-подію (GA4 Measurement Protocol + Meta Conversions
+  // API). Див. src/lib/serverConversions.ts.
+  clientIdentifiers?: { fbp: string | null; fbc: string | null; gaClientId: string | null };
   // Наш внутрішній ID замовлення — генерується на клієнті ДО відправки,
   // передається і сюди (для Telegram), і в /api/checkout/monobank (як
   // reference в інвойсі), і в webhook — так продавець може зіставити
@@ -470,7 +489,13 @@ export async function POST(req: NextRequest) {
 
     // --- Командний центр: пишемо ПЕРШИМИ, до Telegram і CRM ---
     // Не блокує відповідь користувачу, якщо Supabase недоступний.
-    const commandCenterOrderId = await saveOrderToSupabase(body, calculatedTotal, split);
+    const commandCenterOrderId = await saveOrderToSupabase(
+      body,
+      calculatedTotal,
+      split,
+      ip,
+      req.headers.get("user-agent")
+    );
 
     const gatewayLabel = paymentMethod === "card_mono" ? "Monobank" : "WayForPay";
     const paymentLine = split.isDeposit

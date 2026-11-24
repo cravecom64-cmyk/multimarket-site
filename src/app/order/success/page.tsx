@@ -54,8 +54,31 @@ function SuccessContent() {
     const markSuccess = () => {
       // Purchase шлемо саме тут — момент реальної оплати, а не
       // моменту заповнення форми (див. коментар у pixel.ts/ga4.ts).
-      trackPurchasePixel(pending.items, pending.totalPrice);
-      trackPurchaseGA4(pending.items, pending.totalPrice);
+      //
+      // ДОДАНО 24.11.2026 (аудит сайту п.2): якщо людина закриє вкладку ДО
+      // того, як долетить сюди, вебхук оплати (Monobank/WayForPay) сам
+      // відправить цю ж Purchase-подію з сервера (src/lib/serverConversions.ts)
+      // — тому тут атомарно "застовблюємо" право на GA4 (там немає
+      // дедуплікації по event_id, на відміну від Meta): якщо вебхук уже
+      // встиг це зробити раніше (типовий випадок — він зазвичай швидший за
+      // повний редирект туди-назад через сторінку оплати), GA4 тут вдруге
+      // не шлемо, щоб не задвоїти дохід. Pixel шлемо завжди — Meta сама
+      // дедуплікує по eventID (той самий orderId, що й у серверній CAPI-події).
+      trackPurchasePixel(pending.items, pending.totalPrice, pending.orderId);
+      fetch("/api/track-purchase-confirmed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderRef: pending.orderId }),
+      })
+        .then((r) => r.json())
+        .then((data: { claimed?: boolean }) => {
+          if (data.claimed) trackPurchaseGA4(pending.items, pending.totalPrice, pending.orderId);
+        })
+        .catch(() => {
+          // Мережева помилка — краще все одно порахувати GA4 (ризик рідкісного
+          // задвоєння нижчий, ніж ризик зовсім загубити конверсію).
+          trackPurchaseGA4(pending.items, pending.totalPrice, pending.orderId);
+        });
       if (pending.isDeposit && pending.codRemainder) {
         setCodRemainder(pending.codRemainder);
       }

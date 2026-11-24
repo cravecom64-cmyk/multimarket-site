@@ -126,6 +126,30 @@ function getUtm() {
   return getAttribution();
 }
 
+// ДОДАНО 24.11.2026 (аудит сайту п.2+п.3): ідентифікатори браузера, потрібні
+// для server-side Purchase (GA4 Measurement Protocol + Meta Conversions API),
+// коли підтвердження оплати приходить вебхуком з сервера платіжки (там цих
+// кукі вже немає — тому знімаємо їх ЗАРАЗ, в момент оформлення, і зберігаємо
+// в рядку замовлення в Supabase, щоб вебхук міг їх підхопити пізніше).
+function readCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+export function getClientIdentifiers(): { fbp: string | null; fbc: string | null; gaClientId: string | null } {
+  if (typeof window === "undefined") return { fbp: null, fbc: null, gaClientId: null };
+  const fbp = readCookie("_fbp");
+  // Meta Pixel сам ставить _fbc тільки якщо людина прийшла по рекламному
+  // посиланню (?fbclid=...) — немає кукі - немає кліку по рекламі, це норма.
+  const fbc = readCookie("_fbc");
+  // _ga формату "GA1.1.XXXXXXXXXX.YYYYYYYYYY" — client_id для Measurement
+  // Protocol це останні два сегменти через крапку.
+  const gaRaw = readCookie("_ga");
+  const gaMatch = gaRaw?.match(/(\d+\.\d+)$/);
+  return { fbp, fbc, gaClientId: gaMatch ? gaMatch[1] : null };
+}
+
 function send(payload: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   if (isInternalVisit()) return;

@@ -9,7 +9,7 @@ import {
   trackPurchase as trackPurchaseGA4,
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
-import { trackCheckoutEvent, getAttribution } from "@/lib/analytics";
+import { trackCheckoutEvent, getAttribution, getClientIdentifiers } from "@/lib/analytics";
 import { COD_MIN_TOTAL, getPaymentSplit, hasViberShopItem, orderMargin } from "@/lib/checkout";
 
 interface OrderModalProps {
@@ -284,6 +284,13 @@ export function OrderModal({ onClose }: OrderModalProps) {
           _t: formLoadedAt.current,
           paymentMethod,
           utm: getAttribution(),
+          // ДОДАНО 24.11.2026 (аудит сайту п.2+п.3): fbp/fbc/ga_client_id —
+          // знімаємо ЗАРАЗ, поки це реальний браузер клієнта. Вебхук оплати
+          // (Monobank/WayForPay), який прийде пізніше, видно з сервера
+          // платіжки — там цих кукі вже немає, тож без цього сервер не зможе
+          // надіслати якісну Purchase-подію в GA4/Meta, якщо клієнт закриє
+          // вкладку одразу після оплати.
+          clientIdentifiers: getClientIdentifiers(),
           items: items.map((i) => ({
             id: i.id, // для командного центру (Supabase) — зіставлення з поставщиками
             name: i.name,
@@ -444,7 +451,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
           quantity: i.quantity,
           category: i.categoryName ?? i.category,
         })),
-        totalPrice
+        totalPrice,
+        orderId
       );
       trackPurchaseGA4(
         items.map((i) => ({
@@ -454,7 +462,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
           quantity: i.quantity,
           category: i.categoryName ?? i.category,
         })),
-        totalPrice
+        totalPrice,
+        orderId
       );
       setStatus("success");
       clearCart();

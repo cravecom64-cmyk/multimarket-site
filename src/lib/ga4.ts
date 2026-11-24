@@ -89,16 +89,17 @@ export function trackSearch(searchString: string, resultsCount?: number) {
   });
 }
 
-// Оплата при отриманні (COD) — Purchase шлемо в момент прийняття
-// замовлення на сайті, так само як в pixel.ts. Коли підключимо онлайн-оплату
-// — перенесемо на сторінку "оплата пройшла успішно".
+// Purchase шлемо на сторінці "оплата пройшла успішно", так само як в
+// pixel.ts. transactionId (= orderId, якщо передано) — щоб збігалось з
+// тим самим замовленням у Supabase/Meta, а не з випадковим timestamp.
 export function trackPurchase(
   items: { id: string; name: string; price: number; quantity: number; category?: string }[],
-  value: number
+  value: number,
+  transactionId?: string
 ) {
   if (!gtagReady()) return;
   window.gtag!("event", "purchase", {
-    transaction_id: `order_${Date.now()}`,
+    transaction_id: transactionId ?? `order_${Date.now()}`,
     currency: CURRENCY,
     value,
     items: items.map((i) => ({

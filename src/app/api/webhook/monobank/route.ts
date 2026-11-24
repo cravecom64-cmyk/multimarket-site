@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { pushPaidOrderByRef } from "@/lib/crmPush";
 import { verifyWebhookSignature } from "@/lib/monobank";
+import { reportPaidOrderConversions } from "@/lib/serverConversions";
 
 // Той самий підхід, що й в api/order/route.ts (КОМАНДНИЙ ЦЕНТР) — окремий
 // клієнт тут, бо це інший serverless-роут. 12.11.2026: раніше вебхук лише
@@ -120,6 +121,15 @@ export async function POST(req: NextRequest) {
     await updatePaymentStatus(orderId, "paid");
     // оплачене замовлення — одразу в CRM з правильним статусом (lib/crmPush.ts)
     await pushPaidOrderByRef(orderId).catch((e) => console.error("[webhook] CRM push:", e));
+    // ДОДАНО 24.11.2026 (аудит сайту п.2+п.3): server-side Purchase у GA4/Meta
+    // по сигналу реальної оплати — не чекаючи, чи долетить браузер клієнта
+    // до /order/success. Див. src/lib/serverConversions.ts.
+    const db = supabaseServer();
+    if (db) {
+      await reportPaidOrderConversions(db, orderId).catch((e) =>
+        console.error("[webhook] server-side conversions:", e)
+      );
+    }
     await sendTelegram(
       `✅ *ОПЛАТА ОТРИМАНА*\n\n🔖 Замовлення: ${ref}\n💰 Сума: ${sum}₴\n💳 Спосіб: Monobank Acquiring${itemLine}${phoneLine}`
     );

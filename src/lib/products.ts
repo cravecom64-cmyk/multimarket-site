@@ -277,10 +277,20 @@ export function getCrossSellProducts(product: Product, limit = 4): Product[] {
   return curated.slice(0, limit);
 }
 
+// ВИПРАВЛЕНО 24.11.2026 (аудит сайту, п.1): ця функція віддавала товари з
+// bundleWith БЕЗ жодної фільтрації прихованих/відсутніх у наявності товарів —
+// на відміну від getCrossSellProducts() вище, яка це вже робить. Через це
+// кнопка "🎁 Взяти все разом" на 20 з 71 картки (напр. лампа Intelligent —
+// bk33) пропонувала докупити товари, яких більше немає в продажу (Veger S22,
+// Andes Mini UPS), і сервер відхиляв замовлення з помилкою "товар недоступний".
+// Одноразове чищення bundleWith в даних (01.11.2026, 746cff5) вже вирішувало
+// це один раз, але проблема повернулась, бо нові товари й далі ховають через
+// адмінку — тому цього разу фільтр ставимо прямо у функції, щоб він діяв
+// завжди, а не лише на момент чищення даних.
 export function getBundleProducts(ids: string[]): Product[] {
   return ids
     .map((id) => products.find((p) => p.id === id))
-    .filter((p): p is Product => !!p);
+    .filter((p): p is Product => !!p && !p.isHidden && p.inStock !== false);
 }
 
 export const categories = [

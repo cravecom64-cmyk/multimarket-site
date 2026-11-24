@@ -54,7 +54,11 @@ export const metadata: Metadata = {
     // Google Search Console — підтвердження власності сайту (2026-08-03)
     google: "wOJayGkxAUsqIJZgRFD5ctTYULnA3ny3axYZU1Xhmjw",
     // Bing Webmaster Tools (2026-11-18) – ChatGPT шукає через індекс Bing
-    other: { "msvalidate.01": "17E31766D7877E8FB802BBD445AB3713" },
+    // Facebook Business – підтвердження домену (2026-11-24, аудит сайту п.5)
+    other: {
+      "msvalidate.01": "17E31766D7877E8FB802BBD445AB3713",
+      "facebook-domain-verification": "35y7qddu5ezjggxypokfu2wj65gpex",
+    },
   },
 };
 

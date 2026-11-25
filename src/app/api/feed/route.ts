@@ -58,6 +58,7 @@ function gpcByName(name: string): number | undefined {
   const n = name.toLowerCase().trim();
   if (/^(магнітний\s+)?(повербанк|павербанк)/.test(n)) return 505295; // Power Adapters & Chargers
   if (/^(акумуляторний\s+|налобний\s+)?ліхтар/.test(n)) return 338; // Flashlights & Headlamps
+  if (/^зарядна\s+станція/.test(n)) return 505295; // портативна станція – як повербанки (Power Adapters & Chargers)
   return undefined;
 }
 

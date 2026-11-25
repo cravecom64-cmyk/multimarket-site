@@ -4567,6 +4567,55 @@
     "searchKeywords": "павербанк 30000, повербанк 30000 mah, levino, power bank з ліхтариком, для блекауту, HP-N50"
   },
   {
+    "id": "bk52",
+    "name": "Повербанк REXPOWER AK-213 30 000 mAh з 4 вбудованими кабелями: Type-C, Lightning, microUSB, USB",
+    "slug": "poverbank-rexpower-ak-213-30000-mah-4-kabeli",
+    "emoji": "🔋",
+    "image": "/products/bk52/hero-8a13.jpg",
+    "images": [
+      "/products/bk52/photo-2-8a13.jpg",
+      "/products/bk52/photo-3-8a13.jpg",
+      "/products/bk52/photo-4-8a13.jpg"
+    ],
+    "price": 1379,
+    "specs": {
+      "Колір": "чорний",
+      "Ємність": "30 000 mAh (заявлена)",
+      "Зарядка": "Smart Fast Charge",
+      "Індикація": "LED-дисплей",
+      "Тип акумулятора": "Li-Pol",
+      "Вбудовані кабелі": "Type-C, Lightning, microUSB, USB"
+    },
+    "badges": [
+      "new"
+    ],
+    "rating": 0,
+    "season": "Весь рік",
+    "buyPrice": 962,
+    "category": "blackout",
+    "features": [
+      "4 вбудовані кабелі: Type-C, Lightning, microUSB, USB",
+      "30 000 mAh — запас на кілька днів",
+      "Підходить і для iPhone, і для Android",
+      "LED-дисплей заряду",
+      "Ремінець для перенесення"
+    ],
+    "oldPrice": 1799,
+    "shortDesc": "30 000 mAh і 4 кабелі вже всередині — Type-C, Lightning, microUSB та USB. Заряджає телефони всієї родини без жодного окремого шнура.",
+    "usageTips": [
+      "Вбудовані кабелі не перегинайте різко біля корпусу — так вони прослужать довше",
+      "Заряджайте повербанк повністю, поки є світло"
+    ],
+    "orderCount": 0,
+    "description": "Головна зручність REXPOWER AK-213 — кабелі вже вбудовані в корпус: Type-C, Lightning для iPhone, microUSB і USB. Більше не потрібно шукати потрібний шнур у темряві під час відключення — повербанк підходить і до Android, і до iPhone, і до старших гаджетів.\n\nЄмність 30 000 mAh дає запас енергії на кілька днів для смартфонів, навушників і планшетів. Технологія Smart Fast Charge, LED-дисплей показує рівень заряду, а ремінець дозволяє зручно носити повербанк із собою — у поїздки, на природу чи в укриття.",
+    "reviewCount": 0,
+    "safetyNotes": [
+      "Не залишайте повербанк на сонці чи біля обігрівача"
+    ],
+    "categoryName": "Блекаут",
+    "searchKeywords": "павербанк 30000 з кабелями, повербанк з вбудованими кабелями, rexpower ak-213, power bank lightning type-c, для блекауту"
+  },
+  {
     "id": "h24",
     "slug": "shvabra-avtomatychnyi-vidzhym-vidro-11l",
     "name": "Швабра плоска з автоматичним віджимом і відром 11л",

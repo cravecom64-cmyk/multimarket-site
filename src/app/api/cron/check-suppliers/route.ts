@@ -968,7 +968,12 @@ async function handleGet(req: NextRequest) {
     if (!(feed instanceof Map)) return { inStock: false, price: null, error: feed.error };
     if (!row.supplier_sku) return { inStock: false, price: null, error: "не вказано артикул постачальника (supplier_sku)" };
     const offer = feed.get(normSku(row.supplier_sku));
-    if (!offer) return { inStock: false, price: null, error: `артикулу ${row.supplier_sku} немає у вивантаженні` };
+    // 25.11.2026: деяких кольорів LUGI немає у вивантаженні (напр. HP-N50B, чорний LEVINO 30000) —
+    // тоді перевіряємо сторінку товару на сайті постачальника.
+    if (!offer) {
+      if (row.url && !row.url.includes("feed.")) return fetchSupplierStatus(row.url);
+      return { inStock: false, price: null, error: `артикулу ${row.supplier_sku} немає у вивантаженні` };
+    }
     const stockOnly = supplierOf(row)?.feed_mode === "stock";
     const feedInStock = offer.available && (offer.qty === null || offer.qty > 0);
     // 14.11.2026: у вивантаженні Aveopt (магазин aveon.net.ua на Prom) наявність

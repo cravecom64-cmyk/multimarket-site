@@ -4433,7 +4433,8 @@
         "image": "/products/bk50/chornyy-1-3120.jpg",
         "images": [
           "/products/bk50/chornyy-1-3120.jpg"
-        ]
+        ],
+        "soldOut": true
       }
     ],
     "price": 3199,
@@ -4869,7 +4870,8 @@
           "/products/h27/fioletovyy-4-8989.jpg",
           "/products/h27/fioletovyy-5-8989.jpg",
           "/products/h27/common-1-8989.jpg"
-        ]
+        ],
+        "soldOut": true
       },
       {
         "name": "Бірюзовий",
@@ -8310,7 +8312,8 @@
           "/products/ny35/zhovtyy-chornyy-3-5564.jpg",
           "/products/ny35/zhovtyy-chornyy-4-5564.jpg",
           "/products/ny35/zhovtyy-chornyy-5-5564.jpg"
-        ]
+        ],
+        "soldOut": true
       },
       {
         "name": "Білий",

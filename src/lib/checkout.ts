@@ -36,7 +36,7 @@ export const COD_DEPOSIT_AMOUNT = 100; // 200 → 100 з 28.11.2026 (рішен�
 export const COD_DEPOSIT_MIN = 50;
 
 type MarginItem = { id?: string; price: number; quantity: number };
-type CatalogRow = { id: string; buyPrice?: number; supplier?: string; sizes?: { slug: string; buyPrice?: number }[] };
+type CatalogRow = { id: string; price?: number; buyPrice?: number; supplier?: string; sizes?: { slug: string; price?: number; buyPrice?: number }[] };
 const BUY_BY_ID = new Map((productsData as CatalogRow[]).map((p) => [p.id, p]));
 
 // ДОДАНО 14.11.2026 (рішення Павла): VIBER-SHOP не може переадресувати
@@ -141,3 +141,30 @@ export function getPaymentSplit(items: MarginItem[], mode: PayMode = "full"): Pa
   const payTotal = items.reduce((s, i) => s + discountedUnitPrice(i.price) * i.quantity, 0);
   return { mode: "full", goodsTotal: total, discount: total - payTotal, payTotal, onlineAmount: payTotal, codRemainder: 0, isDeposit: false };
 }
+
+// ==================== Перевірка цін кошика (28.11.2026, погоджено з Павлом) ====================
+// Ціну позиції сервер раніше брав із запиту браузера без звірки з каталогом.
+// Тепер кожна позиція має бути товаром каталогу з ТІЄЮ Ж ціною, що в
+// products.json (для розмірів — ціна розміру). Інакше замовлення не
+// приймається: або ціну підмінили, або каталог щойно оновився (автооновлення
+// цін постачальників) — тоді покупцю достатньо оновити сторінку.
+export function catalogUnitPrice(itemId: string | undefined): number | null {
+  if (!itemId) return null;
+  const [productId, sizeSlug] = itemId.split("__");
+  const p = BUY_BY_ID.get(productId);
+  if (!p) return null;
+  const price = sizeSlug ? p.sizes?.find((s) => s.slug === sizeSlug)?.price : p.price;
+  return typeof price === "number" && price > 0 ? price : null;
+}
+
+/** null — усі ціни збігаються з каталогом; інакше — id першої позиції з розбіжністю. */
+export function findPriceMismatch(items: MarginItem[]): string | null {
+  for (const it of items) {
+    const expected = catalogUnitPrice(it.id);
+    if (expected === null || expected !== it.price) return it.id ?? "(без id)";
+  }
+  return null;
+}
+
+export const PRICE_CHANGED_MESSAGE =
+  "Ціна одного з товарів щойно оновилась. Онови сторінку і додай товар у кошик ще раз.";

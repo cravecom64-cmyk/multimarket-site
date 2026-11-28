@@ -239,6 +239,11 @@ export function OrderModal({ onClose }: OrderModalProps) {
       if (data?.error && VALIDATION_MESSAGES[data.error]) {
         return VALIDATION_MESSAGES[data.error];
       }
+      // Сервер уже віддав готовий текст українською (прихований товар,
+      // колір закінчився, ціна оновилась) — показуємо як є.
+      if (typeof data?.error === "string" && /[а-яіїєґ]/i.test(data.error)) {
+        return data.error;
+      }
     } catch {
       // не JSON — ігноруємо, повертаємо fallback
     }

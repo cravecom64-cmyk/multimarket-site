@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createInvoice } from "@/lib/monobank";
-import { discountedUnitPrice, getPaymentSplit } from "@/lib/checkout";
+import { discountedUnitPrice, findPriceMismatch, getPaymentSplit, PRICE_CHANGED_MESSAGE } from "@/lib/checkout";
 import { storedPayMode } from "@/lib/orderPayMode";
 
 // Той самий rate-limit підхід, що й у /api/order — окремий лічильник,
@@ -84,6 +84,10 @@ export async function POST(req: NextRequest) {
     // товарів — тож і фіскальний чек-кошик для депозиту має бути ОДНИМ
     // рядком "Передоплата" на суму депозиту, а не реальним переліком
     // товарів за повною ціною (інакше сума кошика не зійдеться з amount).
+    // Ціни — лише з каталогу (28.11.2026), як і в /api/order.
+    if (findPriceMismatch(body.items)) {
+      return NextResponse.json({ error: PRICE_CHANGED_MESSAGE }, { status: 409 });
+    }
     const split = getPaymentSplit(body.items, await storedPayMode(body.orderId, body.payMode));
 
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPurchaseFields } from "@/lib/wayforpay";
-import { discountedUnitPrice, getPaymentSplit } from "@/lib/checkout";
+import { discountedUnitPrice, findPriceMismatch, getPaymentSplit, PRICE_CHANGED_MESSAGE } from "@/lib/checkout";
 import { storedPayMode } from "@/lib/orderPayMode";
 
 const rateLimitMap = new Map<string, number[]>();
@@ -80,6 +80,10 @@ export async function POST(req: NextRequest) {
     // buildPurchaseFields сам підсумовує items у amount, тому для депозиту
     // підміняємо items на один синтетичний рядок "Передоплата" на суму
     // депозиту — інакше WayForPay стягне повну вартість товарів.
+    // Ціни — лише з каталогу (28.11.2026), як і в /api/order.
+    if (findPriceMismatch(body.items)) {
+      return NextResponse.json({ error: PRICE_CHANGED_MESSAGE }, { status: 409 });
+    }
     const split = getPaymentSplit(body.items, await storedPayMode(body.orderId, body.payMode));
 
     const { actionUrl, fields } = buildPurchaseFields({

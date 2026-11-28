@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
-import { getPaymentSplit, type PaymentSplit } from "@/lib/checkout";
+import { findPriceMismatch, getPaymentSplit, PRICE_CHANGED_MESSAGE, type PaymentSplit } from "@/lib/checkout";
 import { payLinkUrl } from "@/lib/payLink";
 import { variantLabel } from "@/lib/products";
 
@@ -472,6 +472,15 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
+    }
+
+    // --- Guard: ціни мають збігатися з каталогом (28.11.2026) ---
+    // Повністю оплачені замовлення йдуть без дзвінка, тож підмінену в
+    // браузері ціну ніхто б не помітив. Див. findPriceMismatch у lib/checkout.ts.
+    const mismatch = findPriceMismatch(body.items);
+    if (mismatch) {
+      console.error(`[order] Price mismatch for item ${mismatch}`);
+      return NextResponse.json({ error: PRICE_CHANGED_MESSAGE }, { status: 409 });
     }
 
     // --- Build Telegram message ---

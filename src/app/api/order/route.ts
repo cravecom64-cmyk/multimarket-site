@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import productsData from "@/data/products.json";
-import { getPaymentSplit, hasViberShopItem, orderMargin, type PaymentSplit } from "@/lib/checkout";
+import { getPaymentSplit, type PaymentSplit } from "@/lib/checkout";
+import { payLinkUrl } from "@/lib/payLink";
 import { variantLabel } from "@/lib/products";
 
 // Мапа товарів за id — для перевірки, що покупець не оформлює замовлення
@@ -43,7 +44,10 @@ async function saveOrderToSupabase(
         np_warehouse: body.branch,
         payment_method: split.isDeposit ? "deposit_cod" : "prepay_card",
         payment_status: "not_paid",
-        total_amount: calculatedTotal,
+        // total_amount — скільки клієнт платить загалом (після знижки -5% за
+        // повну онлайн-оплату); discount_amount — сама знижка (28.11.2026).
+        total_amount: split.payTotal,
+        discount_amount: split.discount,
         prepaid_amount: split.onlineAmount,
         cod_amount: split.codRemainder,
         // Клієнтський orderId (той самий, що летить у Monobank/WayForPay як
@@ -51,7 +55,8 @@ async function saveOrderToSupabase(
         // знаходять цей рядок і виставляють payment_status. 12.11.2026.
         order_ref: body.orderId || null,
         status: "new",
-        confirm_call: body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
+        // "Оплата при отриманні" — ЗАВЖДИ з дзвінком (рішення Павла 28.11.2026).
+        confirm_call: split.isDeposit ? true : body.confirmCall !== false, // чекбокс на сайті; відсутнє поле = true (старі клієнти/дефолт)
         // коментар клієнта — для CRM, яка тепер отримує замовлення пізніше (lib/crmPush.ts)
         order_comment: body.comment?.trim() || null,
         // Джерело замовлення (17.11.2026): реклама / органіка / прямий захід.
@@ -321,6 +326,9 @@ interface OrderBody {
   // існує — відсутнє/некоректне поле трактуємо як "card_mono" (Рішення
   // Павла 12.11.2026).
   paymentMethod?: "card_mono" | "card_wfp";
+  // Спосіб оплати, обраний клієнтом (28.11.2026): "full" — повністю онлайн зі
+  // знижкою 5%, "cod" — передоплата + накладений платіж. Відсутнє = "full".
+  payMode?: "full" | "cod";
   // ДОДАНО 24.11.2026 (аудит сайту п.2+п.3): кукі/ідентифікатори браузера,
   // зняті клієнтом у момент оформлення — щоб вебхук оплати (який бачить лише
   // сервер платіжки, без кукі клієнта) міг пізніше надіслати якісну
@@ -478,11 +486,10 @@ export async function POST(req: NextRequest) {
       (sum, item) => sum + item.price * item.quantity, 0
     );
 
-    // Чистої "наложки" без онлайн-частини більше не існує (Рішення Павла
-    // 12.11.2026): від COD_MIN_TOTAL — передоплата COD_DEPOSIT_AMOUNT,
-    // залишок накладеним платежем; нижче порогу — повна оплата онлайн.
-    // Єдине джерело цієї логіки — src/lib/checkout.ts.
-    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items), hasViberShopItem(body.items));
+    // Спосіб оплати обирає клієнт (рішення Павла 28.11.2026): повністю онлайн
+    // зі знижкою 5% або передоплата + наложка (від 300₴, не VIBER-SHOP).
+    // Єдине джерело логіки — src/lib/checkout.ts.
+    const split = getPaymentSplit(body.items, body.payMode === "cod" ? "cod" : "full");
 
     const paymentMethod: "card_mono" | "card_wfp" =
       body.paymentMethod === "card_wfp" ? "card_wfp" : "card_mono";
@@ -500,10 +507,12 @@ export async function POST(req: NextRequest) {
     const gatewayLabel = paymentMethod === "card_mono" ? "Monobank" : "WayForPay";
     const paymentLine = split.isDeposit
       ? `💳 *Передоплата ${split.onlineAmount}\u20b4 через ${gatewayLabel} — очікуємо підтвердження*\n💰 *Залишок ${split.codRemainder}\u20b4 — накладеним платежем при отриманні*`
-      : `💳 *Оплата: ПОВНІСТЮ ОНЛАЙН через ${gatewayLabel}, ${split.onlineAmount}\u20b4 — очікуємо підтвердження*`;
+      : `💳 *Оплата: ПОВНІСТЮ ОНЛАЙН через ${gatewayLabel}, ${split.onlineAmount}\u20b4 (знижка 5%: ${split.discount}\u20b4) — очікуємо підтвердження*`;
+    const payLink = body.orderId ? payLinkUrl(body.orderId) : null;
+    const payLinkLine = payLink ? `\n🔗 Посилання на оплату (якщо клієнт не оплатив): ${payLink}` : "";
     const orderIdLine = body.orderId ? `🔖 *№ ${escapeMarkdown(body.orderId)}*\n` : "";
     const confirmCallLine =
-      body.confirmCall === false
+      body.confirmCall === false && !split.isDeposit
         ? "⚠️ *Клієнт просив НЕ дзвонити для підтвердження*"
         : "☎️ Погодився на підтвердження дзвінком";
 
@@ -519,9 +528,9 @@ ${confirmCallLine}
 📋 *Товари:*
 ${itemsText}
 
-💰 *Сума: ${calculatedTotal}₴*
+💰 *Сума: ${split.payTotal}₴*${split.discount ? ` (товари ${calculatedTotal}₴)` : ""}
 ${calculatedTotal >= 2000 ? "✅ Безкоштовна доставка" : "📦 Доставка НП ~60\\-80₴"}
-${paymentLine}
+${paymentLine}${payLinkLine}
 
 🌐 IP: ${ip}
 ⏰ ${new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" })}`;

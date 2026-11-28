@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPurchaseFields } from "@/lib/wayforpay";
-import { getPaymentSplit, hasViberShopItem, orderMargin } from "@/lib/checkout";
+import { discountedUnitPrice, getPaymentSplit } from "@/lib/checkout";
+import { storedPayMode } from "@/lib/orderPayMode";
 
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT_WINDOW = 60_000;
@@ -35,6 +36,7 @@ interface CheckoutBody {
   // відмову беремо не звідси, а з першого Telegram-повідомлення, яке вже
   // йде на /api/order одразу при оформленні (містить ім'я/телефон/товари).
   customerPhone?: string;
+  payMode?: "full" | "cod"; // 28.11.2026 — запасний варіант, основне джерело — збережене замовлення
 }
 
 const SITE_URL = "https://www.multi-market.com.ua";
@@ -78,11 +80,7 @@ export async function POST(req: NextRequest) {
     // buildPurchaseFields сам підсумовує items у amount, тому для депозиту
     // підміняємо items на один синтетичний рядок "Передоплата" на суму
     // депозиту — інакше WayForPay стягне повну вартість товарів.
-    const calculatedTotal = body.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items), hasViberShopItem(body.items));
+    const split = getPaymentSplit(body.items, await storedPayMode(body.orderId, body.payMode));
 
     const { actionUrl, fields } = buildPurchaseFields({
       // Чистий orderId — WayForPay показує це значення клієнту в чеку як
@@ -98,7 +96,7 @@ export async function POST(req: NextRequest) {
           ]
         : body.items.map((i) => ({
             name: i.name.slice(0, 128),
-            price: i.price,
+            price: discountedUnitPrice(i.price), // повна оплата — ціна зі знижкою 5%
             count: i.quantity,
           })),
       // Повертаємо НЕ напряму на /order/success (сторінку), а на проміжний

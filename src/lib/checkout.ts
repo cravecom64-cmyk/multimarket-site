@@ -21,7 +21,7 @@ import productsData from "@/data/products.json";
 // api/checkout/wayforpay/route.ts) рахують розподіл через getPaymentSplit()
 // нижче, а не дублюють арифметику кожен по-своєму.
 export const COD_MIN_TOTAL = 300;
-export const COD_DEPOSIT_AMOUNT = 200;
+export const COD_DEPOSIT_AMOUNT = 100; // 200 → 100 з 28.11.2026 (рішення Павла)
 
 // ДОДАНО 13.11.2026 (рішення Павла, «перший варіант»): передоплата не більша
 // за маржу ЗАМОВЛЕННЯ. Постачальник (Фантом, Aveopt, LUGI PRO, VIBER-SHOP)
@@ -72,8 +72,57 @@ export function orderMargin(items: MarginItem[]): number | null {
   return margin;
 }
 
+// ==================== Схема оплати з 28.11.2026 (рішення Павла) ====================
+// Клієнт САМ обирає спосіб оплати:
+//   1) "full" — повна оплата онлайн зі знижкою FULL_PAY_DISCOUNT (5%). Головний
+//      варіант за замовчуванням, доступний для будь-якої суми й будь-якого
+//      постачальника (включно з VIBER-SHOP). Такі замовлення не обдзвонюються.
+//   2) "cod" — оплата при отриманні: передоплата COD_DEPOSIT_AMOUNT (100₴, але не
+//      більше маржі, див. вище) онлайн зараз, залишок — накладеним платежем.
+//      Лише від COD_MIN_TOTAL і не для VIBER-SHOP. Такі замовлення ЗАВЖДИ
+//      підтверджуються дзвінком (confirm_call = true примусово).
+// Знижка рахується від ЦІНИ ОДИНИЦІ (округлення до гривні), а не від суми, щоб
+// фіскальний кошик mono/WayForPay (ціна × кількість) збігався з сумою оплати
+// до копійки. Маржа кожного видимого товару більша за 5% ціни (перевірено 28.11).
+export const FULL_PAY_DISCOUNT = 0.05;
+export const FULL_PAY_DISCOUNT_LABEL = "-5%";
+export type PayMode = "full" | "cod";
+
+export function discountedUnitPrice(price: number): number {
+  return Math.round(price * (1 - FULL_PAY_DISCOUNT));
+}
+
+export function goodsTotal(items: MarginItem[]): number {
+  return items.reduce((s, i) => s + i.price * i.quantity, 0);
+}
+
+/** Сума передоплати для "оплати при отриманні"; null — цей спосіб для кошика недоступний. */
+export function codDeposit(items: MarginItem[]): number | null {
+  const total = goodsTotal(items);
+  if (total < COD_MIN_TOTAL || hasViberShopItem(items)) return null;
+  let deposit = COD_DEPOSIT_AMOUNT;
+  const margin = orderMargin(items);
+  if (margin !== null) deposit = Math.min(deposit, Math.floor(margin / 10) * 10);
+  return deposit >= COD_DEPOSIT_MIN ? deposit : null;
+}
+
+/** Чому "оплата при отриманні" недоступна (для підказки в UI); null — доступна. */
+export function codUnavailableReason(items: MarginItem[]): "min_total" | "viber" | "margin" | null {
+  if (hasViberShopItem(items)) return "viber";
+  if (goodsTotal(items) < COD_MIN_TOTAL) return "min_total";
+  return codDeposit(items) === null ? "margin" : null;
+}
+
 export interface PaymentSplit {
-  /** Скільки потрібно оплатити онлайн зараз — або депозит, або повна сума. */
+  /** Обраний (фактичний) спосіб — "cod" падає у "full", якщо недоступний. */
+  mode: PayMode;
+  /** Сума товарів за цінами каталогу. */
+  goodsTotal: number;
+  /** Знижка за повну онлайн-оплату (0 для "cod"). */
+  discount: number;
+  /** Скільки клієнт платить загалом (товари − знижка). */
+  payTotal: number;
+  /** Скільки потрібно оплатити онлайн зараз — або передоплата, або повна сума зі знижкою. */
   onlineAmount: number;
   /** Залишок, що оплачується накладеним платежем при отриманні. 0 = оплата повна. */
   codRemainder: number;
@@ -81,22 +130,14 @@ export interface PaymentSplit {
   isDeposit: boolean;
 }
 
-export function getPaymentSplit(
-  total: number,
-  margin: number | null = null,
-  forceFullPayment: boolean = false,
-): PaymentSplit {
-  if (forceFullPayment || total < COD_MIN_TOTAL) {
-    return { onlineAmount: total, codRemainder: 0, isDeposit: false };
+export function getPaymentSplit(items: MarginItem[], mode: PayMode = "full"): PaymentSplit {
+  const total = goodsTotal(items);
+  if (mode === "cod") {
+    const deposit = codDeposit(items);
+    if (deposit !== null) {
+      return { mode: "cod", goodsTotal: total, discount: 0, payTotal: total, onlineAmount: deposit, codRemainder: total - deposit, isDeposit: true };
+    }
   }
-  let deposit = COD_DEPOSIT_AMOUNT;
-  if (margin !== null) deposit = Math.min(deposit, Math.floor(margin / 10) * 10);
-  if (deposit < COD_DEPOSIT_MIN) {
-    return { onlineAmount: total, codRemainder: 0, isDeposit: false };
-  }
-  return {
-    onlineAmount: deposit,
-    codRemainder: total - deposit,
-    isDeposit: true,
-  };
+  const payTotal = items.reduce((s, i) => s + discountedUnitPrice(i.price) * i.quantity, 0);
+  return { mode: "full", goodsTotal: total, discount: total - payTotal, payTotal, onlineAmount: payTotal, codRemainder: 0, isDeposit: false };
 }

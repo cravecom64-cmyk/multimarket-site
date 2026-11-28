@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
-import { getPaymentSplit, orderMargin, hasViberShopItem } from "@/lib/checkout";
+import { codDeposit, getPaymentSplit } from "@/lib/checkout";
 
 export function CartDrawer() {
   const {
@@ -27,7 +27,10 @@ export function CartDrawer() {
   // кнопкою "Оформити замовлення", рахуючи через getPaymentSplit() на
   // реальних items кошика (враховує VIBER-SHOP і маржу замовлення, а не
   // просто поріг 300₴).
-  const paymentSplit = getPaymentSplit(totalPrice, orderMargin(items), hasViberShopItem(items));
+  // З 28.11.2026: показуємо ціну зі знижкою 5% за повну онлайн-оплату і чи
+  // доступна оплата при отриманні (src/lib/checkout.ts).
+  const fullSplit = getPaymentSplit(items, "full");
+  const cartCodDeposit = codDeposit(items);
 
   if (!isCartOpen && !showOrder) return null;
 
@@ -207,9 +210,10 @@ export function CartDrawer() {
                   <span className="text-xl font-extrabold">{totalPrice}₴</span>
                 </div>
                 <div className="text-[10px] text-gray-400 mb-2 -mt-1">
-                  {paymentSplit.isDeposit
-                    ? `💳 Передоплата ${paymentSplit.onlineAmount}₴ онлайн, решта при отриманні на Новій Пошті`
-                    : "💳 Оплата повністю онлайн при оформленні"}
+                  {`⚡ ${fullSplit.payTotal}₴ при повній оплаті онлайн (−5%)`}
+                  {cartCodDeposit !== null
+                    ? ` · або оплата при отриманні з передоплатою ${cartCodDeposit}₴`
+                    : ""}
                 </div>
                 <button
                   onClick={() => {

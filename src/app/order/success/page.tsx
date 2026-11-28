@@ -20,7 +20,7 @@ interface PendingOrder {
   codRemainder?: number;
 }
 
-type PageStatus = "checking" | "success" | "failure" | "pending" | "notfound";
+type PageStatus = "checking" | "success" | "failure" | "pending" | "notfound" | "link";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -32,6 +32,12 @@ function SuccessContent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const raw = localStorage.getItem("mm_pending_order");
+    // Оплата за посиланням від менеджера (/pay/…, 28.11.2026): запису в
+    // localStorage немає, оплату зараховує вебхук — просто дякуємо.
+    if (!raw && searchParams.get("via") === "link") {
+      setStatus("link");
+      return;
+    }
     if (!raw) {
       setStatus("notfound");
       return;
@@ -167,6 +173,21 @@ function SuccessContent() {
         <div className="text-xl font-extrabold mb-2">Оплата обробляється</div>
         <div className="text-sm text-gray-500 mb-6">
           Це займає лічені хвилини. Ми напишемо тобі, щойно платіж підтвердиться.
+        </div>
+        <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
+          На головну
+        </Link>
+      </div>
+    );
+  }
+
+  if (status === "link") {
+    return (
+      <div className="text-center">
+        <div className="text-5xl mb-4">✅</div>
+        <div className="text-xl font-extrabold mb-2">Дякуємо за оплату!</div>
+        <div className="text-sm text-gray-500 mb-6">
+          Щойно банк підтвердить платіж, ми отримаємо його автоматично і передамо замовлення на відправку.
         </div>
         <Link href="/" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold inline-block">
           На головну

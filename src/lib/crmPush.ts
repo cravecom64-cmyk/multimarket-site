@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { payLinkUrl } from "@/lib/payLink";
 
 // ==================== Передача замовлень у CRM (SalesDrive, КЦ SalesWave) ====================
 // З 14.11.2026 (рішення Павла): замовлення йде в CRM НЕ одразу при
@@ -28,6 +29,7 @@ type OrderRow = {
   total_amount: number | null;
   prepaid_amount: number | null;
   cod_amount: number | null;
+  discount_amount?: number | null;
   order_ref: string | null;
   confirm_call: boolean | null;
   order_comment: string | null;
@@ -47,18 +49,22 @@ export function supabaseService(): SupabaseClient | null {
 const uah = (n: number | null) => `${Math.round(Number(n ?? 0))}₴`;
 
 // Який статус КЦ і що написати — за схемою, погодженою з Павлом 14.11.2026.
-export function crmPlan(o: Pick<OrderRow, "payment_method" | "prepaid_amount" | "cod_amount" | "total_amount" | "confirm_call">, paid: boolean): {
+export function crmPlan(o: Pick<OrderRow, "payment_method" | "prepaid_amount" | "cod_amount" | "total_amount" | "confirm_call"> & Partial<Pick<OrderRow, "discount_amount" | "order_ref">>, paid: boolean): {
   status: CrmStatus;
   paymentLabel: string;
   note: string;
 } {
   const deposit = o.payment_method === "deposit_cod";
-  const callOk = o.confirm_call !== false;
+  // "Оплата при отриманні" — завжди з дзвінком (рішення Павла 28.11.2026).
+  const callOk = deposit || o.confirm_call !== false;
+  const discount = Number(o.discount_amount ?? 0);
+  // Сума в CRM по товарах — за цінами каталогу; клієнт платить на знижку менше.
+  const discountNote = discount > 0 ? ` Знижка 5% за повну оплату: −${uah(discount)} (товари в CRM за повною ціною).` : "";
   if (paid && !deposit) {
     return {
       status: "Підтверджено - оплатили",
       paymentLabel: `ОПЛАЧЕНО ПОВНІСТЮ онлайн ${uah(o.total_amount)} — накладений платіж НЕ ставити`,
-      note: `✅ Оплачено повністю ${uah(o.total_amount)} онлайн. Накладений платіж НЕ ставити. Дзвінок не потрібен.`,
+      note: `✅ Оплачено повністю ${uah(o.total_amount)} онлайн. Накладений платіж НЕ ставити. Дзвінок не потрібен.${discountNote}`,
     };
   }
   if (paid && deposit) {
@@ -69,14 +75,15 @@ export function crmPlan(o: Pick<OrderRow, "payment_method" | "prepaid_amount" | 
     };
   }
   const due = deposit ? o.prepaid_amount : o.total_amount;
+  const link = o.order_ref ? payLinkUrl(o.order_ref) : null;
   return {
     status: callOk ? "Новий" : "Переписка viber",
     paymentLabel: `НЕ ОПЛАЧЕНО: потрібно ${deposit ? "передоплату" : "оплату"} ${uah(due)} онлайн`,
     note:
       `⚠️ НЕ ОПЛАЧЕНО — клієнт не завершив оплату ${uah(due)} на сайті. ` +
       (callOk ? "Зателефонувати" : "Написати у Viber (клієнт просив не дзвонити)") +
-      ` і надіслати посилання на оплату. Без оплати НЕ відправляти.` +
-      (deposit ? ` Після передоплати накладений платіж: ${uah(o.cod_amount)}.` : ""),
+      ` і надіслати посилання на оплату${link ? `: ${link}` : ""}. Без оплати НЕ відправляти.` +
+      (deposit ? ` Після передоплати накладений платіж: ${uah(o.cod_amount)}.` : discountNote),
   };
 }
 

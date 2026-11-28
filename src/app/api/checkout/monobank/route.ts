@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createInvoice } from "@/lib/monobank";
-import { getPaymentSplit, hasViberShopItem, orderMargin } from "@/lib/checkout";
+import { discountedUnitPrice, getPaymentSplit } from "@/lib/checkout";
+import { storedPayMode } from "@/lib/orderPayMode";
 
 // Той самий rate-limit підхід, що й у /api/order — окремий лічильник,
 // бо це окремий serverless endpoint (Vercel не ділить in-memory стан між ними).
@@ -31,6 +32,7 @@ interface CheckoutBody {
   orderId: string;
   items: OrderItem[];
   totalPrice: number;
+  payMode?: "full" | "cod"; // 28.11.2026 — запасний варіант, основне джерело — збережене замовлення
   // Телефон клієнта — не показується покупцю (Monobank не виводить
   // "reference" на сторінці оплати, на відміну від "destination"), але
   // повертається нам назад у webhook/status — так у сповіщенні про відмову
@@ -76,17 +78,13 @@ export async function POST(req: NextRequest) {
 
     // Сума рахується СЕРВЕРНО з items, а не береться з body.totalPrice —
     // клієнт не може підмінити суму оплати.
-    const calculatedTotal = body.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
 
     // Чистої "наложки" більше не існує (Рішення Павла 12.11.2026): від
     // COD_MIN_TOTAL стягуємо лише депозит (getPaymentSplit), не повну суму
     // товарів — тож і фіскальний чек-кошик для депозиту має бути ОДНИМ
     // рядком "Передоплата" на суму депозиту, а не реальним переліком
     // товарів за повною ціною (інакше сума кошика не зійдеться з amount).
-    const split = getPaymentSplit(calculatedTotal, orderMargin(body.items), hasViberShopItem(body.items));
+    const split = getPaymentSplit(body.items, await storedPayMode(body.orderId, body.payMode));
 
     const phoneDigits = (body.customerPhone || "").replace(/\D/g, "");
     // reference не показується клієнту (на відміну від destination) — сюди
@@ -112,7 +110,8 @@ export async function POST(req: NextRequest) {
       : body.items.map((i, idx) => ({
           name: i.name.slice(0, 128),
           qty: i.quantity,
-          sum: Math.round(i.price * 100),
+          // повна оплата — ціна зі знижкою 5% (сума кошика = amount)
+          sum: Math.round(discountedUnitPrice(i.price) * 100),
           unit: "шт",
           // Код позиції — обов'язковий, бо на акаунті увімкнена фіскалізація.
           // Беремо id товару з каталогу; якщо його немає (не мало б траплятись

@@ -21,7 +21,7 @@ import {
   getBundleProducts,
   variantLabel,
 } from "@/lib/products";
-import { getPaymentSplit, orderMargin, hasViberShopItem } from "@/lib/checkout";
+import { codDeposit } from "@/lib/checkout";
 
 export function ProductPageClient() {
   const params = useParams();
@@ -147,11 +147,8 @@ export function ProductPageClient() {
   // (forceFullPayment) і для рідкісного випадку, коли маржа обмежує депозит
   // нижче стандартних 200₴.
   const singleItemForPayment = [{ id: cartItemId, price: effectivePrice, quantity: 1 }];
-  const paymentSplit = getPaymentSplit(
-    effectivePrice,
-    orderMargin(singleItemForPayment),
-    hasViberShopItem(singleItemForPayment),
-  );
+  // З 28.11.2026: −5% за повну онлайн-оплату + чи доступна оплата при отриманні.
+  const cardCodDeposit = codDeposit(singleItemForPayment);
 
   const discount = effectiveOldPrice
     ? Math.round(((effectiveOldPrice - effectivePrice) / effectiveOldPrice) * 100)
@@ -614,9 +611,9 @@ export function ProductPageClient() {
           )}
         </div>
         <div className="text-[10px] text-gray-400 mt-1">
-          {paymentSplit.isDeposit
-            ? `💳 Передоплата ${paymentSplit.onlineAmount}₴ онлайн, решта при отриманні на Новій Пошті`
-            : "💳 Оплата повністю онлайн при оформленні"}
+          {cardCodDeposit !== null
+            ? `⚡ −5% при повній оплаті онлайн · або оплата при отриманні з передоплатою ${cardCodDeposit}₴`
+            : "⚡ −5% при повній оплаті онлайн"}
         </div>
       </div>
 

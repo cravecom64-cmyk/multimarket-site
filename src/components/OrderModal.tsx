@@ -10,7 +10,7 @@ import {
   trackInitiateCheckout as trackInitiateCheckoutGA4,
 } from "@/lib/ga4";
 import { trackCheckoutEvent, getAttribution, getClientIdentifiers } from "@/lib/analytics";
-import { COD_MIN_TOTAL, getPaymentSplit, hasViberShopItem, orderMargin } from "@/lib/checkout";
+import { COD_MIN_TOTAL, codDeposit, codUnavailableReason, getPaymentSplit, type PayMode } from "@/lib/checkout";
 
 interface OrderModalProps {
   onClose: () => void;
@@ -202,12 +202,16 @@ export function OrderModal({ onClose }: OrderModalProps) {
   // з кількома еквайрингами (monobank.ua/knowledge-base/acquiring/online/brandbook):
   // "назва без лого" — валідний варіант поряд з варіантом із лого.
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card_mono");
-  // Оплата тепер завжди хоча б частково онлайн: від COD_MIN_TOTAL —
-  // передоплата COD_DEPOSIT_AMOUNT карткою, залишок накладеним платежем
-  // при отриманні; нижче порогу — повна оплата онлайн. Єдине джерело цієї
-  // логіки (і на клієнті, і на сервері) — src/lib/checkout.ts. Рішення
-  // Павла 12.11.2026 (замінює попередню модель "або картка, або наложка").
-  const { onlineAmount, codRemainder, isDeposit } = getPaymentSplit(totalPrice, orderMargin(items), hasViberShopItem(items));
+  // Спосіб оплати обирає клієнт (рішення Павла 28.11.2026): "full" — повністю
+  // онлайн зі знижкою 5% (за замовчуванням, головний варіант), "cod" — оплата
+  // при отриманні з передоплатою (від COD_MIN_TOTAL, не для VIBER-SHOP).
+  // Єдине джерело логіки — src/lib/checkout.ts.
+  const [payMode, setPayMode] = useState<PayMode>("full");
+  const codAvailableDeposit = codDeposit(items);
+  const codReason = codUnavailableReason(items);
+  const split = getPaymentSplit(items, payMode);
+  const { onlineAmount, codRemainder, isDeposit } = split;
+  const fullSplit = getPaymentSplit(items, "full");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Чи покупець вже вийшов з поля телефону хоч раз — щоб не показувати
@@ -279,7 +283,9 @@ export function OrderModal({ onClose }: OrderModalProps) {
           city: form.city,
           branch: form.branch,
           comment: form.comment,
-          confirmCall: form.confirmCall,
+          // "Оплата при отриманні" — завжди з дзвінком-підтвердженням
+          confirmCall: isDeposit ? true : form.confirmCall,
+          payMode: split.mode,
           website: form.website,
           _t: formLoadedAt.current,
           paymentMethod,
@@ -328,6 +334,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
             // Йде тільки в невидиме клієнту поле reference — щоб у сповіщенні
             // про відмову оплати одразу було видно кому телефонувати.
             customerPhone: form.phone,
+            payMode: split.mode,
           }),
         });
 
@@ -354,7 +361,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
               quantity: i.quantity,
               category: i.categoryName ?? i.category,
             })),
-            totalPrice,
+            // сума, яку клієнт реально платить (зі знижкою -5% при повній оплаті) — для пікселя/GA4
+            totalPrice: split.payTotal,
             isDeposit,
             codRemainder,
           })
@@ -381,6 +389,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               quantity: i.quantity,
             })),
             customerPhone: form.phone,
+            payMode: split.mode,
           }),
         });
 
@@ -408,7 +417,8 @@ export function OrderModal({ onClose }: OrderModalProps) {
               quantity: i.quantity,
               category: i.categoryName ?? i.category,
             })),
-            totalPrice,
+            // сума, яку клієнт реально платить (зі знижкою -5% при повній оплаті) — для пікселя/GA4
+            totalPrice: split.payTotal,
             isDeposit,
             codRemainder,
           })
@@ -561,9 +571,20 @@ export function OrderModal({ onClose }: OrderModalProps) {
             );
           })}
           <hr className="my-2" />
+          {split.discount > 0 && (
+            <div className="flex justify-between text-xs text-emerald-700 font-semibold">
+              <span>Знижка 5% за повну оплату онлайн</span>
+              <span>−{split.discount}₴</span>
+            </div>
+          )}
           <div className="flex justify-between text-sm font-extrabold">
             <span>Разом</span>
-            <span>{totalPrice}₴</span>
+            <span>
+              {split.discount > 0 && (
+                <span className="text-gray-400 line-through font-semibold mr-1.5">{totalPrice}₴</span>
+              )}
+              {split.payTotal}₴
+            </span>
           </div>
           <div className="text-[10px] text-gray-400 mt-1">
             {totalPrice >= 2000
@@ -572,10 +593,70 @@ export function OrderModal({ onClose }: OrderModalProps) {
           </div>
         </div>
 
-        {/* Payment method — картка онлайн пріоритетна: менше повернень і відмов при курєрі */}
+        {/* Спосіб оплати (28.11.2026): повна онлайн -5% (головний) або при отриманні з передоплатою */}
         <div className="mb-4">
           <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
             Спосіб оплати
+          </label>
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => setPayMode("full")}
+              className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
+                split.mode === "full" ? "border-emerald-500 bg-emerald-50" : "border-gray-200"
+              }`}
+            >
+              <span className="text-xl">⚡</span>
+              <span className="flex-1 min-w-0">
+                <span className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-sm font-bold">Оплатити онлайн повністю</span>
+                  <span className="text-[10px] font-extrabold text-white bg-emerald-500 px-1.5 py-0.5 rounded-full">
+                    −5%
+                  </span>
+                </span>
+                <span className="block text-[11px] text-gray-500">
+                  {fullSplit.payTotal}₴ замість {totalPrice}₴ · без накладного платежу та комісії на пошті
+                </span>
+              </span>
+              <span
+                className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                  split.mode === "full" ? "border-emerald-500 bg-emerald-500" : "border-gray-300"
+                }`}
+              />
+            </button>
+            {codAvailableDeposit !== null ? (
+              <button
+                type="button"
+                onClick={() => setPayMode("cod")}
+                className={`w-full flex items-center gap-3 rounded-lg border-2 px-3 py-2.5 text-left transition-colors ${
+                  split.mode === "cod" ? "border-emerald-500 bg-emerald-50" : "border-gray-200"
+                }`}
+              >
+                <span className="text-xl">📦</span>
+                <span className="flex-1 min-w-0">
+                  <span className="text-sm font-bold">Оплата при отриманні</span>
+                  <span className="block text-[11px] text-gray-500">
+                    {codAvailableDeposit}₴ передоплата зараз, решта {totalPrice - codAvailableDeposit}₴ – на Новій Пошті.
+                    Підтвердимо дзвінком.
+                  </span>
+                </span>
+                <span
+                  className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                    split.mode === "cod" ? "border-emerald-500 bg-emerald-500" : "border-gray-300"
+                  }`}
+                />
+              </button>
+            ) : codReason === "min_total" ? (
+              <div className="text-[11px] text-gray-400 px-1">
+                Оплата при отриманні доступна для замовлень від {COD_MIN_TOTAL}₴
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+            Чим оплатити онлайн
           </label>
           <div className="space-y-2">
             <button
@@ -635,12 +716,12 @@ export function OrderModal({ onClose }: OrderModalProps) {
               {isDeposit ? (
                 <>
                   💳 Зараз оплачуєш передоплату <b>{onlineAmount}₴</b>. Залишок{" "}
-                  <b>{codRemainder}₴</b> — готівкою або карткою при отриманні на Новій Пошті.
+                  <b>{codRemainder}₴</b> – готівкою або карткою при отриманні на Новій Пошті.
                 </>
               ) : (
                 <>
-                  💳 Замовлення до {COD_MIN_TOTAL}₴ оплачується повністю онлайн —{" "}
-                  <b>{onlineAmount}₴</b>.
+                  💳 Оплачуєш зараз <b>{onlineAmount}₴</b> – це вся сума замовлення зі знижкою 5%.
+                  Накладеного платежу на пошті не буде.
                 </>
               )}
             </div>
@@ -788,6 +869,11 @@ export function OrderModal({ onClose }: OrderModalProps) {
             />
           </div>
 
+          {isDeposit ? (
+            <div className="text-xs text-gray-600">
+              ☎️ Ми зателефонуємо, щоб підтвердити замовлення перед відправкою
+            </div>
+          ) : (
           <label className="flex items-start gap-2.5 cursor-pointer select-none">
             <input
               type="checkbox"
@@ -799,6 +885,7 @@ export function OrderModal({ onClose }: OrderModalProps) {
               Зв&apos;язатися зі мною для підтвердження замовлення
             </span>
           </label>
+          )}
 
           {status === "error" && (
             <div className="text-xs text-red-500 text-center">
